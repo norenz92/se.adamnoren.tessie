@@ -1,0 +1,26 @@
+[
+  {
+    "type": "group",
+    "label": {
+      "en": "Units"
+    },
+    "children": [
+      {
+        "id": "distance_format",
+        "type": "label",
+        "label": {
+          "en": "Distance format"
+        },
+        "highlight": true
+      },
+      {
+        "id": "temperature_format",
+        "type": "label",
+        "label": {
+          "en": "Temperature format"
+        },
+        "highlight": true
+      }
+    ]
+  }
+]

@@ -1,0 +1,1 @@
+Tessie for Homey brings the power of Tessie to your smart home, allowing you to monitor and control your Tesla through Homey. This integration unlocks a seamless experience to automate Tesla-related tasks, create powerful flows, and access real-time vehicle data.

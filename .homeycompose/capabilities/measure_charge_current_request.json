@@ -1,0 +1,10 @@
+{
+  "type": "number",
+  "uiComponent": "sensor",
+  "title": "Current Charging Amps",
+  "insights": true,
+  "getable": true,
+  "setable": true,
+  "icon": "/drivers/car/assets/battery-charging.svg",
+  "units": "A"
+}

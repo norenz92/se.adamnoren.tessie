@@ -1,0 +1,22 @@
+{
+  "triggers": [],
+  "conditions": [],
+  "actions": [
+    {
+      "id": "set_charge_current_request",
+      "title": "Set Charging Current",
+      "args": [
+        {
+          "name": "amps",
+          "type": "number",
+          "min": 0,
+          "max": 16,
+          "step": 1,
+          "title": "Charging Current (A)",
+          "titleFormatted": "Set Charging Current to [[amps]]A",
+          "placeholder": "0A-16A"
+        }
+      ]
+    }
+  ]
+}

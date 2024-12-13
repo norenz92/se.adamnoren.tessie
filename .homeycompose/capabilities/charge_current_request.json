@@ -1,0 +1,11 @@
+{
+  "title": "Charging Amps",
+  "getable": true,
+  "setable": true,
+  "uiComponent": "slider",
+  "icon": "/assets/icon.svg",
+  "type": "number",
+  "min": 1,
+  "max": 16,
+  "step": 1
+}

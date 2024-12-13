@@ -1,0 +1,8 @@
+{
+  "title": "Preconditioning",
+  "getable": true,
+  "setable": false,
+  "uiComponent": "toggle",
+  "icon": "/assets/icon.svg",
+  "type": "boolean"
+}

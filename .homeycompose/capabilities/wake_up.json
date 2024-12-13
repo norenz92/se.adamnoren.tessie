@@ -1,0 +1,8 @@
+{
+  "title": "Wake Up",
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button",
+  "icon": "/assets/icon.svg",
+  "type": "boolean"
+}

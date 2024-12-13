@@ -1,0 +1,26 @@
+{
+  "title": "Front Right Seat Heater",
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "icon": "/assets/icon.svg",
+  "type": "enum",
+  "values": [
+    {
+      "id": "0",
+      "title": "Off"
+    },
+    {
+      "id": "1",
+      "title": "Low"
+    },
+    {
+      "id": "2",
+      "title": "Medium"
+    },
+    {
+      "id": "3",
+      "title": "High"
+    }
+  ]
+}

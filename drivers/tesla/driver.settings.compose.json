@@ -1,0 +1,17 @@
+[
+  {
+    "id": "telemetryEnabled",
+    "type": "checkbox",
+    "value": true,
+    "label": { "en": "Use telemetry" },
+    "highlight": true,
+    "hint": { "en": "Requires a Virtual Key to be installed. Learn how: https://help.tessie.com/article/117-virtual-key" }
+  },
+  {
+    "id": "label",
+    "type": "label",
+    "label": { "en": "Telemetry status" },
+    "value": "",
+    "hint": { "en": "Indicates if a virtual key has been installed" }
+  }
+]

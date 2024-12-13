@@ -1,0 +1,10 @@
+{
+  "type": "number",
+  "uiComponent": "sensor",
+  "title": "Minutes to Full Charge",
+  "insights": true,
+  "getable": true,
+  "setable": false,
+  "icon": "/drivers/car/assets/hourglass-split.svg",
+  "units": "minutes"
+}

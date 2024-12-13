@@ -1,0 +1,8 @@
+{
+  "type": "boolean",
+  "uiComponent": "button",
+  "setable": true,
+  "getable": true,
+  "title": "Charging",
+  "icon": "/drivers/car/assets/battery-charging.svg"
+}

@@ -1,0 +1,11 @@
+{
+  "version": "1.0",
+  "apis": [
+    {
+      "identifier": "tessie",
+      "source": "@tessie/v2.0#19jnr83gm4pycxed",
+      "integrity": "sha512-IL0s6E3rGARPcHqBrhX/VWiCnUNzjfiNObQSS1sHr+4qEak3uQ3GxwfGpKraSlHAUr2Crt0RwLuR0BqAIkOIMQ==",
+      "installerVersion": "6.1.2"
+    }
+  ]
+}

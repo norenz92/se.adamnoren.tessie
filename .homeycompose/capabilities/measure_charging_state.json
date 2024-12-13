@@ -1,0 +1,22 @@
+{
+  "title": "Charging State",
+  "getable": true,
+  "setable": false,
+  "uiComponent": "picker",
+  "icon": "/assets/icon.svg",
+  "type": "enum",
+  "values": [
+    {
+      "id": "Disconnected",
+      "title": "Disconnected"
+    },
+    {
+      "id": "Charging",
+      "title": "Charging"
+    },
+    {
+      "id": "Complete",
+      "title": "Complete"
+    }
+  ]
+}

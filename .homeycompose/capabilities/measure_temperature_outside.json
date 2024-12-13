@@ -1,0 +1,11 @@
+{
+  "title": "Outside Temperature",
+  "getable": true,
+  "setable": false,
+  "units": "°C",
+  "uiComponent": "sensor",
+  "icon": "/assets/icon.svg",
+  "insights": true,
+  "type": "number",
+  "decimals": 1
+}

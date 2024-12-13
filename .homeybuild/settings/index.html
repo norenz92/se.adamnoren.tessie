@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- The '/homey.js' script must be included in your settings view to work -->
+    <script
+      type="text/javascript"
+      src="/homey.js"
+      data-origin="settings"
+    ></script>
+    <style> 
+      #buttons {
+        display: flex;
+        flex-direction: row;
+        gap: 12px;
+      }
+      
+      #buttons button {
+        flex: 2
+      }
+      </style>
+  </head>
+  <body>
+    <header class="homey-header">
+      <h1 class="homey-title" data-i18n="settings.title">
+        <!-- This will be filled with the translated string with key 'settings.title'. -->
+      </h1>
+      <p class="homey-subtitle" data-i18n="settings.subtitle">
+        <!-- This field will also be translated -->
+      </p>
+    </header>
+
+    <fieldset class="homey-form-fieldset">
+      <legend class="homey-form-legend">Settings</legend>
+      <div class="homey-form-group">
+        <label class="homey-form-label" for="accessToken">Access token</label>
+        <input class="homey-form-input" id="accessToken" type="text" value="" />
+      </div>
+    </fieldset>
+    <div id="buttons">
+      <button id="getTessie" class="homey-button-secondary-small">Get Tessie</button>
+      <button id="getAccessToken" class="homey-button-danger-small">Get access token</button>
+    </div>
+    <button id="save" class="homey-button-primary-full">Save changes</button>
+
+    <script type="text/javascript">
+      // a method named 'onHomeyReady' must be present in your code
+      function onHomeyReady(Homey) {
+        // Tell Homey we're ready to be displayed
+        Homey.ready();
+
+        var accessTokenElement = document.getElementById("accessToken");
+        var saveElement = document.getElementById("save");
+
+        const getTessie = document.getElementById("getTessie");
+        const getAccessToken = document.getElementById("getAccessToken");
+
+        // Send user to URL
+        getTessie.addEventListener("click", function (e) {
+          Homey.openURL("https://share.tessie.com/1oPgpu3hfMb");
+        });
+
+        // Get access token
+        getAccessToken.addEventListener("click", function (e) {
+          Homey.openURL("https://dash.tessie.com/settings/api");
+        });
+
+        Homey.get("accessToken", function (err, accessToken) {
+          if (err) return Homey.alert(err);
+          accessTokenElement.value = accessToken;
+        });
+
+        saveElement.addEventListener("click", function (e) {
+          saveElement.classList.add("is-disabled");
+          saveElement.classList.add("is-loading");
+          // Set button text
+          saveElement.innerHTML = "Saving...";
+          Homey.set("accessToken", accessTokenElement.value, function (err) {
+            saveElement.classList.remove("is-disabled");
+            saveElement.classList.remove("is-loading");
+            saveElement.innerHTML = "Save changes";
+            if (err) return Homey.alert(err);
+            Homey.alert("Settings saved");
+          });
+        });
+      }
+    </script>
+  </body>
+</html>

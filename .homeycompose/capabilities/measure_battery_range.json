@@ -1,0 +1,9 @@
+{
+  "title": "Battery Range",
+  "getable": true,
+  "setable": false,
+  "units": "km",
+  "uiComponent": "sensor",
+  "icon": "/assets/icon.svg",
+  "type": "number"
+}

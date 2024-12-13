@@ -1,0 +1,11 @@
+{
+  "title": "Charge Limit",
+  "getable": true,
+  "setable": true,
+  "uiComponent": "slider",
+  "icon": "/assets/icon.svg",
+  "type": "number",
+  "min": 50,
+  "max": 100,
+  "step": 1
+}

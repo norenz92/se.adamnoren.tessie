@@ -1,0 +1,8 @@
+{
+  "title": "Bioweapon Mode",
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle",
+  "icon": "/assets/icon.svg",
+  "type": "boolean"
+}

@@ -1,0 +1,8 @@
+{
+  "title": "Front Trunk",
+  "getable": true,
+  "setable": true,
+  "uiComponent": "button",
+  "icon": "/assets/icon.svg",
+  "type": "boolean"
+}

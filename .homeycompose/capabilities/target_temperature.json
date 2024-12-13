@@ -1,0 +1,12 @@
+{
+  "title": "Target Temperature",
+  "getable": true,
+  "setable": true,
+  "units": "°C",
+  "uiComponent": "thermostat",
+  "icon": "/assets/icon.svg",
+  "type": "number",
+  "min": 16,
+  "max": 32,
+  "step": 0.5
+}

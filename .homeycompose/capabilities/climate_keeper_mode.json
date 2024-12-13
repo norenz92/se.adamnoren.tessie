@@ -1,0 +1,30 @@
+{
+  "title": "Climate Keeper Mode",
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "icon": "/assets/icon.svg",
+  "type": "enum",
+  "values": [
+    {
+      "id": "off",
+      "title": "Off"
+    },
+    {
+      "id": "on",
+      "title": "On"
+    },
+    {
+      "id": "keep",
+      "title": "Keep"
+    },
+    {
+      "id": "dog",
+      "title": "Dog"
+    },
+    {
+      "id": "camp",
+      "title": "Camp"
+    }
+  ]
+}

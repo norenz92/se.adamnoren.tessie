@@ -71,7 +71,7 @@ export class RealtimeClient extends WebSocketClient {
     super();
     this.vin = vin;
     this.access_token = access_token;
-    console.log("RealtimeClient initialized: ", { vin, access_token });
+    console.log("RealtimeClient initialized");
   }
 
   async disconnectClient() {
@@ -80,9 +80,9 @@ export class RealtimeClient extends WebSocketClient {
 
   async onData(callback: (data: RealtimeDataResponse) => void) {
     const url = `${this.host}/${this.vin}?access_token=${this.access_token}`;
-    console.log("Connecting to RealtimeClient: ", url);
+    console.log("Connecting to RealtimeClient...");
     this.on("connect", (connection) => {
-      console.log("RealtimeClient connected to: ", url);
+      console.log("RealtimeClient connected!");
       connection.on("message", (message: Message) => {
         if (message.type === "utf8") {
           const data = JSON.parse(

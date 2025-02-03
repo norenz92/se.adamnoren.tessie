@@ -1,6 +1,6 @@
 {
   "id": "com.adamnoren.tessie",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
@@ -36,9 +36,9 @@
       "paypal": {
         "username": "adamnorenverisure"
       },
-       "githubSponsors": {
-         "username": "norenz92"
-       }
+      "githubSponsors": {
+        "username": "norenz92"
+      }
     }
   },
   "bugs": {

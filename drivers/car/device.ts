@@ -6,9 +6,9 @@ module.exports = class CarDevice extends TessieDevice {
   async onInit() {
     await super.onInit();
 
-    this.registerChargeListener();
-    this.registerSetChargeCostAction();
-    this.registerBatteryHealthTrigger();
+    // this.registerChargeListener();
+    // this.registerSetChargeCostAction();
+    // this.registerBatteryHealthTrigger();
   }
 
   async registerChargeListener() {

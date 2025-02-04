@@ -50,15 +50,19 @@ export default class TessieDevice extends Homey.Device {
   }
 
   async handleLocation(data: ArrayElement<GetVehiclesResponse200["results"]>) {
-    const state = data.last_state?.drive_state;
-    if (state) {
-      this.setStoreValue("latitude", state.latitude);
-      this.setStoreValue("longitude", state.longitude);
-      this.setStoreValue("speed", state.speed ?? 0);
-      this.setStoreValue("heading", state.heading);
-      this.setStoreValue("timestamp", state.timestamp); // Unix timestamp
+    try {
+      const state = data.last_state?.drive_state;
+      if (state) {
+        this.setStoreValue("latitude", state.latitude);
+        this.setStoreValue("longitude", state.longitude);
+        this.setStoreValue("speed", state.speed ?? 0);
+        this.setStoreValue("heading", state.heading);
+        this.setStoreValue("timestamp", state.timestamp); // Unix timestamp
 
-      this.homey.emit(`location-${data.vin}`, data.last_state?.drive_state);
+        //this.homey.emit(`location-${data.vin}`, state);
+      }
+    } catch (error) {
+      this.error(`Failed to handle location: ${error}`);
     }
   }
 

@@ -100,6 +100,32 @@ export const capabilites: CapabilityMap[] = [
           return false;
       }
     },
+    actions: [
+      {
+        id: "start_charging",
+        title: "Start Charging",
+        hint: "Start charging the vehicle",
+        action: async (args, state, vin, access_token) => {
+          tessie.auth(access_token);
+          return await tessie.startCharging({
+            vin,
+            wait_for_completion: true,
+          });
+        },
+      },
+      {
+        id: "stop_charging",
+        title: "Stop Charging",
+        hint: "Stop charging the vehicle",
+        action: async (args, state, vin, access_token) => {
+          tessie.auth(access_token);
+          return await tessie.stopCharging({
+            vin,
+            wait_for_completion: true,
+          });
+        },
+      },
+    ],
   },
   {
     capability_id: "measure_charge_current_request",

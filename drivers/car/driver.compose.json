@@ -15,6 +15,9 @@
   },
   "pair": [
     {
+      "id": "accessToken"
+    },
+    {
       "id": "list_devices",
       "template": "list_devices",
       "navigation": {

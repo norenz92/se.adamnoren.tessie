@@ -1,11 +1,8 @@
 // Create an event emitter for data events
 
 import { EventEmitter } from "events";
-import Tessie, {
-  GetStateResponse200,
-  GetVehiclesResponse200,
-} from "../.api/apis/tessie";
-import { Realtime, RealtimeDataResponse } from "./realtime";
+import Tessie, { GetVehiclesResponse200 } from "../.api/apis/tessie";
+import { Realtime } from "./realtime";
 
 const apiEventEmitter = new EventEmitter();
 
@@ -26,26 +23,30 @@ export class TessieApi {
   }
 
   private async getData() {
-    console.log("Getting data..");
-    Tessie.auth(this.accessToken);
-    const { data, status } = await Tessie.getVehicles().catch((error) => {
-      throw new Error(`Cound not get vehicles: ${error}`);
-    });
+    try {
+      Tessie.auth(this.accessToken);
+      const { data, status } = await Tessie.getVehicles().catch((error) => {
+        throw new Error(`Cound not get vehicles: ${error}`);
+      });
 
-    if (status !== 200) {
-      throw new Error(`Failed to get data: ${status}`);
-    }
-
-    data.results?.forEach((vehicle) => {
-      if (!vehicle.vin) {
-        throw new Error("Vehicle VIN is missing");
+      if (status !== 200) {
+        throw new Error(`Failed to get data: ${status}`);
       }
-      this.emitData(vehicle.vin, vehicle);
-    });
+
+      data.results?.forEach((vehicle) => {
+        if (!vehicle.vin) {
+          throw new Error("Vehicle VIN is missing");
+        }
+        this.emitData(vehicle.vin, vehicle);
+      });
+    } catch (error) {
+      console.error(error);
+    }
   }
 
   // Start polling for data every 30 seconds.
   private async startPolling() {
+    await this.getData();
     this.timeout = setInterval(() => {
       this.getData();
     }, POLL_INTERVAL);
@@ -74,10 +75,6 @@ export class TessieApi {
     callback: (data: ArrayElement<GetVehiclesResponse200["results"]>) => void
   ) {
     this.apiEventEmitter.on(vin, callback);
-  }
-
-  init() {
-    this.startPolling();
   }
 }
 

@@ -109,6 +109,7 @@ export type Action = {
     title: string | { [key: string]: string };
     titleFormatted?: string | { [key: string]: string };
     placeholder?: string | { [key: string]: string };
+    required?: boolean;
   }[];
   action: (
     args: any,

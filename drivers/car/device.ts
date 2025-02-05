@@ -11,6 +11,16 @@ module.exports = class CarDevice extends TessieDevice {
     // this.registerBatteryHealthTrigger();
   }
 
+  async _auth() {
+    const accessToken = (this.homey.app as TessieApp).accessToken;
+
+    if (!accessToken) {
+      throw new Error("Access token is missing");
+    }
+
+    tessie.auth(accessToken);
+  }
+
   async registerChargeListener() {
     const vin = this.getData().id;
     (this.homey.app as TessieApp).tessieApi?.onData(vin, (data) => async () => {

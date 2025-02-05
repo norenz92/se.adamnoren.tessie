@@ -1,0 +1,39 @@
+{
+    "title": {
+        "en": "Inside temperature changed",
+        "de": "Innentemperatur hat sich geändert",
+        "nl": "Binnentemperatuur gewijzigd",
+        "fr": "Température intérieure modifiée",
+        "it": "Temperatura interna modificata",
+        "sv": "Inomhustemperaturen ändrad",
+        "no": "Innetemperaturen endret",
+        "es": "Temperatura interior cambiada",
+        "da": "Indendørstemperaturen ændret",
+        "ru": "Изменение внутренней температуры",
+        "pl": "Zmiana temperatury wewnątrz"
+    },
+    "tokens": [
+        {
+            "name": "measure_climate_temperature_in",
+            "type": "number",
+            "title": {
+                "en": "Inside temperature",
+                "de": "Innentemperatur",
+                "nl": "Binnentemperatuur",
+                "fr": "Température intérieure",
+                "it": "Temperatura interna",
+                "sv": "Inomhustemperatur",
+                "no": "Innetemperatur",
+                "es": "Temperatura interior",
+                "da": "Indendørstemperatur",
+                "ru": "Внутренняя температура",
+                "pl": "Temperatura wewnątrz"
+            }
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

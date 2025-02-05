@@ -1,0 +1,40 @@
+{
+    "title": {
+        "en": "Battery level changed",
+        "de": "Batteriestand hat sich geändert",
+        "nl": "Batterijniveau gewijzigd",
+        "fr": "Niveau de batterie modifié",
+        "it": "Livello della batteria modificato",
+        "sv": "Batterinivå ändrad",
+        "no": "Batterinivå endret",
+        "es": "Nivel de batería cambiado",
+        "da": "Batteriniveau ændret",
+        "ru": "Изменен уровень заряда батареи",
+        "pl": "Zmieniono poziom naładowania baterii"
+    },
+    "tokens": [
+        {
+            "name": "measure_soc_level",
+            "type": "number",
+            "title": {
+                "en": "Battery level",
+                "de": "Batteriestand",
+                "nl": "Batterijniveau",
+                "fr": "Niveau de batterie",
+                "it": "Livello della batteria",
+                "sv": "Batterinivå",
+                "no": "Batterinivå",
+                "es": "Nivel de batería",
+                "da": "Batteriniveau",
+                "ru": "Уровень заряда батареи",
+                "pl": "Poziom naładowania baterii"
+            },
+            "example": "80"
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

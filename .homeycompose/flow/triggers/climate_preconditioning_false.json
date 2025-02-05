@@ -1,0 +1,22 @@
+{
+    "title": {
+        "en": "Climate preconditioning has been deactivated",
+        "de": "Klimatisierung wurde deaktiviert",
+        "nl": "Climate control is gedeactiveerd",
+        "fr": "La préconditionnement climatique a été désactivé",
+        "it": "Il condizionamento climatico è stato disattivato",
+        "sv": "Klimatförberedelse har inaktiverats",
+        "no": "Klimaforberedelse er deaktivert",
+        "es": "La climatización ha sido desactivada",
+        "da": "Klimaforberedelse er blevet deaktiveret",
+        "ru": "Климатическая предварительная обработка отключена",
+        "pl": "Klimatyzacja została dezaktywowana"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=climate"
+        }
+    ]
+}

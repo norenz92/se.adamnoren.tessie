@@ -1,0 +1,40 @@
+{
+    "title": {
+        "en": "Battery range ideal changed",
+        "de": "Batteriereichweite ideal hat sich geändert",
+        "nl": "Batterijbereik ideaal gewijzigd",
+        "fr": "Changement de la plage idéale de la batterie",
+        "it": "Cambiamento della portata ideale della batteria",
+        "sv": "Batteriområde ideal ändrat",
+        "no": "Batterirekkevidde ideell endret",
+        "es": "Cambio en el rango ideal de la batería",
+        "da": "Batteriinterval ideel ændret",
+        "ru": "Изменение идеального диапазона батареи",
+        "pl": "Zmiana idealnego zakresu baterii"
+    },
+    "tokens": [
+        {
+            "name": "measure_soc_range_ideal",
+            "type": "number",
+            "title": {
+                "en": "Battery range ideal",
+                "de": "Batteriereichweite ideal",
+                "nl": "Batterijbereik ideaal",
+                "fr": "Plage idéale de la batterie",
+                "it": "Portata ideale della batteria",
+                "sv": "Batteriområde ideal",
+                "no": "Batterirekkevidde ideell",
+                "es": "Rango ideal de la batería",
+                "da": "Batteriinterval ideel",
+                "ru": "Идеальный диапазон батареи",
+                "pl": "Idealny zakres baterii"
+            },
+            "example": "250"
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

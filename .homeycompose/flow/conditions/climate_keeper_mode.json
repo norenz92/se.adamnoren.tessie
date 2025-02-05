@@ -1,0 +1,117 @@
+{
+  "title": {
+    "en": "Climate control mode !{{is|isn't}}",
+    "de": "Klimatisierungsoption !{{ist|ist nicht}}",
+    "nl": "Klimaatregelingsoptie !{{is|is niet}}",
+    "fr": "Mode de contrôle du climat !{{est|n'est pas}}",
+    "it": "Modalità di controllo del clima !{{è|non è}}",
+    "sv": "Klimatkontrollläge !{{är|är inte}}",
+    "no": "Klimakontrollmodus !{{er|er ikke}}",
+    "es": "Modo de control del clima !{{es|no es}}",
+    "da": "Klimakontroltilstand !{{er|er ikke}}",
+    "ru": "Режим управления климатом !{{есть|нет}}"
+  },
+  "titleFormatted": {
+    "en": "Climate control mode !{{is|isn't}} [[mode]]",
+    "de": "Klimatisierungsoption !{{ist|ist nicht}} [[mode]]",
+    "nl": "Klimaatregelingsoptie !{{is|is niet}} [[mode]]",
+    "fr": "Mode de contrôle du climat !{{est|n'est pas}} [[mode]]",
+    "it": "Modalità di controllo del clima !{{è|non è}} [[mode]]",
+    "sv": "Klimatkontrollläge !{{är|är inte}} [[mode]]",
+    "no": "Klimakontrollmodus !{{er|er ikke}} [[mode]]",
+    "es": "Modo de control del clima !{{es|no es}} [[mode]]",
+    "da": "Klimakontroltilstand !{{er|er ikke}} [[mode]]",
+    "ru": "Режим управления климатом !{{есть|нет}} [[mode]]",
+    "pl": "Tryb sterowania klimatyzacją !{{jest|nie jest}} [[mode]]"
+  },
+  "args": [
+    {
+      "name": "device",
+      "type": "device",
+      "filter": "driver_id=undefined"
+    },
+    {
+      "name": "mode",
+      "type": "dropdown",
+      "title": { 
+        "en": "Climate keeper mode",
+        "de": "Klimaüberwachungsmodus",
+        "nl": "Klimaatbewakingsmodus",
+        "fr": "Mode de conservation du climat",
+        "it": "Modalità di conservazione del clima",
+        "sv": "Klimatbevarandeläge",
+        "no": "Klimabevaremodus",
+        "es": "Modo de conservación del clima",
+        "da": "Klimabevaretilstand",
+        "ru": "Режим сохранения климата",
+        "pl": "Tryb zachowania klimatu"
+      },
+      "values": [
+        {
+          "id": "off",
+          "title": {
+            "en": "Off",
+            "de": "Aus",
+            "nl": "Uit",
+            "fr": "Éteint",
+            "it": "Spento",
+            "sv": "Av",
+            "no": "Av",
+            "es": "Apagado",
+            "da": "Slukket",
+            "ru": "Выключено",
+            "pl": "Wyłączone"
+          }
+        },
+        {
+          "id": "on",
+          "title": {
+            "en": "Keep activated",
+            "de": "Aktiviert lassen",
+            "nl": "Actief houden",
+            "fr": "Maintenir activé",
+            "it": "Mantieni attivo",
+            "sv": "Behåll aktiverad",
+            "no": "Hold aktivert",
+            "es": "Mantener activado",
+            "da": "Hold aktiveret",
+            "ru": "Сохранить активированным",
+            "pl": "Utrzymuj włączone"
+          }
+        },
+        {
+          "id": "dog",
+          "title": {
+            "en": "Dog mode",
+            "de": "Hundemodus",
+            "nl": "Hondenmodus",
+            "fr": "Mode chien",
+            "it": "Modalità cane",
+            "sv": "Hundläge",
+            "no": "Hundemodus",
+            "es": "Modo perro",
+            "da": "Hundetilstand",
+            "ru": "Режим собаки",
+            "pl": "Tryb psa"
+          }
+        },
+        {
+          "id": "camp",
+          "title": {
+            "en": "Camp mode",
+            "de": "Camping-Modus",
+            "nl": "Kampeermodus",
+            "fr": "Mode camping",
+            "it": "Modalità campeggio",
+            "sv": "Camp-läge",
+            "no": "Camp-modus",
+            "es": "Modo campamento",
+            "da": "Campingtilstand",
+            "ru": "Режим кемпинга",
+            "pl": "Tryb kempingowy"
+          }
+        }
+      ]
+    }
+  ]
+}

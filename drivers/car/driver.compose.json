@@ -3,7 +3,6 @@
     "en": "Car"
   },
   "class": "other",
-  "capabilities": [],
   "platforms": [
     "local"
   ],
@@ -28,5 +27,32 @@
       "id": "add_devices",
       "template": "add_devices"
     }
+  ],
+  "energy": {
+    "batteries": ["INTERNAL"]
+  },
+  "capabilities": [
+    "car_doors_locked",
+    "meter_car_odo",
+    "charging_on",
+    "measure_charge_current_max",
+    "measure_charge_current",
+    "measure_charge_energy_added",
+    "measure_charge_limit_soc",
+    "measure_charge_minutes_to_full_charge",
+    "measure_charge_phases",
+    "measure_charge_power",
+    "measure_charge_voltage",
+    "measure_climate_temperature_in",
+    "measure_climate_temperature_out",
+    "measure_io_battery_power",
+    "measure_location_heading",
+    "measure_location_latitude",
+    "measure_location_longitude",
+    "measure_soc_level",
+    "measure_soc_range_estimated",
+    "measure_soc_range_ideal",
+    "measure_soc_usable",
+    "measure_battery"
   ]
 }

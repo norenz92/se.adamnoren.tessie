@@ -1,0 +1,23 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "Charging port has been closed",
+        "de": "Ladeanschluss wurde geschlossen",
+        "nl": "Oplaadpoort is gesloten",
+        "fr": "Le port de charge a été fermé",
+        "it": "La porta di ricarica è stata chiusa",
+        "sv": "Laddningsporten har stängts",
+        "no": "Ladeporten er blitt lukket",
+        "es": "El puerto de carga ha sido cerrado",
+        "da": "Opladningsporten er blevet lukket",
+        "ru": "Зарядный порт закрыт",
+        "pl": "Port ładowania został zamknięty"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=battery"
+        }
+    ]
+}

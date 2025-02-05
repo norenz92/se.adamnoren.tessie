@@ -1,0 +1,40 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "State changed",
+        "de": "Status hat sich geändert",
+        "nl": "Toestand gewijzigd",
+        "fr": "État modifié",
+        "it": "Stato modificato",
+        "sv": "Tillstånd ändrat",
+        "no": "Tilstand endret",
+        "es": "Estado cambiado",
+        "da": "Tilstand ændret",
+        "ru": "Состояние изменено",
+        "pl": "Zmieniony stan"
+    },
+    "tokens": [{
+            "name": "car_state",
+            "type": "string",
+            "title": {
+                "en": "State",
+                "de": "Status",
+                "nl": "Toestand",
+                "fr": "État",
+                "it": "Stato",
+                "sv": "Tillstånd",
+                "no": "Tilstand",
+                "es": "Estado",
+                "da": "Tilstand",
+                "ru": "Состояние",
+                "pl": "Stan"
+            },
+            "example": "online"
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=undefined"
+    }]
+}

@@ -1,9 +1,0 @@
-{
-  "type": "number",
-  "uiComponent": "battery",
-  "title": "Battery Level",
-  "insights": true,
-  "getable": true,
-  "setable": false,
-  "icon": "/assets/icon.svg"
-}

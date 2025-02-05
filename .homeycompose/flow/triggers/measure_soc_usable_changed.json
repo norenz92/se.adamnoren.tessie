@@ -1,0 +1,40 @@
+{
+    "title": {
+        "en": "Usable battery level changed",
+        "de": "Nutzbarer Batteriestand hat sich geändert",
+        "nl": "Bruikbaar batterijniveau gewijzigd",
+        "fr": "Niveau de batterie utilisable modifié",
+        "it": "Livello di batteria utilizzabile modificato",
+        "sv": "Ändring av användbart batterinivå",
+        "no": "Endring i brukbar batterinivå",
+        "es": "Nivel de batería utilizable cambiado",
+        "da": "Ændring i brugbar batteriniveau",
+        "ru": "Изменение уровня используемой батареи",
+        "pl": "Zmiana poziomu użytecznego poziomu baterii"
+    },
+    "tokens": [
+        {
+            "name": "measure_soc_usable",
+            "type": "number",
+            "title": {
+                "en": "Usable battery level",
+                "de": "Nutzbarer Batteriestand",
+                "nl": "Bruikbaar batterijniveau",
+                "fr": "Niveau de batterie utilisable",
+                "it": "Livello di batteria utilizzabile",
+                "sv": "Användbar batterinivå",
+                "no": "Brukbar batterinivå",
+                "es": "Nivel de batería utilizable",
+                "da": "Brugbar batteriniveau",
+                "ru": "Уровень используемой батареи",
+                "pl": "Poziom użytecznego poziomu baterii"
+            },
+            "example": "75"
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

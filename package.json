@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@api/tessie": "file:.api/apis/tessie",
+    "https": "^1.0.0",
     "websocket": "^1.0.35"
   }
 }

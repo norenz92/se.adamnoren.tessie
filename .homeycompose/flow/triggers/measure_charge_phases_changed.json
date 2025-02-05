@@ -1,0 +1,39 @@
+{
+    "title": {
+        "en": "Charge phases changed",
+        "de": "Ladephasen hat sich geändert",
+        "nl": "Laad fasen gewijzigd",
+        "fr": "Phases de charge modifiées",
+        "it": "Fasi di carica modificate",
+        "sv": "Laddningsfaser ändrades",
+        "no": "Ladefaser endret",
+        "es": "Fases de carga modificadas",
+        "da": "Opladningsfaser ændret",
+        "ru": "Изменение фаз зарядки",
+        "pl": "Zmiana faz ładowania"
+    },
+    "tokens": [
+        {
+            "name": "measure_charge_phases",
+            "type": "number",
+            "title": {
+                "en": "Charge phases",
+                "de": "Ladephasen",
+                "nl": "Laad fasen",
+                "fr": "Phases de charge",
+                "it": "Fasi di carica",
+                "sv": "Laddningsfaser",
+                "no": "Ladefaser",
+                "es": "Fases de carga",
+                "da": "Opladningsfaser",
+                "ru": "Фазы зарядки",
+                "pl": "Fazy ładowania"
+            }
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

@@ -1,0 +1,23 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "Charging port has been opened",
+        "de": "Ladeanschluss wurde geöffnet",
+        "nl": "Oplaadpoort is geopend",
+        "fr": "Le port de charge a été ouvert",
+        "it": "La porta di ricarica è stata aperta",
+        "sv": "Laddningsporten har öppnats",
+        "no": "Ladeporten har blitt åpnet",
+        "es": "El puerto de carga ha sido abierto",
+        "da": "Opladningsporten er blevet åbnet",
+        "ru": "Разъем для зарядки был открыт",
+        "pl": "Port ładowania został otwarty"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=battery"
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "type": "string",
+    "title": {
+        "en": "Charging cable",
+        "de": "Ladekabel",
+        "nl": "Oplaadkabel",
+        "fr": "Câble de charge",
+        "it": "Cavo di ricarica",
+        "sv": "Laddningskabel",
+        "no": "Ladekabel",
+        "es": "Cable de carga",
+        "da": "Opladningskabel",
+        "ru": "Зарядный кабель",
+        "pl": "Kabel ładowania"
+    },
+    "uiComponent": "sensor",
+    "getable": true,
+    "setable": false,
+    "icon": "./assets/capability_icons/charging_port_cable.svg"
+}

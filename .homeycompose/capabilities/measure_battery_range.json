@@ -1,0 +1,9 @@
+{
+  "type": "number",
+  "uiComponent": "sensor",
+  "title": "Estimated Range",
+  "insights": true,
+  "getable": true,
+  "setable": false,
+  "icon": "/drivers/car/assets/geo-fill.svg"
+}

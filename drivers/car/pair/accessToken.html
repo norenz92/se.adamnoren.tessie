@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <header class="homey-header">
+      <h1 class="homey-title">
+        Add Tessie device
+      </h1>
+      <p class="homey-subtitle">
+        Enter your API key to connect a Tessie device
+      </p>
+    </header>
+
+    <fieldset class="homey-form-fieldset">
+      <div class="homey-form-group">
+        <label class="homey-form-label" for="apiKey">API key</label>
+        <input class="homey-form-input" id="apiKey" type="text" value="" />
+      </div>
+    </fieldset>
+
+    <button id="save" class="homey-button-primary-full">Save changes</button>
+
+    <script type="text/javascript">
+      // a method named 'onHomeyReady' must be present in your code
+
+        var apiKeyElement = document.getElementById("apiKey");
+        var saveElement = document.getElementById("save");
+
+        saveElement.addEventListener("click", function (e) {
+          saveElement.classList.add("is-loading","is-disabled")
+          saveElement.value = "Saving...";
+          Homey.showLoadingOverlay();
+          
+          Homey.emit("accessToken", { accessToken: apiKeyElement.value }).then(function (success) {
+            if (success) {
+              Homey.nextView()
+            } else {
+              Homey.alert("Failed to save settings");
+              saveElement.classList.remove("is-loading","is-disabled")
+              saveElement.value = "Save changes";
+            }
+            Homey.hideLoadingOverlay();
+          }).catch(function (err) {
+            Homey.alert("Failed to save settings");
+            saveElement.classList.remove("is-loading","is-disabled")
+            saveElement.value = "Save changes";
+            Homey.hideLoadingOverlay();
+          });
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,8 @@
+{
+  "type": "boolean",
+  "uiComponent": "toggle",
+  "setable": true,
+  "getable": true,
+  "title": "Climate Control",
+  "icon": "/drivers/car/assets/thermometer-half.svg"
+}

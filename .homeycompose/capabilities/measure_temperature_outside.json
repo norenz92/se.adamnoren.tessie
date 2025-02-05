@@ -1,0 +1,9 @@
+{
+  "type": "number",
+  "uiComponent": "sensor",
+  "title": "Outside Temperature",
+  "insights": true,
+  "getable": true,
+  "setable": false,
+  "icon": "/drivers/car/assets/thermometer-half.svg"
+}

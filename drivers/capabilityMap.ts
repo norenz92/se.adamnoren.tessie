@@ -181,7 +181,7 @@ export const capabilites: CapabilityMap[] = [
   },
 
   // Range
-  /* {
+  {
     capability_id: "measure_battery_range",
     api_key: "last_state.charge_state.battery_range",
     capability: {
@@ -199,10 +199,29 @@ export const capabilites: CapabilityMap[] = [
       "stringValue" in value.value
         ? roundedToFixed(Number(value.value.stringValue), 1)
         : value.value,
-  }, */
+  },
+  {
+    capability_id: "measure_est_battery_range",
+    api_key: "last_state.charge_state.est_battery_range",
+    capability: {
+      type: "number",
+      uiComponent: "sensor",
+      title: "Estimated Range",
+      insights: true,
+      getable: true,
+      setable: false,
+      icon: "/drivers/car/assets/geo-fill.svg",
+    },
+    type: "distance",
+    realtime_key: "RatedRange",
+    transformRealtimeData: (value) =>
+      "doubleValue" in value.value
+        ? roundedToFixed(Number(value.value.doubleValue), 1)
+        : value.value,
+  },
 
   // Climate
-  /* {
+  {
     capability_id: "measure_temperature_inside",
     api_key: "last_state.climate_state.inside_temp",
     capability: {
@@ -217,11 +236,11 @@ export const capabilites: CapabilityMap[] = [
     type: "temperature",
     realtime_key: "InsideTemp",
     transformRealtimeData: (value) =>
-      "stringValue" in value.value
-        ? roundedToFixed(Number(value.value.stringValue), 1)
+      "doubleValue" in value.value
+        ? roundedToFixed(Number(value.value.doubleValue), 1)
         : value.value,
-  }, */
-  /* {
+  },
+  {
     capability_id: "measure_temperature_outside",
     api_key: "last_state.climate_state.outside_temp",
     capability: {
@@ -236,10 +255,89 @@ export const capabilites: CapabilityMap[] = [
     type: "temperature",
     realtime_key: "OutsideTemp",
     transformRealtimeData: (value) =>
-      "stringValue" in value.value
-        ? roundedToFixed(Number(value.value.stringValue), 1)
+      "doubleValue" in value.value
+        ? roundedToFixed(Number(value.value.doubleValue), 1)
         : value.value,
-  }, */
+  },
+  {
+    capability_id: "climate_control",
+    api_key: "last_state.climate_state.is_climate_on",
+    capability: {
+      type: "boolean",
+      uiComponent: "toggle",
+      setable: true,
+      getable: true,
+      title: "Climate Control",
+      icon: "/drivers/car/assets/thermometer-half.svg",
+    },
+    realtime_key: "HvacPower",
+    transformRealtimeData: (value) =>
+      "hvacPowerValue" in value.value
+        ? value.value.hvacPowerValue === "HvacPowerStateOn"
+        : value.value,
+    setter: async (value, access_token, vin) => {
+      tessie.auth(access_token);
+      if (value) {
+        await tessie.startClimate({
+          vin,
+          wait_for_completion: true,
+        });
+      } else {
+        await tessie.stopClimate({
+          vin,
+          wait_for_completion: true,
+        });
+      }
+    },
+    actions: [
+      {
+        id: "start_climate",
+        title: "Start Climate",
+        hint: "Start climate control",
+        action: async (args, state, vin, access_token) => {
+          tessie.auth(access_token);
+
+          if (args.climate_temperature) {
+            await tessie.setTemperatures({
+              vin,
+              wait_for_completion: true,
+              temperature: args.climate_temperature,
+            });
+          }
+
+          return await tessie.startClimate({
+            vin,
+            wait_for_completion: true,
+          });
+        },
+        args: [
+          {
+            name: "climate_temperature",
+            type: "number",
+            min: 15,
+            max: 28,
+            step: 1,
+            title: "Temperature",
+            titleFormatted: "Start Climate at [[climate_temperature]]°C",
+            placeholder: "15°C-28°C",
+            required: false,
+          },
+        ],
+      },
+      {
+        id: "stop_climate",
+        title: "Stop Climate",
+        hint: "Stop climate control",
+        action: async (args, state, vin, access_token) => {
+          tessie.auth(access_token);
+          return await tessie.stopClimate({
+            vin,
+            wait_for_completion: true,
+          });
+        },
+      },
+    ],
+  },
 
   // Location/speed
   /* {

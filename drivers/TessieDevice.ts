@@ -11,6 +11,7 @@ import { ArrayElement } from "../tessie/api";
 
 export default class TessieDevice extends Homey.Device {
   realtimeClient: RealtimeClient | undefined;
+  isInitialized: boolean = false;
 
   /**
    * onInit is called when the device is initialized.
@@ -21,7 +22,7 @@ export default class TessieDevice extends Homey.Device {
     (this.homey.app as TessieApp).tessieApi?.onData(vin, (data) => {
       this.handleCapabilities(data);
       this.handleUnits(data);
-      this.handleLocation(data);
+      //this.handleLocation(data);
     });
     this.realtimeClient = (
       this.homey.app as TessieApp
@@ -144,28 +145,45 @@ export default class TessieDevice extends Homey.Device {
                 break;
             }
           }
+        }
 
+        if (!this.isInitialized) {
+          this.log(`TessieDevice is initializing...`);
           if (capability?.setter) {
+            this.log(
+              `Registering capability listener for: ${capability.capability_id}`
+            );
             this.registerCapabilityListener(
               capability.capability_id,
               async (value) => {
-                capability.setter!(value, access_token, vin).catch((error) => {
-                  this.error(error);
-                });
+                await capability.setter!(value, access_token, vin).catch(
+                  (error) => {
+                    this.error(error);
+                  }
+                );
               }
+            );
+            this.log(
+              `Registered capability listener for: ${capability.capability_id}`
             );
           }
 
           if (capability?.actions) {
+            this.log(`Registering actions for: ${capability.capability_id}`);
             capability.actions.forEach((action) => {
+              this.log(`Registering action: ${action.id}`);
               this.homey.flow
                 .getActionCard(action.id)
                 .registerRunListener(async (args, state) => {
-                  return await action.action(args, state, vin, access_token);
+                  return action.action(args, state, vin, access_token);
                 });
-              console.log("Registered action: ", action.id);
+              this.log(`Registered action: ${action.id}`);
             });
+            this.log(`Registered actions for: ${capability.capability_id}`);
           }
+
+          this.isInitialized = true;
+          this.log(`TessieDevice has been initialized`);
         }
 
         const transformedValue = capability.transformData

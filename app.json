@@ -1,7 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.adamnoren.tessie",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "compatibility": ">=12.2.0",
   "sdk": 3,
   "platforms": [
@@ -49,6 +49,28 @@
   "flow": {
     "actions": [
       {
+        "id": "start_charging",
+        "title": "Start Charging",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          }
+        ]
+      },
+      {
+        "id": "stop_charging",
+        "title": "Stop Charging",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          }
+        ]
+      },
+      {
         "id": "set_charge_current_request",
         "title": "Set Charging Current",
         "args": [
@@ -66,6 +88,39 @@
             "title": "Charging Current (A)",
             "titleFormatted": "Set Charging Current to [[amps]]A",
             "placeholder": "0A-16A"
+          }
+        ]
+      },
+      {
+        "id": "start_climate",
+        "title": "Start Climate",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          },
+          {
+            "name": "climate_temperature",
+            "type": "number",
+            "min": 15,
+            "max": 28,
+            "step": 1,
+            "title": "Temperature",
+            "titleFormatted": "Start Climate at [[climate_temperature]]°C",
+            "placeholder": "15°C-28°C",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": "stop_climate",
+        "title": "Stop Climate",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
           }
         ]
       }
@@ -88,6 +143,9 @@
         "xlarge": "/drivers/car/assets/images/xlarge.png"
       },
       "pair": [
+        {
+          "id": "accessToken"
+        },
         {
           "id": "list_devices",
           "template": "list_devices",
@@ -130,6 +188,14 @@
     }
   ],
   "capabilities": {
+    "climate_control": {
+      "type": "boolean",
+      "uiComponent": "toggle",
+      "setable": true,
+      "getable": true,
+      "title": "Climate Control",
+      "icon": "/drivers/car/assets/thermometer-half.svg"
+    },
     "measure_battery": {
       "type": "number",
       "uiComponent": "battery",
@@ -138,6 +204,15 @@
       "getable": true,
       "setable": false,
       "icon": "/assets/icon.svg"
+    },
+    "measure_battery_range": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Estimated Range",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/geo-fill.svg"
     },
     "measure_charge_current_request": {
       "type": "number",
@@ -157,6 +232,15 @@
       "title": "Charging",
       "icon": "/drivers/car/assets/battery-charging.svg"
     },
+    "measure_est_battery_range": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Estimated Range",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/geo-fill.svg"
+    },
     "measure_minutes_to_full_charge": {
       "type": "number",
       "uiComponent": "sensor",
@@ -166,6 +250,24 @@
       "setable": false,
       "icon": "/drivers/car/assets/hourglass-split.svg",
       "units": "minutes"
+    },
+    "measure_temperature_inside": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Inside Temperature",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/thermometer-half.svg"
+    },
+    "measure_temperature_outside": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Outside Temperature",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/thermometer-half.svg"
     }
   }
 }

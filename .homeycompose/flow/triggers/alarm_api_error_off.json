@@ -1,0 +1,23 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "API ok",
+        "de": "API ok",
+        "nl": "API ok",
+        "fr": "API ok",
+        "it": "API ok",
+        "sv": "API ok",
+        "no": "API ok",
+        "es": "API ok",
+        "da": "API ok",
+        "ru": "API ok",
+        "pl": "API ok"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=undefined"
+        }
+    ]
+}

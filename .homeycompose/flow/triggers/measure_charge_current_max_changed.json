@@ -1,0 +1,39 @@
+{
+    "title": {
+        "en": "Max. charge current changed",
+        "de": "Max. Ladestrom hat sich geändert",
+        "nl": "Max. laadstroom gewijzigd",
+        "fr": "Courant de charge max. modifié",
+        "it": "Corrente di carica massima modificata",
+        "sv": "Max. laddström ändrad",
+        "no": "Maks. ladestrøm endret",
+        "es": "Corriente de carga máxima cambiada",
+        "da": "Maks. ladestrøm ændret",
+        "ru": "Изменен максимальный ток зарядки",
+        "pl": "Zmieniono maksymalny prąd ładowania"
+    },
+    "tokens": [
+        {
+            "name": "measure_charge_current_max",
+            "type": "number",
+            "title": {
+                "en": "Max. charge current",
+                "de": "Max. Ladestrom",
+                "nl": "Max. laadstroom",
+                "fr": "Courant de charge max.",
+                "it": "Corrente di carica massima",
+                "sv": "Max. laddström",
+                "no": "Maks. ladestrøm",
+                "es": "Corriente de carga máxima",
+                "da": "Maks. ladestrøm",
+                "ru": "Максимальный ток зарядки",
+                "pl": "Maksymalny prąd ładowania"
+            }
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

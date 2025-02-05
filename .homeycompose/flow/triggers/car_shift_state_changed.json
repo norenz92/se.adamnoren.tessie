@@ -1,0 +1,39 @@
+{
+    "title": {
+        "en": "Shift state changed",
+        "de": "Schaltzustand hat sich geändert",
+        "nl": "Schakelstand gewijzigd",
+        "fr": "État de changement de vitesse",
+        "it": "Stato cambio marcia modificato",
+        "sv": "Växelläge ändrat",
+        "no": "Skiftetilstand endret",
+        "es": "Estado de cambio de marcha modificado",
+        "da": "Skifttilstand ændret",
+        "ru": "Изменено состояние переключения",
+        "pl": "Zmieniono stan zmiany biegu"
+    },
+    "tokens": [
+        {
+            "name": "car_shift_state",
+            "type": "string",
+            "title": {
+                "en": "Shift state",
+                "de": "Schaltzustand",
+                "nl": "Schakelstand",
+                "fr": "État de changement de vitesse",
+                "it": "Stato cambio marcia",
+                "sv": "Växelläge",
+                "no": "Skiftetilstand",
+                "es": "Estado de cambio de marcha",
+                "da": "Skifttilstand",
+                "ru": "Состояние переключения",
+                "pl": "Stan zmiany biegu"
+            }
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=undefined"
+    }]
+}

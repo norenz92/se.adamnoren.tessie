@@ -1,0 +1,23 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "Defrost !{{is|isn't}} active",
+        "de": "Enteisen !{{ist|ist nicht}} aktiviert",
+        "nl": "Ontdooien !{{is|is niet}} geactiveerd",
+        "fr": "Désembuage !{{est|n'est pas}} actif",
+        "it": "Sbrina !{{è|non è}} attiva",
+        "sv": "Avfrostning !{{är|är inte}} aktiv",
+        "no": "Avriming !{{er|er ikke}} aktiv",
+        "es": "Descongelación !{{está|no está}} activa",
+        "da": "Afrimning !{{er|er ikke}} aktiv",
+        "ru": "Разморозка !{{активна|не активна}}",
+        "pl": "Odszranianie !{{jest|nie jest}} aktywne"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=undefined"
+        }
+    ]
+}

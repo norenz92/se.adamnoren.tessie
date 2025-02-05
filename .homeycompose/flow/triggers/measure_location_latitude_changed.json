@@ -1,0 +1,39 @@
+{
+    "title": {
+        "en": "Latitude changed",
+        "de": "Breitengrad hat sich geändert",
+        "nl": "Breedtegraad gewijzigd",
+        "fr": "Latitude modifiée",
+        "it": "Latitudine modificata",
+        "sv": "Latitud ändrad",
+        "no": "Breddegrad endret",
+        "es": "Latitud cambiada",
+        "da": "Breddegrad ændret",
+        "ru": "Изменена широта",
+        "pl": "Zmieniona szerokość geograficzna"
+    },
+    "tokens": [
+        {
+            "name": "measure_location_latitude",
+            "type": "number",
+            "title": {
+                "en": "Latitude",
+                "de": "Breitengrad",
+                "nl": "Breedtegraad",
+                "fr": "Latitude",
+                "it": "Latitudine",
+                "sv": "Latitud",
+                "no": "Breddegrad",
+                "es": "Latitud",
+                "da": "Breddegrad",
+                "ru": "Широта",
+                "pl": "Szerokość geograficzna"
+            }
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

@@ -1,0 +1,39 @@
+{
+    "title": {
+        "en": "API wake commmand count changed",
+        "de": "API Weck-Kommandoanzahl geändert",
+        "nl": "Aantal API wek-commando's veranderd",
+        "fr": "Nombre de commandes de l'API de Wake modifié",
+        "it": "Conteggio comandi API Wake modificato",
+        "sv": "API weck-kommandoräkning ändrad",
+        "no": "Endret API-weck-kommandotelling",
+        "es": "Recuento de comandos de Wake de la API cambiado",
+        "da": "Ændret API-weck-kommandotal",
+        "ru": "Изменено количество команд API",
+        "pl": "Zmieniono liczbę poleceń API"
+    },
+    "tokens": [
+        {
+            "name": "measure_api_command_wakes_count",
+            "type": "number",
+            "title": {
+                "en": "Commands per day",
+                "de": "Kommandos pro Tag",
+                "nl": "Commando's per dag",
+                "fr": "Commandes par jour",
+                "it": "Comandi al giorno",
+                "sv": "Kommandon per dag",
+                "no": "Kommandoer per dag",
+                "es": "Comandos por día",
+                "da": "Kommandoer pr. dag",
+                "ru": "Команд в день",
+                "pl": "Polecenia na dzień"
+            }
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=undefined"
+    }]
+}

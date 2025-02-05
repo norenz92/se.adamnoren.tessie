@@ -1,0 +1,39 @@
+{
+    "title": {
+        "en": "Odometer changed",
+        "de": "Kilometerzähler hat sich geändert",
+        "nl": "Kilometerteller gewijzigd",
+        "fr": "Compteur kilométrique modifié",
+        "it": "Contachilometri modificato",
+        "sv": "Mätarställning ändrad",
+        "no": "Turteller endret",
+        "es": "Odómetro cambiado",
+        "da": "Odometer ændret",
+        "ru": "Изменение одометра",
+        "pl": "Zmiana licznika"
+    },
+    "tokens": [
+        {
+            "name": "meter_car_odo",
+            "type": "string",
+            "title": {
+                "en": "Odometer",
+                "de": "Kilometerzähler",
+                "nl": "Kilometerteller",
+                "fr": "Compteur kilométrique",
+                "it": "Contachilometri",
+                "sv": "Mätarställning",
+                "no": "Turteller",
+                "es": "Odómetro",
+                "da": "Odometer",
+                "ru": "Одометр",
+                "pl": "Licznik"
+            }
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

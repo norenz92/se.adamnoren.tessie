@@ -1,0 +1,138 @@
+{
+    "title": {
+        "en": "Update state !{{is|isn't}}",
+        "de": "Aktualisierungs-Status !{{ist|ist nicht}}",
+        "nl": "Status bijwerken !{{is|is niet}}",
+        "fr": "État de mise à jour !{{est|n'est pas}}",
+        "it": "Stato aggiornamento !{{è|non è}}",
+        "sv": "Uppdateringsstatus !{{är|är inte}}",
+        "no": "Oppdateringsstatus !{{er|er ikke}}",
+        "es": "Estado de actualización !{{es|no es}}",
+        "da": "Opdateringsstatus !{{er|er ikke}}",
+        "ru": "Состояние обновления !{{есть|нет}}"
+    },
+    "titleFormatted": {
+        "en": "Update state !{{is|isn't}} [[state]]",
+        "de": "Aktualisierungs-Status !{{ist|ist nicht}} [[state]]",
+        "nl": "Status bijwerken !{{is|is niet}} [[state]]",
+        "fr": "État de mise à jour !{{est|n'est pas}} [[state]]",
+        "it": "Stato aggiornamento !{{è|non è}} [[state]]",
+        "sv": "Uppdateringsstatus !{{är|är inte}} [[state]]",
+        "no": "Oppdateringsstatus !{{er|er ikke}} [[state]]",
+        "es": "Estado de actualización !{{es|no es}} [[state]]",
+        "da": "Opdateringsstatus !{{er|er ikke}} [[state]]",
+        "ru": "Состояние обновления !{{есть|нет}} [[state]]"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=undefined"
+        },
+        {
+            "name": "state",
+            "type": "dropdown",
+            "title": { 
+                "en": "Update state",
+                "de": "Aktualisierungs-Status",
+                "nl": "Status bijwerken",
+                "fr": "État de mise à jour",
+                "it": "Stato aggiornamento",
+                "sv": "Uppdateringsstatus",
+                "no": "Oppdateringsstatus",
+                "es": "Estado de actualización",
+                "da": "Opdateringsstatus",
+                "ru": "Состояние обновления",
+                "pl": "Stan aktualizacji"
+            },
+            "values": [
+                {
+                    "id": "",
+                    "title": {
+                        "en": "-"
+                    }
+                },
+                {
+                    "id": "available",
+                    "title": {
+                        "en": "Available",
+                        "de": "Verfügbar",
+                        "nl": "Beschikbaar",
+                        "fr": "Disponible",
+                        "it": "Disponibile",
+                        "sv": "Tillgänglig",
+                        "no": "Tilgjengelig",
+                        "es": "Disponible",
+                        "da": "Tilgængelig",
+                        "ru": "Доступно",
+                        "pl": "Dostępne"
+                    }
+                },
+                {
+                    "id": "scheduled",
+                    "title": {
+                        "en": "Planned",
+                        "de": "Geplant",
+                        "nl": "Gepland",
+                        "fr": "Planifié",
+                        "it": "Pianificato",
+                        "sv": "Planerad",
+                        "no": "Planlagt",
+                        "es": "Planificado",
+                        "da": "Planlagt",
+                        "ru": "Запланировано",
+                        "pl": "Zaplanowane"
+                    }
+                },
+                {
+                    "id": "downloading_wifi_wait",
+                    "title": {
+                        "en": "Waiting for Wifi download",
+                        "de": "Warte auf Wifi-Download",
+                        "nl": "Wachten op wifi-download",
+                        "fr": "En attente du téléchargement Wifi",
+                        "it": "In attesa del download tramite Wifi",
+                        "sv": "Väntar på Wifi-nedladdning",
+                        "no": "Venter på Wifi-nedlasting",
+                        "es": "Esperando la descarga por Wifi",
+                        "da": "Venter på Wifi-download",
+                        "ru": "Ожидание загрузки по Wi-Fi",
+                        "pl": "Oczekiwanie na pobieranie przez Wifi"
+                    }
+                },
+                {
+                    "id": "downloading",
+                    "title": {
+                        "en": "Downloading",
+                        "de": "Wird heruntergeladen",
+                        "nl": "Downloaden",
+                        "fr": "Téléchargement en cours",
+                        "it": "Download in corso",
+                        "sv": "Laddar ner",
+                        "no": "Laster ned",
+                        "es": "Descargando",
+                        "da": "Downloader",
+                        "ru": "Загрузка",
+                        "pl": "Pobieranie"
+                    }
+                },
+                {
+                    "id": "installing",
+                    "title": {
+                        "en": "Installing",
+                        "de": "Wird installiert",
+                        "nl": "Is being installed",
+                        "fr": "Installation en cours",
+                        "it": "Installazione in corso",
+                        "sv": "Installerar",
+                        "no": "Installerer",
+                        "es": "Instalando",
+                        "da": "Installerer",
+                        "ru": "Установка",
+                        "pl": "Instalowanie"
+                    }
+                }
+            ]
+        }
+    ]
+}

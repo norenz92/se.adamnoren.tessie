@@ -1,0 +1,39 @@
+{
+    "title": {
+        "en": "Charge voltage changed",
+        "de": "Ladespannung hat sich geändert",
+        "nl": "Laad spanning gewijzigd",
+        "fr": "Tension de charge modifiée",
+        "it": "Tensione di carica modificata",
+        "sv": "Laddningsspänning ändrad",
+        "no": "Ladespenning endret",
+        "es": "Voltaje de carga cambiado",
+        "da": "Opladningsspænding ændret",
+        "ru": "Изменение напряжения заряда",
+        "pl": "Zmiana napięcia ładowania"
+    },
+    "tokens": [
+        {
+            "name": "measure_charge_voltage",
+            "type": "number",
+            "title": {
+                "en": "Charge voltage",
+                "de": "Ladespannung",
+                "nl": "Laad spanning",
+                "fr": "Tension de charge",
+                "it": "Tensione di carica",
+                "sv": "Laddningsspänning",
+                "no": "Ladespenning",
+                "es": "Voltaje de carga",
+                "da": "Opladningsspænding",
+                "ru": "Напряжение заряда",
+                "pl": "Napięcie ładowania"
+            }
+        }
+    ],
+    "args": [{
+        "name": "device",
+        "type": "device",
+        "filter": "driver_id=car"
+    }]
+}

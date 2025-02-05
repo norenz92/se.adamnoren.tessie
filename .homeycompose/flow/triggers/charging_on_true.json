@@ -1,0 +1,23 @@
+{
+    "highlight": true,
+    "title": {
+        "en": "Charging has started",
+        "de": "Laden wurde gestartet",
+        "nl": "Het laden is begonnen",
+        "fr": "La charge a commencé",
+        "it": "La ricarica è iniziata",
+        "sv": "Laddningen har börjat",
+        "no": "Ladingen har startet",
+        "es": "La carga ha comenzado",
+        "da": "Opladning er startet",
+        "ru": "Зарядка началась",
+        "pl": "Rozpoczęto ładowanie"
+    },
+    "args": [
+        {
+            "name": "device",
+            "type": "device",
+            "filter": "driver_id=car"
+        }
+    ]
+}

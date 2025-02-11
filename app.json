@@ -2934,7 +2934,7 @@
           {
             "name": "device",
             "type": "device",
-            "filter": "driver_id=battery"
+            "filter": "driver_id=car"
           }
         ],
         "id": "measure_charge_limit_soc_changed"

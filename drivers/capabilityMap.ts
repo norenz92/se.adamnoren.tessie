@@ -1,6 +1,6 @@
 import { RealtimeData } from "../tessie/realtime";
 import { Action, Capability, Condition, Trigger } from "./types";
-import tessie from "@api/tessie";
+import getTessieSDK from "../tessie/sdk/index";
 
 type CapabilityMap = {
   capability: Capability;
@@ -78,14 +78,15 @@ export const capabilites: CapabilityMap[] = [
       }
     },
     setter: async (value, access_token, vin) => {
-      tessie.auth(access_token);
+      const sdk = getTessieSDK();
+      sdk.setAccessToken(access_token);
       if (value) {
-        await tessie.startCharging({
+        await sdk.startCharging({
           vin,
           wait_for_completion: true,
         });
       } else {
-        await tessie.stopCharging({
+        await sdk.stopCharging({
           vin,
           wait_for_completion: true,
         });
@@ -106,8 +107,9 @@ export const capabilites: CapabilityMap[] = [
         title: "Start Charging",
         hint: "Start charging the vehicle",
         action: async (args, state, vin, access_token) => {
-          tessie.auth(access_token);
-          return await tessie.startCharging({
+          const sdk = getTessieSDK();
+          sdk.setAccessToken(access_token);
+          return await sdk.startCharging({
             vin,
             wait_for_completion: true,
           });
@@ -118,8 +120,9 @@ export const capabilites: CapabilityMap[] = [
         title: "Stop Charging",
         hint: "Stop charging the vehicle",
         action: async (args, state, vin, access_token) => {
-          tessie.auth(access_token);
-          return await tessie.stopCharging({
+          const sdk = getTessieSDK();
+          sdk.setAccessToken(access_token);
+          return await sdk.stopCharging({
             vin,
             wait_for_completion: true,
           });
@@ -144,8 +147,9 @@ export const capabilites: CapabilityMap[] = [
     transformRealtimeData: (value) =>
       "intValue" in value.value ? Number(value.value.intValue) : value.value,
     setter: async (value, access_token, vin) => {
-      tessie.auth(access_token);
-      await tessie.setChargingAmps({
+      const sdk = getTessieSDK();
+      sdk.setAccessToken(access_token);
+      await sdk.setChargingAmps({
         vin,
         wait_for_completion: true,
         amps: value,
@@ -157,8 +161,9 @@ export const capabilites: CapabilityMap[] = [
         title: "Set Charging Current",
         hint: "Set the charging current in Amperes",
         action: async (args, state, vin, access_token) => {
-          tessie.auth(access_token);
-          return await tessie.setChargingAmps({
+          const sdk = getTessieSDK();
+          sdk.setAccessToken(access_token);
+          return await sdk.setChargingAmps({
             vin,
             wait_for_completion: true,
             amps: args.amps,
@@ -276,14 +281,15 @@ export const capabilites: CapabilityMap[] = [
         ? value.value.hvacPowerValue === "HvacPowerStateOn"
         : value.value,
     setter: async (value, access_token, vin) => {
-      tessie.auth(access_token);
+      const sdk = getTessieSDK();
+      sdk.setAccessToken(access_token);
       if (value) {
-        await tessie.startClimate({
+        await sdk.startClimate({
           vin,
           wait_for_completion: true,
         });
       } else {
-        await tessie.stopClimate({
+        await sdk.stopClimate({
           vin,
           wait_for_completion: true,
         });
@@ -295,17 +301,18 @@ export const capabilites: CapabilityMap[] = [
         title: "Start Climate",
         hint: "Start climate control",
         action: async (args, state, vin, access_token) => {
-          tessie.auth(access_token);
+          const sdk = getTessieSDK();
+          sdk.setAccessToken(access_token);
 
           if (args.climate_temperature) {
-            await tessie.setTemperatures({
+            await sdk.setTemperatures({
               vin,
               wait_for_completion: true,
               temperature: args.climate_temperature,
             });
           }
 
-          return await tessie.startClimate({
+          return await sdk.startClimate({
             vin,
             wait_for_completion: true,
           });
@@ -329,8 +336,9 @@ export const capabilites: CapabilityMap[] = [
         title: "Stop Climate",
         hint: "Stop climate control",
         action: async (args, state, vin, access_token) => {
-          tessie.auth(access_token);
-          return await tessie.stopClimate({
+          const sdk = getTessieSDK();
+          sdk.setAccessToken(access_token);
+          return await sdk.stopClimate({
             vin,
             wait_for_completion: true,
           });

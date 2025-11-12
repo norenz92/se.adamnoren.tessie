@@ -2,7 +2,7 @@
 
 import Homey from "homey";
 import { PairSession } from "homey/lib/Driver";
-import tessie from "../.api/apis/tessie";
+import getTessieSDK from "../tessie/sdk/index";
 
 export default class TessieDriver extends Homey.Driver {
   async onInit() {
@@ -27,13 +27,14 @@ export default class TessieDriver extends Homey.Driver {
         );
       }
 
-      tessie.auth(accessToken);
-      const { data } = await tessie.getVehicles().catch((error) => {
+      const sdk = getTessieSDK();
+      sdk.setAccessToken(accessToken);
+      const vehicles = await sdk.getVehicles().catch((error) => {
         this.error(error);
-        throw new Error(`Cound not get vehicles: ${error}`);
+        throw new Error(`Could not get vehicles: ${error}`);
       });
 
-      const devices = data.results?.map((vehicle) => {
+      const devices = vehicles.results?.map((vehicle) => {
         return {
           name: vehicle.last_state?.display_name ?? vehicle.vin,
           data: {

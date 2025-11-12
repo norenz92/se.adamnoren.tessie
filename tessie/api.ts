@@ -1,7 +1,8 @@
 // Create an event emitter for data events
 
 import { EventEmitter } from "events";
-import Tessie, { GetVehiclesResponse200 } from "../.api/apis/tessie";
+import getTessieSDK from "./sdk/index";
+import { VehicleData } from "./sdk/types";
 import { Realtime } from "./realtime";
 
 const apiEventEmitter = new EventEmitter();
@@ -19,21 +20,18 @@ export class TessieApi {
     this.apiEventEmitter = apiEventEmitter;
     this.accessToken = access_token;
     this.realtime = new Realtime(access_token);
+    getTessieSDK().setAccessToken(access_token);
     this.startPolling();
   }
 
   private async getData() {
     try {
-      Tessie.auth(this.accessToken);
-      const { data, status } = await Tessie.getVehicles().catch((error) => {
-        throw new Error(`Cound not get vehicles: ${error}`);
+      const sdk = getTessieSDK();
+      const vehicles = await sdk.getVehicles().catch((error: any) => {
+        throw new Error(`Could not get vehicles: ${error}`);
       });
 
-      if (status !== 200) {
-        throw new Error(`Failed to get data: ${status}`);
-      }
-
-      data.results?.forEach((vehicle) => {
+      vehicles.results?.forEach((vehicle: VehicleData) => {
         if (!vehicle.vin) {
           throw new Error("Vehicle VIN is missing");
         }
@@ -63,17 +61,11 @@ export class TessieApi {
     this.stopPolling();
   }
 
-  private emitData(
-    vin: string,
-    data: ArrayElement<GetVehiclesResponse200["results"]>
-  ) {
+  private emitData(vin: string, data: VehicleData) {
     this.apiEventEmitter.emit(vin, data);
   }
 
-  onData(
-    vin: string,
-    callback: (data: ArrayElement<GetVehiclesResponse200["results"]>) => void
-  ) {
+  onData(vin: string, callback: (data: VehicleData) => void) {
     this.apiEventEmitter.on(vin, callback);
   }
 }

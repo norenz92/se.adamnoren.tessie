@@ -5,7 +5,7 @@ import {
   RealtimeDataResponse,
 } from "../tessie/realtime";
 import TessieApp from "../TessieApp";
-import { GetStateResponse200, GetVehiclesResponse200 } from "@api/tessie";
+import { GetStateResponse } from "../tessie/sdk/types";
 import { capabilites } from "./capabilityMap";
 import { ArrayElement } from "../tessie/api";
 
@@ -19,7 +19,7 @@ export default class TessieDevice extends Homey.Device {
   async onInit() {
     this.log(`TessieDevice has been initialized`);
     const vin = this.getData().id;
-    (this.homey.app as TessieApp).tessieApi?.onData(vin, (data) => {
+    (this.homey.app as TessieApp).tessieApi?.onData(vin, (data: any) => {
       this.handleCapabilities(data);
       this.handleUnits(data);
       //this.handleLocation(data);
@@ -33,8 +33,8 @@ export default class TessieDevice extends Homey.Device {
     });
   }
 
-  async handleUnits(data: GetStateResponse200) {
-    const guiSettings = data.gui_settings;
+  async handleUnits(data: GetStateResponse) {
+    const guiSettings = (data as any).gui_settings;
     if (guiSettings) {
       if (guiSettings.gui_distance_units) {
         this.setSettings({
@@ -50,7 +50,7 @@ export default class TessieDevice extends Homey.Device {
     }
   }
 
-  async handleLocation(data: ArrayElement<GetVehiclesResponse200["results"]>) {
+  async handleLocation(data: any) {
     try {
       const state = data.last_state?.drive_state;
       if (state) {
@@ -75,7 +75,7 @@ export default class TessieDevice extends Homey.Device {
   }
 
   async handleCapabilities(
-    data: ArrayElement<GetVehiclesResponse200["results"]>
+    data: any
   ) {
     const access_token = (this.homey.app as TessieApp).accessToken;
     const vin = this.getData().id;

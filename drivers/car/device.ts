@@ -1,5 +1,6 @@
 import Homey from "homey";
-import tessie, { GetStateResponse200 } from "../../.api/apis/tessie";
+import getTessieSDK from "../../tessie/sdk/index";
+import { GetStateResponse } from "../../tessie/sdk/types";
 import { Driver } from "homey";
 
 const POLL_INTERVAL = 30 * 1000; // 30 seconds
@@ -23,17 +24,17 @@ module.exports = class CarDevice extends Homey.Device {
       throw new Error("Access token is missing");
     }
 
-    tessie.auth(accessToken);
+    getTessieSDK().setAccessToken(accessToken);
   }
 
   async getState() {
     try {
       await this._auth();
-      const { data } = await tessie.getState({
+      const state = await getTessieSDK().getState({
         vin: this.getData().id,
       });
-      this.updateDevice(data);
-      return data;
+      this.updateDevice(state);
+      return state;
     } catch (error) {
       this.error(`Failed to get state: ${error}`);
     }
@@ -94,7 +95,7 @@ module.exports = class CarDevice extends Homey.Device {
       .getActionCard("charge_current")
       .registerRunListener(async (args, state) => {
         this.sendCommand(async () => {
-          await tessie.setChargingAmps({
+          await getTessieSDK().setChargingAmps({
             amps: args.current,
             vin: this.getData().id,
             wait_for_completion: true,
@@ -112,13 +113,13 @@ module.exports = class CarDevice extends Homey.Device {
         this.sendCommand(async () => {
           if (args.action === "start") {
             this.log("Starting charging");
-            await tessie.startCharging({
+            await getTessieSDK().startCharging({
               vin: this.getData().id,
               wait_for_completion: true,
             });
           } else {
             this.log("Stopping charging");
-            await tessie.stopCharging({
+            await getTessieSDK().stopCharging({
               vin: this.getData().id,
               wait_for_completion: true,
             });
@@ -132,7 +133,7 @@ module.exports = class CarDevice extends Homey.Device {
       .registerRunListener(async (args, state) => {
         this.sendCommand(async () => {
           this.log("Setting charge limit: ", args.limit);
-          await tessie.setChargeLimit({
+          await getTessieSDK().setChargeLimit({
             percent: args.limit,
             vin: this.getData().id,
             wait_for_completion: true,
@@ -156,7 +157,7 @@ module.exports = class CarDevice extends Homey.Device {
       });
   }
 
-  async updateDevice(data: GetStateResponse200) {
+  async updateDevice(data: GetStateResponse) {
     if (
       this.hasCapability("measure_battery") &&
       data.charge_state?.battery_level

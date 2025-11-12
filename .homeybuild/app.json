@@ -7864,6 +7864,63 @@
           ]
         }
       ]
+    },
+    {
+      "name": {
+        "en": "Tesla"
+      },
+      "class": "car",
+      "capabilities": [],
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/tesla/assets/images/small.png",
+        "large": "/drivers/tesla/assets/images/large.png",
+        "xlarge": "/drivers/tesla/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "id": "tesla",
+      "settings": [
+        {
+          "id": "telemetryEnabled",
+          "type": "checkbox",
+          "value": true,
+          "label": {
+            "en": "Use telemetry"
+          },
+          "highlight": true,
+          "hint": {
+            "en": "Requires a Virtual Key to be installed. Learn how: https://help.tessie.com/article/117-virtual-key"
+          }
+        },
+        {
+          "id": "label",
+          "type": "label",
+          "label": {
+            "en": "Telemetry status"
+          },
+          "value": "",
+          "hint": {
+            "en": "Indicates if a virtual key has been installed"
+          }
+        }
+      ]
     }
   ],
   "capabilities": {
@@ -8033,6 +8090,14 @@
       "setable": false,
       "uiComponent": "sensor",
       "icon": "/assets/capability_icons/battery_heater.svg"
+    },
+    "bioweapon": {
+      "title": "Bioweapon Mode",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
     },
     "car_doors_locked": {
       "type": "boolean",
@@ -8622,6 +8687,36 @@
       "setable": true,
       "uiComponent": "button",
       "icon": "./assets/capability_icons/car_wake_up.svg"
+    },
+    "charge_current_request": {
+      "title": "Charging Amps",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "slider",
+      "icon": "/assets/icon.svg",
+      "type": "number",
+      "min": 1,
+      "max": 16,
+      "step": 1
+    },
+    "charge_limit_soc": {
+      "title": "Charge Limit",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "slider",
+      "icon": "/assets/icon.svg",
+      "type": "number",
+      "min": 50,
+      "max": 100,
+      "step": 1
+    },
+    "charge_port_door_open": {
+      "title": "Charge Port Door",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
     },
     "charging_on": {
       "type": "boolean",
@@ -9286,6 +9381,14 @@
         }
       ]
     },
+    "climate_on": {
+      "title": "Climate",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
+    },
     "climate_overheat_protection_level": {
       "type": "enum",
       "title": {
@@ -9861,6 +9964,14 @@
       "uiComponent": "button",
       "icon": "./assets/capability_icons/climate_window_vent.svg"
     },
+    "defrost": {
+      "title": "Defrost",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
+    },
     "device_state": {
       "type": "boolean",
       "uiQuickAction": true,
@@ -10009,6 +10120,14 @@
         "ru": "Офлайн",
         "pl": "Offline"
       }
+    },
+    "front_trunk": {
+      "title": "Front Trunk",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
     },
     "last_online": {
       "type": "string",
@@ -10199,6 +10318,14 @@
       "uiComponent": "sensor",
       "icon": "./assets/capability_icons/location_route_destination_time.svg"
     },
+    "locked": {
+      "title": "Locked",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
+    },
     "measure_api_command_charge_count": {
       "type": "number",
       "title": {
@@ -10361,6 +10488,24 @@
       "setable": true,
       "uiComponent": null,
       "icon": "./assets/capability_icons/measure_api_request_count.svg"
+    },
+    "measure_battery_level": {
+      "title": "Battery Level",
+      "getable": true,
+      "setable": false,
+      "units": "%",
+      "uiComponent": "battery",
+      "icon": "/assets/icon.svg",
+      "type": "number"
+    },
+    "measure_battery_range": {
+      "title": "Battery Range",
+      "getable": true,
+      "setable": false,
+      "units": "km",
+      "uiComponent": "sensor",
+      "icon": "/assets/icon.svg",
+      "type": "number"
     },
     "measure_car_drive_speed": {
       "type": "number",
@@ -10711,6 +10856,28 @@
       "setable": false,
       "icon": "./assets/capability_icons/measure_charge_voltage.svg"
     },
+    "measure_charging_state": {
+      "title": "Charging State",
+      "getable": true,
+      "setable": false,
+      "uiComponent": "picker",
+      "icon": "/assets/icon.svg",
+      "type": "enum",
+      "values": [
+        {
+          "id": "Disconnected",
+          "title": "Disconnected"
+        },
+        {
+          "id": "Charging",
+          "title": "Charging"
+        },
+        {
+          "id": "Complete",
+          "title": "Complete"
+        }
+      ]
+    },
     "measure_climate_temperature_in": {
       "type": "number",
       "title": {
@@ -10960,6 +11127,28 @@
       "setable": false,
       "icon": "./assets/capability_icons/measure_soc_usable.svg"
     },
+    "measure_temperature": {
+      "title": "Inside Temperature",
+      "getable": true,
+      "setable": false,
+      "units": "°C",
+      "uiComponent": "sensor",
+      "icon": "/assets/icon.svg",
+      "insights": true,
+      "type": "number",
+      "decimals": 1
+    },
+    "measure_temperature_outside": {
+      "title": "Outside Temperature",
+      "getable": true,
+      "setable": false,
+      "units": "°C",
+      "uiComponent": "sensor",
+      "icon": "/assets/icon.svg",
+      "insights": true,
+      "type": "number",
+      "decimals": 1
+    },
     "meter_car_odo": {
       "type": "number",
       "title": {
@@ -11006,6 +11195,240 @@
       "setable": false,
       "uiComponent": "sensor",
       "icon": "./assets/capability_icons/meter_charge_power.svg"
+    },
+    "preconditioning": {
+      "title": "Preconditioning",
+      "getable": true,
+      "setable": false,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
+    },
+    "rear_trunk": {
+      "title": "Rear Trunk",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
+    },
+    "seat_heater_left": {
+      "title": "Front Left Seat Heater",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/icon.svg",
+      "type": "enum",
+      "values": [
+        {
+          "id": "0",
+          "title": "Off"
+        },
+        {
+          "id": "1",
+          "title": "Low"
+        },
+        {
+          "id": "2",
+          "title": "Medium"
+        },
+        {
+          "id": "3",
+          "title": "High"
+        }
+      ]
+    },
+    "seat_heater_rear_center": {
+      "title": "Rear Middle Seat Heater",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/icon.svg",
+      "type": "enum",
+      "values": [
+        {
+          "id": "0",
+          "title": "Off"
+        },
+        {
+          "id": "1",
+          "title": "Low"
+        },
+        {
+          "id": "2",
+          "title": "Medium"
+        },
+        {
+          "id": "3",
+          "title": "High"
+        }
+      ]
+    },
+    "seat_heater_rear_left": {
+      "title": "Rear Left Seat Heater",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/icon.svg",
+      "type": "enum",
+      "values": [
+        {
+          "id": "0",
+          "title": "Off"
+        },
+        {
+          "id": "1",
+          "title": "Low"
+        },
+        {
+          "id": "2",
+          "title": "Medium"
+        },
+        {
+          "id": "3",
+          "title": "High"
+        }
+      ]
+    },
+    "seat_heater_rear_right": {
+      "title": "Rear Right Seat Heater",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/icon.svg",
+      "type": "enum",
+      "values": [
+        {
+          "id": "0",
+          "title": "Off"
+        },
+        {
+          "id": "1",
+          "title": "Low"
+        },
+        {
+          "id": "2",
+          "title": "Medium"
+        },
+        {
+          "id": "3",
+          "title": "High"
+        }
+      ]
+    },
+    "seat_heater_right": {
+      "title": "Front Right Seat Heater",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/icon.svg",
+      "type": "enum",
+      "values": [
+        {
+          "id": "0",
+          "title": "Off"
+        },
+        {
+          "id": "1",
+          "title": "Low"
+        },
+        {
+          "id": "2",
+          "title": "Medium"
+        },
+        {
+          "id": "3",
+          "title": "High"
+        }
+      ]
+    },
+    "seat_heater_third_row_left": {
+      "title": "Third Row Left Seat Heater",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/icon.svg",
+      "type": "enum",
+      "values": [
+        {
+          "id": "0",
+          "title": "Off"
+        },
+        {
+          "id": "1",
+          "title": "Low"
+        },
+        {
+          "id": "2",
+          "title": "Medium"
+        },
+        {
+          "id": "3",
+          "title": "High"
+        }
+      ]
+    },
+    "seat_heater_third_row_right": {
+      "title": "Third Row Right Seat Heater",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "icon": "/assets/icon.svg",
+      "type": "enum",
+      "values": [
+        {
+          "id": "0",
+          "title": "Off"
+        },
+        {
+          "id": "1",
+          "title": "Low"
+        },
+        {
+          "id": "2",
+          "title": "Medium"
+        },
+        {
+          "id": "3",
+          "title": "High"
+        }
+      ]
+    },
+    "start_stop_charging": {
+      "title": "Start/Stop Charging",
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
+    },
+    "steering_wheel_heater": {
+      "title": "Steering Wheel Heater",
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
+    },
+    "target_temperature": {
+      "title": "Target Temperature",
+      "getable": true,
+      "setable": true,
+      "units": "°C",
+      "uiComponent": "thermostat",
+      "icon": "/assets/icon.svg",
+      "type": "number",
+      "min": 16,
+      "max": 32,
+      "step": 0.5
+    },
+    "wake_up": {
+      "title": "Wake Up",
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button",
+      "icon": "/assets/icon.svg",
+      "type": "boolean"
     }
   }
 }

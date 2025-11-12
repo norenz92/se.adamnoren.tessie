@@ -132,3 +132,5 @@ dist
 
 # Added by Homey CLI
 /.homeybuild/
+
+.vscode/

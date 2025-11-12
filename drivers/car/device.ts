@@ -3,7 +3,68 @@ import getTessieSDK from "../../tessie/sdk/index";
 import { GetStateResponse } from "../../tessie/sdk/types";
 import { Driver } from "homey";
 
+// Constants
 const POLL_INTERVAL = 30 * 1000; // 30 seconds
+const MILES_TO_KM_FACTOR = 1.60934;
+const DISPLAY_SETTINGS_DELAY = 1000; // 1 second
+
+// Types
+type DistanceUnit = 'km' | 'mi';
+type SettingsEvent = {
+  oldSettings: Record<string, any>;
+  newSettings: Record<string, any>;
+  changedKeys: string[];
+};
+
+// Distance-related capabilities that need unit conversion
+const DISTANCE_CAPABILITIES = [
+  'meter_car_odo',
+  'measure_soc_range_estimated',
+  'measure_soc_range_ideal'
+] as const;
+
+/**
+ * Utility class for distance unit conversions
+ */
+class DistanceConverter {
+  /**
+   * Convert miles to kilometers
+   */
+  static milesToKm(miles: number): number {
+    return miles * MILES_TO_KM_FACTOR;
+  }
+
+  /**
+   * Convert kilometers to miles
+   */
+  static kmToMiles(km: number): number {
+    return km / MILES_TO_KM_FACTOR;
+  }
+
+  /**
+   * Convert distance from one unit to another
+   */
+  static convert(value: number, fromUnit: DistanceUnit, toUnit: DistanceUnit): number {
+    if (fromUnit === toUnit) return value;
+    
+    if (fromUnit === 'mi' && toUnit === 'km') {
+      return this.milesToKm(value);
+    }
+    
+    if (fromUnit === 'km' && toUnit === 'mi') {
+      return this.kmToMiles(value);
+    }
+    
+    return value;
+  }
+
+  /**
+   * Convert Tesla API value (always in miles) to user's preferred unit
+   */
+  static fromMiles(miles: number, targetUnit: DistanceUnit): number {
+    return targetUnit === 'km' ? this.milesToKm(miles) : miles;
+  }
+}
 
 module.exports = class CarDevice extends Homey.Device {
   private timeout: NodeJS.Timeout | null = null;
@@ -12,9 +73,36 @@ module.exports = class CarDevice extends Homey.Device {
     // TODO
     this.log("TessieDevice has been initialized");
     await this._updateCapabilities();
+    await this._initDistanceUnits(); // Initialize distance units
+    await this._updateDisplaySettings();
     await this._initActions();
     await this._initConditions();
     this.startPolling();
+  }
+
+  /**
+   * Handle settings changes
+   */
+  async onSettings(event: SettingsEvent): Promise<void> {
+    this.log('Settings changed:', event.changedKeys);
+    
+    if (event.changedKeys.includes('odometer_unit')) {
+      const oldUnit = event.oldSettings.odometer_unit as DistanceUnit;
+      const newUnit = event.newSettings.odometer_unit as DistanceUnit;
+      this.log(`Distance unit changed: ${oldUnit} → ${newUnit}`);
+      
+      // Defer updates to avoid settings conflicts
+      setImmediate(() => {
+        this._updateDistanceUnits(oldUnit, newUnit);
+        
+        // Update display settings after unit change
+        setTimeout(() => {
+          this._updateDisplaySettings().catch(error => {
+            this.error('Failed to update display settings:', error);
+          });
+        }, DISPLAY_SETTINGS_DELAY);
+      });
+    }
   }
 
   _auth() {
@@ -157,6 +245,99 @@ module.exports = class CarDevice extends Homey.Device {
       });
   }
 
+  /**
+   * Get the user's preferred distance unit
+   */
+  private _getDistanceUnit(): DistanceUnit {
+    return (this.getSetting('odometer_unit') as DistanceUnit) || 'km';
+  }
+
+  /**
+   * Convert Tesla API distance value (miles) to user's preferred unit
+   */
+  private _convertDistance(valueInMiles: number): number {
+    return DistanceConverter.fromMiles(valueInMiles, this._getDistanceUnit());
+  }
+
+  /**
+   * Update distance capability units and convert existing values
+   */
+  private async _updateDistanceUnits(oldUnit?: DistanceUnit, newUnit?: DistanceUnit): Promise<void> {
+    const targetUnit = newUnit || this._getDistanceUnit();
+    
+    this.log(`Updating distance units to: ${targetUnit} (was: ${oldUnit || 'unknown'})`);
+
+    for (const capabilityId of DISTANCE_CAPABILITIES) {
+      if (!this.hasCapability(capabilityId)) continue;
+
+      try {
+        await this._updateCapabilityUnit(capabilityId, oldUnit, targetUnit);
+      } catch (error) {
+        this.error(`Failed to update ${capabilityId} unit:`, error);
+      }
+    }
+  }
+
+  /**
+   * Update a single capability's unit and convert its value if needed
+   */
+  private async _updateCapabilityUnit(
+    capabilityId: string, 
+    oldUnit?: DistanceUnit, 
+    newUnit: DistanceUnit = this._getDistanceUnit()
+  ): Promise<void> {
+    const currentValue = this.getCapabilityValue(capabilityId);
+    
+    // Convert existing value if units changed and we have a valid value
+    let convertedValue = currentValue;
+    if (
+      currentValue !== null && 
+      currentValue !== undefined && 
+      oldUnit && 
+      oldUnit !== newUnit
+    ) {
+      convertedValue = DistanceConverter.convert(currentValue, oldUnit, newUnit);
+      this.log(
+        `Converting ${capabilityId}: ${currentValue} ${oldUnit} → ${convertedValue} ${newUnit}`
+      );
+    }
+
+    // Update capability options with new unit
+    await this.setCapabilityOptions(capabilityId, { units: newUnit });
+
+    // Set the converted value
+    if (convertedValue !== null && convertedValue !== undefined) {
+      await this.setCapabilityValue(capabilityId, convertedValue);
+      this.log(`Updated ${capabilityId}: ${convertedValue} ${newUnit}`);
+    }
+  }
+
+  /**
+   * Initialize distance capability units (called during onInit)
+   */
+  private async _initDistanceUnits(): Promise<void> {
+    await this._updateDistanceUnits();
+  }
+
+  /**
+   * Update display settings to reflect current unit preferences
+   */
+  private async _updateDisplaySettings(): Promise<void> {
+    const unit = this._getDistanceUnit();
+    
+    const distanceFormatText = unit === 'mi' ? 'Miles (mi)' : 'Kilometers (km)';
+    const temperatureFormatText = 'Celsius (°C)'; // Tesla always uses Celsius internally
+    
+    try {
+      await this.setSettings({
+        distance_format_display: distanceFormatText,
+        temperature_format_display: temperatureFormatText,
+      });
+    } catch (error) {
+      this.error('Failed to update display settings:', error);
+    }
+  }
+
   async updateDevice(data: GetStateResponse) {
     if (
       this.hasCapability("measure_battery") &&
@@ -169,9 +350,12 @@ module.exports = class CarDevice extends Homey.Device {
     }
 
     if (this.hasCapability("meter_car_odo") && data.vehicle_state?.odometer) {
+      const convertedOdometer = this._convertDistance(
+        data.vehicle_state.odometer
+      );
       await this.setCapabilityValue(
         "meter_car_odo",
-        data.vehicle_state.odometer
+        convertedOdometer
       );
     }
 
@@ -339,9 +523,12 @@ module.exports = class CarDevice extends Homey.Device {
       this.hasCapability("measure_soc_range_estimated") &&
       data.charge_state?.est_battery_range
     ) {
+      const convertedRange = this._convertDistance(
+        data.charge_state.est_battery_range
+      );
       await this.setCapabilityValue(
         "measure_soc_range_estimated",
-        data.charge_state.est_battery_range
+        convertedRange
       );
     }
 
@@ -349,9 +536,12 @@ module.exports = class CarDevice extends Homey.Device {
       this.hasCapability("measure_soc_range_ideal") &&
       data.charge_state?.ideal_battery_range
     ) {
+      const convertedRange = this._convertDistance(
+        data.charge_state.ideal_battery_range
+      );
       await this.setCapabilityValue(
         "measure_soc_range_ideal",
-        data.charge_state.ideal_battery_range
+        convertedRange
       );
     }
 

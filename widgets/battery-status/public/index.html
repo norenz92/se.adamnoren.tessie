@@ -1,0 +1,257 @@
+<html lang="en">
+  <head>
+    <style>
+      body {
+        padding: var(--homey-su-3);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      }
+
+      .battery-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--homey-su-3);
+      }
+
+      .stat-box {
+        background: linear-gradient(135deg, var(--homey-color-light-gray), rgba(0,0,0,0.02));
+        padding: var(--homey-su-3);
+        border-radius: var(--homey-border-radius-default);
+        text-align: center;
+        border: 1px solid var(--homey-line-light);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .stat-box:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      }
+
+      .stat-icon {
+        font-size: 28px;
+        color: var(--homey-color-blue);
+        margin-bottom: var(--homey-su-1);
+      }
+
+      .stat-label {
+        font-size: var(--homey-font-size-small);
+        color: var(--homey-text-color-secondary);
+        text-transform: uppercase;
+        font-weight: var(--homey-font-weight-semi-bold);
+        margin-bottom: var(--homey-su-1);
+        display: block;
+        letter-spacing: 0.5px;
+      }
+
+      .stat-value {
+        font-size: var(--homey-font-size-xlarge);
+        font-weight: var(--homey-font-weight-bold);
+        color: var(--homey-text-color);
+      }
+
+      .battery-bar-container {
+        background: var(--homey-color-light-gray);
+        padding: var(--homey-su-2);
+        border-radius: var(--homey-border-radius-default);
+        border-left: 4px solid var(--homey-color-blue);
+      }
+
+      .battery-bar-label {
+        font-size: 11px;
+        color: var(--homey-text-color-secondary);
+        font-weight: var(--homey-font-weight-semi-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: var(--homey-su-1);
+        display: block;
+      }
+
+      .battery-bar {
+        width: 100%;
+        height: 12px;
+        background: var(--homey-color-mono-200);
+        border-radius: 6px;
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        border: 1px solid var(--homey-line-light);
+      }
+
+      .battery-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--homey-color-red), var(--homey-color-orange), var(--homey-color-green));
+        transition: width 0.3s ease;
+        border-radius: 6px 0 0 6px;
+      }
+
+      .battery-percentage-text {
+        margin-top: var(--homey-su-1);
+        font-size: var(--homey-font-size-small);
+        color: var(--homey-text-color);
+        font-weight: var(--homey-font-weight-semi-bold);
+      }
+
+      .battery-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--homey-su-2);
+      }
+
+      .detail-item {
+        background: var(--homey-color-light-gray);
+        padding: var(--homey-su-2);
+        border-radius: var(--homey-border-radius-default);
+        font-size: var(--homey-font-size-small);
+      }
+
+      .detail-label {
+        color: var(--homey-text-color-secondary);
+        font-weight: var(--homey-font-weight-semi-bold);
+        display: block;
+        margin-bottom: var(--homey-su-1);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .detail-value {
+        color: var(--homey-text-color);
+        font-weight: var(--homey-font-weight-semi-bold);
+        font-size: var(--homey-font-size-default);
+      }
+
+      .status-badge {
+        display: inline-block;
+        padding: var(--homey-su-1) var(--homey-su-2);
+        border-radius: var(--homey-border-radius-small);
+        font-size: 11px;
+        font-weight: var(--homey-font-weight-semi-bold);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .status-charging {
+        background-color: var(--homey-color-green);
+        color: white;
+      }
+
+      .status-default {
+        background-color: var(--homey-color-light-gray);
+        color: var(--homey-text-color);
+      }
+
+      .error {
+        color: var(--homey-color-red);
+        padding: var(--homey-su-3);
+        background: var(--homey-color-light-red);
+        border-radius: var(--homey-border-radius-default);
+        font-size: var(--homey-font-size-small);
+      }
+
+      .loading {
+        text-align: center;
+        padding: var(--homey-su-4);
+        color: var(--homey-text-color-secondary);
+        font-size: var(--homey-font-size-default);
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+
+  <body class="homey-widget">
+    <div id="content"></div>
+    
+    <script type="text/javascript">
+      function onHomeyReady(Homey) {
+        Homey.ready();
+
+        const deviceIds = Homey.getDeviceIds();
+        const deviceId = deviceIds[0];
+        const contentEl = document.getElementById('content');
+        console.log('instanceId: ', Homey.getWidgetInstanceId());
+        console.log('settings', Homey.getSettings());
+
+        if (!deviceId) {
+          contentEl.innerHTML = '<div class="error">Please select a vehicle for this widget.</div>';
+          Homey.setHeight(80);
+          return;
+        }
+
+        // Fetch battery status
+        async function updateBatteryStatus() {
+          try {
+            contentEl.innerHTML = '<div class="loading">Loading...</div>';
+            Homey.setHeight(100);
+            
+            const result = await Homey.api('GET', '/?deviceId=' + encodeURIComponent(deviceId));
+            
+            if (!result.success) {
+              contentEl.innerHTML = `<div class="error">Error: ${result.error}</div>`;
+              Homey.setHeight(80);
+              return;
+            }
+
+            const batteryPercentage = result.measure_battery || 0;
+            let fillClass = '';
+            if (batteryPercentage <= 20) {
+              fillClass = 'low';
+            }
+
+            const html = `
+              <div class="battery-container">
+                <div class="stat-box">
+                  <div class="stat-icon">
+                    <i class="fas fa-battery-full"></i>
+                  </div>
+                  <label class="stat-label">Battery Level</label>
+                  <div class="stat-value">${batteryPercentage}%</div>
+                </div>
+
+                <div class="battery-bar-container">
+                  <label class="battery-bar-label">Charge Level</label>
+                  <div class="battery-bar">
+                    <div class="battery-fill" style="width: ${batteryPercentage}%"></div>
+                  </div>
+                  <div class="battery-percentage-text">${batteryPercentage}% ${result.charging_on ? '• Charging' : '• Not Charging'}</div>
+                </div>
+
+                <div class="battery-details">
+                  <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-compass"></i> Range</span>
+                    <div class="detail-value">${result.measure_soc_range_estimated.toFixed(0) || 'N/A'} ${result.range_unit || ''}</div>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-plug"></i> Charge Rate</span>
+                    <div class="detail-value">${result.measure_charge_power || 'N/A'} kW</div>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-hourglass-end"></i> Time to Full</span>
+                    <div class="detail-value">${result.measure_charge_minutes_to_full_charge || 'N/A'} min</div>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-limit"></i> Charge Limit</span>
+                    <div class="detail-value">${result.measure_charge_limit_soc || 'N/A'}%</div>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            contentEl.innerHTML = html;
+            // Set height after content is rendered
+            setTimeout(() => {
+              Homey.setHeight(contentEl.offsetHeight + 24);
+            }, 10);
+          } catch (error) {
+            contentEl.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            Homey.setHeight(80);
+          }
+        }
+
+        // Initial load
+        updateBatteryStatus();
+
+        // Refresh every 30 seconds
+        setInterval(updateBatteryStatus, 30000);
+      }
+    </script>
+  </body>
+</html>

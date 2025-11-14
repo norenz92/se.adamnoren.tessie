@@ -2,7 +2,7 @@
   "name": {
     "en": "Car"
   },
-  "class": "other",
+  "class": "car",
   "platforms": [
     "local"
   ],

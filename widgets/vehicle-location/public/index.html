@@ -1,0 +1,210 @@
+<html lang="en">
+  <head>
+    <style>
+      body {
+        padding: var(--homey-su-3);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      }
+
+      .location-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--homey-su-3);
+      }
+
+      #map {
+        width: 100%;
+        height: 200px;
+        border-radius: var(--homey-border-radius-default);
+        overflow: hidden;
+        background: var(--homey-color-light-gray);
+      }
+
+      .location-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--homey-su-2);
+      }
+
+      .detail-item {
+        background: var(--homey-color-light-gray);
+        padding: var(--homey-su-2);
+        border-radius: var(--homey-border-radius-default);
+        font-size: var(--homey-font-size-small);
+      }
+
+      .detail-label {
+        color: var(--homey-text-color-secondary);
+        font-weight: var(--homey-font-weight-semi-bold);
+        display: block;
+        margin-bottom: var(--homey-su-1);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .detail-value {
+        color: var(--homey-text-color);
+        font-weight: var(--homey-font-weight-semi-bold);
+        font-size: var(--homey-font-size-default);
+        font-family: 'Monaco', 'Menlo', monospace;
+      }
+
+      .error {
+        color: var(--homey-color-red);
+        padding: var(--homey-su-3);
+        background: var(--homey-color-light-red);
+        border-radius: var(--homey-border-radius-default);
+        font-size: var(--homey-font-size-small);
+      }
+
+      .loading {
+        text-align: center;
+        padding: var(--homey-su-4);
+        color: var(--homey-text-color-secondary);
+        font-size: var(--homey-font-size-small);
+      }
+
+      /* Leaflet overrides */
+      .leaflet-control-attribution {
+        display: none;
+      }
+
+      .leaflet-control {
+        font-size: 12px;
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+
+  <body class="homey-widget">
+    
+    <div id="content"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+
+    <script type="text/javascript">
+      let map = null;
+      let marker = null;
+      let heading = 0;
+
+      // Create a custom marker with heading indicator
+      function createHeadingIcon(headingDegrees) {
+        // FontAwesome location-arrow has a neutral rotation of 45 degrees
+        const adjustedRotation = headingDegrees - 45;
+        const html = `
+          <i class="fas fa-location-arrow" style="
+            font-size: 24px;
+            color: #ef4444;
+            filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.3));
+            transform: rotate(${adjustedRotation}deg);
+            display: block;
+          "></i>
+        `;
+        
+        return L.divIcon({
+          html: html,
+          iconSize: [24, 24],
+          className: 'vehicle-marker',
+          popupAnchor: [0, -12],
+        });
+      }
+
+      function onHomeyReady(Homey) {
+        Homey.ready();
+
+        const deviceIds = Homey.getDeviceIds();
+        const deviceId = deviceIds[0];
+        const contentEl = document.getElementById('content');
+
+        if (!deviceId) {
+          contentEl.innerHTML = '<div class="error">Please select a vehicle for this widget.</div>';
+          Homey.setHeight(80);
+          return;
+        }
+
+        contentEl.innerHTML = '<div class="loading">Loading vehicle location...</div>';
+
+        async function updateLocation() {
+          try {
+            const result = await Homey.api('GET', '/?deviceId=' + encodeURIComponent(deviceId));
+
+            if (!result || !result.success) {
+              const errorMsg = result?.error || 'Unknown error';
+              contentEl.innerHTML = `<div class="error">Error: ${errorMsg}</div>`;
+              Homey.setHeight(80);
+              return;
+            }
+
+            const latitude = parseFloat(result.latitude) || 0;
+            const longitude = parseFloat(result.longitude) || 0;
+            heading = parseFloat(result.heading) || 0;
+            const speed = parseFloat(result.speed) || 0;
+
+            if (!map) {
+              contentEl.innerHTML = `
+                <div class="location-container">
+                  <div id="map"></div>
+                  <div class="location-details">
+                    <div class="detail-item">
+                      <span class="detail-label"><i class="fas fa-map-pin"></i> Latitude</span>
+                      <div class="detail-value">${latitude.toFixed(6)}</div>
+                    </div>
+                    <div class="detail-item">
+                      <span class="detail-label"><i class="fas fa-map-pin"></i> Longitude</span>
+                      <div class="detail-value">${longitude.toFixed(6)}</div>
+                    </div>
+                    <div class="detail-item">
+                      <span class="detail-label"><i class="fas fa-compass"></i> Heading</span>
+                      <div class="detail-value" id="heading">${Math.round(heading)}°</div>
+                    </div>
+                    <div class="detail-item">
+                      <span class="detail-label"><i class="fas fa-gauge"></i> Speed</span>
+                      <div class="detail-value" id="speed">${Math.round(speed)} km/h</div>
+                    </div>
+                  </div>
+                </div>
+              `;
+
+              // Small delay to ensure DOM is ready
+              setTimeout(() => {
+                const location = [latitude, longitude];
+                map = L.map('map').setView(location, 17);
+
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                  attribution: '',
+                  maxZoom: 19,
+                }).addTo(map);
+
+                marker = L.marker(location, {
+                  icon: createHeadingIcon(heading),
+                  title: 'Vehicle Location',
+                }).addTo(map);
+
+                Homey.setHeight(contentEl.offsetHeight + 24);
+              }, 0);
+            } else {
+              const location = [latitude, longitude];
+              map.setView(location, 17);
+              marker.setLatLng(location);
+              marker.setIcon(createHeadingIcon(heading));
+
+              document.querySelectorAll('[id="latitude"]').forEach(el => el.textContent = latitude.toFixed(6));
+              document.querySelectorAll('[id="longitude"]').forEach(el => el.textContent = longitude.toFixed(6));
+              document.getElementById('heading').textContent = Math.round(heading) + '°';
+              document.getElementById('speed').textContent = Math.round(speed) + ' km/h';
+            }
+          } catch (error) {
+            console.error('Error updating location:', error);
+            contentEl.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            Homey.setHeight(80);
+          }
+        }
+
+        updateLocation();
+        setInterval(updateLocation, 30000);
+      }
+    </script>
+  </body>
+</html>

@@ -68,6 +68,67 @@ export class TessieApi {
   onData(vin: string, callback: (data: VehicleData) => void) {
     this.apiEventEmitter.on(vin, callback);
   }
+
+  // Climate control methods
+  async startClimate(vin: string) {
+    try {
+      const sdk = getTessieSDK();
+      await sdk.startClimate({
+        vin,
+        wait_for_completion: false,
+      });
+      return { success: true, message: "Climate started" };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
+
+  async stopClimate(vin: string) {
+    try {
+      const sdk = getTessieSDK();
+      await sdk.stopClimate({
+        vin,
+        wait_for_completion: false,
+      });
+      return { success: true, message: "Climate stopped" };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
+
+  async setClimateTemperature(vin: string, temperature: number) {
+    try {
+      // Validate temperature range
+      if (temperature < 16 || temperature > 28) {
+        return {
+          success: false,
+          error: "Temperature must be between 16°C and 28°C",
+        };
+      }
+
+      const sdk = getTessieSDK();
+      await sdk.setTemperatures({
+        vin,
+        temperature,
+        wait_for_completion: false,
+      });
+      return {
+        success: true,
+        message: `Temperature set to ${temperature}°C`,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+      };
+    }
+  }
 }
 
 export type ArrayElement<A> = A extends readonly (infer T)[] ? T : never;

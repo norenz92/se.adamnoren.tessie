@@ -1,0 +1,29 @@
+{
+  "name": {
+    "en": "Vehicle Location"
+  },
+  "height": 188,
+  "devices": {
+    "type": "app",
+    "singular": true,
+    "filter": {
+      "class": "car"
+    }
+  },
+  "settings": [],
+  "api": {
+    "getLocation": {
+      "method": "GET",
+      "path": "/",
+      "parameters": [
+        {
+          "in": "query",
+          "name": "deviceId",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  }
+}

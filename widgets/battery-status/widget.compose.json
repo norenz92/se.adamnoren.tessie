@@ -1,0 +1,29 @@
+{
+  "name": {
+    "en": "Battery Status"
+  },
+  "height": 188,
+  "devices": {
+    "type": "app",
+    "singular": true,
+    "filter": {
+      "class": "car"
+    }
+  },
+  "settings": [],
+  "api": {
+    "getBatteryStatus": {
+      "method": "GET",
+      "path": "/",
+      "parameters": [
+        {
+          "in": "query",
+          "name": "deviceId",
+          "schema": {
+            "type": "string"
+          }
+        }
+      ]
+    }
+  }
+}

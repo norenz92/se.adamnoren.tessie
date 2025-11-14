@@ -1,0 +1,287 @@
+<html lang="en">
+  <head>
+    <style>
+      body {
+        padding: var(--homey-su-3);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      }
+
+      .trip-container {
+        display: flex;
+        flex-direction: column;
+        gap: var(--homey-su-3);
+      }
+
+      .trip-stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--homey-su-2);
+      }
+
+      .stat-box {
+        background: linear-gradient(135deg, var(--homey-color-light-gray), rgba(0,0,0,0.02));
+        padding: var(--homey-su-3);
+        border-radius: var(--homey-border-radius-default);
+        text-align: center;
+        border: 1px solid var(--homey-line-light);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      
+      .stat-icon {
+        font-size: 24px;
+        color: var(--homey-color-blue);
+        margin-bottom: var(--homey-su-1);
+      }
+
+      .stat-label {
+        font-size: var(--homey-font-size-small);
+        color: var(--homey-text-color-secondary);
+        text-transform: uppercase;
+        font-weight: var(--homey-font-weight-semi-bold);
+        margin-bottom: var(--homey-su-1);
+        display: block;
+        letter-spacing: 0.5px;
+      }
+
+      .stat-value {
+        font-size: var(--homey-font-size-xlarge);
+        font-weight: var(--homey-font-weight-bold);
+        color: var(--homey-text-color);
+      }
+
+      .stat-unit {
+        font-size: var(--homey-font-size-small);
+        color: var(--homey-text-color-secondary);
+        margin-top: var(--homey-su-1);
+      }
+
+      .trip-route {
+        background: var(--homey-color-light-gray);
+        padding: var(--homey-su-2);
+        border-radius: var(--homey-border-radius-default);
+        border-left: 4px solid var(--homey-color-blue);
+      }
+
+      .route-item {
+        display: flex;
+        align-items: center;
+        gap: var(--homey-su-2);
+        margin-bottom: var(--homey-su-2);
+      }
+
+      .route-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .route-icon {
+        color: var(--homey-color-blue);
+        min-width: 24px;
+        text-align: center;
+      }
+
+      .route-text {
+        font-size: var(--homey-font-size-small);
+      }
+
+      .route-label {
+        color: var(--homey-text-color-secondary);
+        font-weight: var(--homey-font-weight-semi-bold);
+        display: block;
+        font-size: 11px;
+        margin-bottom: 2px;
+      }
+
+      .route-value {
+        color: var(--homey-text-color);
+        word-break: break-word;
+      }
+
+      .trip-details {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: var(--homey-su-2);
+      }
+
+      .detail-item {
+        background: var(--homey-color-light-gray);
+        padding: var(--homey-su-2);
+        border-radius: var(--homey-border-radius-default);
+        font-size: var(--homey-font-size-small);
+      }
+
+      .detail-label {
+        color: var(--homey-text-color-secondary);
+        font-weight: var(--homey-font-weight-semi-bold);
+        display: block;
+        margin-bottom: var(--homey-su-1);
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .detail-value {
+        color: var(--homey-text-color);
+        font-weight: var(--homey-font-weight-semi-bold);
+        font-size: var(--homey-font-size-default);
+      }
+
+      .battery-indicator {
+        display: flex;
+        align-items: center;
+        gap: var(--homey-su-1);
+      }
+
+      .battery-bar {
+        flex: 1;
+        height: 4px;
+        background: var(--homey-line-light);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .battery-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--homey-color-red), var(--homey-color-orange), var(--homey-color-green));
+        width: var(--fill-width);
+      }
+
+      .error {
+        color: var(--homey-color-red);
+        padding: var(--homey-su-3);
+        background: var(--homey-color-light-red);
+        border-radius: var(--homey-border-radius-default);
+        font-size: var(--homey-font-size-small);
+      }
+
+      .loading {
+        text-align: center;
+        padding: var(--homey-su-4);
+        color: var(--homey-text-color-secondary);
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  </head>
+
+  <body class="homey-widget">
+    <div id="content"></div>
+
+    <script type="text/javascript">
+      function onHomeyReady(Homey) {
+        Homey.ready();
+
+        const deviceIds = Homey.getDeviceIds();
+        const deviceId = deviceIds[0];
+        const contentEl = document.getElementById('content');
+
+        if (!deviceId) {
+          contentEl.innerHTML = '<div class="error">Please select a vehicle for this widget.</div>';
+          Homey.setHeight(80);
+          return;
+        }
+
+        async function updateTripStatus() {
+          try {
+            const result = await Homey.api('GET', '/?deviceId=' + encodeURIComponent(deviceId));
+            
+            if (!result.success) {
+              contentEl.innerHTML = `<div class="error">Error: ${result.error}</div>`;
+              Homey.setHeight(80);
+              return;
+            }
+
+            // Check if we have trip data
+            if (!result.started_at) {
+              contentEl.innerHTML = '<div class="error">No trip data available</div>';
+              Homey.setHeight(80);
+              return;
+            }
+
+            // Format dates
+            const startDate = new Date(result.started_at * 1000);
+            const endDate = new Date(result.ended_at * 1000);
+            const duration = Math.round((result.ended_at - result.started_at) / 60); // in minutes
+            const hours = Math.floor(duration / 60);
+            const minutes = duration % 60;
+            const durationStr = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+
+            const html = `
+              <div class="trip-container">
+                <div class="trip-stats">
+                  <div class="stat-box">
+                    <div class="stat-icon">
+                      <i class="fas fa-road"></i>
+                    </div>
+                    <label class="stat-label">Distance</label>
+                    <div class="stat-value">${Math.round(result.distance || 0)}</div>
+                    <div class="stat-unit">${result.distance_unit}</div>
+                  </div>
+                  <div class="stat-box">
+                    <div class="stat-icon">
+                      <i class="fas fa-bolt"></i>
+                    </div>
+                    <label class="stat-label">Energy Used</label>
+                    <div class="stat-value">${(result.energy_used || 0).toFixed(1)}</div>
+                    <div class="stat-unit">kWh</div>
+                  </div>
+                </div>
+
+                <div class="trip-route">
+                  <div class="route-item">
+                    <div class="route-icon">
+                      <i class="fas fa-circle-dot"></i>
+                    </div>
+                    <div class="route-text">
+                      <span class="route-label">From</span>
+                      <div class="route-value">${result.starting_location}</div>
+                    </div>
+                  </div>
+                  <div class="route-item">
+                    <div class="route-icon">
+                      <i class="fas fa-flag-checkered"></i>
+                    </div>
+                    <div class="route-text">
+                      <span class="route-label">To</span>
+                      <div class="route-value">${result.ending_location}</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="trip-details">
+                  <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-hourglass-end"></i> Duration</span>
+                    <div class="detail-value">${durationStr}</div>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-gauge"></i> Avg Speed</span>
+                    <div class="detail-value">${Math.round(result.average_speed || 0)} km/h</div>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-tachometer-alt"></i> Max Speed</span>
+                    <div class="detail-value">${Math.round(result.max_speed || 0)} km/h</div>
+                  </div>
+                  <div class="detail-item">
+                    <span class="detail-label"><i class="fas fa-battery-half"></i> Battery</span>
+                    <div class="detail-value">${Math.round(result.starting_battery)}% → ${Math.round(result.ending_battery)}%</div>
+                  </div>
+                </div>
+              </div>
+            `;
+            
+            contentEl.innerHTML = html;
+            // Set height after content is rendered
+            setTimeout(() => {
+              Homey.setHeight(contentEl.offsetHeight + 24);
+            }, 10);
+          } catch (error) {
+            console.error('Error updating trip status:', error);
+            contentEl.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            Homey.setHeight(80);
+          }
+        }
+
+        updateTripStatus();
+        setInterval(updateTripStatus, 30000);
+      }
+    </script>
+  </body>
+</html>

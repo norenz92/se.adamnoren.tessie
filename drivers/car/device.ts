@@ -7,9 +7,10 @@ import { Driver } from "homey";
 const POLL_INTERVAL = 30 * 1000; // 30 seconds
 const MILES_TO_KM_FACTOR = 1.60934;
 const DISPLAY_SETTINGS_DELAY = 1000; // 1 second
+const TESLA_API_DISTANCE_UNIT = "mi" as const; // Tesla API always returns distances in miles
 
 // Types
-type DistanceUnit = 'km' | 'mi';
+type DistanceUnit = "km" | "mi";
 type SettingsEvent = {
   oldSettings: Record<string, any>;
   newSettings: Record<string, any>;
@@ -18,9 +19,9 @@ type SettingsEvent = {
 
 // Distance-related capabilities that need unit conversion
 const DISTANCE_CAPABILITIES = [
-  'meter_car_odo',
-  'measure_soc_range_estimated',
-  'measure_soc_range_ideal'
+  "meter_car_odo",
+  "measure_soc_range_estimated",
+  "measure_soc_range_ideal",
 ] as const;
 
 /**
@@ -44,17 +45,21 @@ class DistanceConverter {
   /**
    * Convert distance from one unit to another
    */
-  static convert(value: number, fromUnit: DistanceUnit, toUnit: DistanceUnit): number {
+  static convert(
+    value: number,
+    fromUnit: DistanceUnit,
+    toUnit: DistanceUnit
+  ): number {
     if (fromUnit === toUnit) return value;
-    
-    if (fromUnit === 'mi' && toUnit === 'km') {
+
+    if (fromUnit === "mi" && toUnit === "km") {
       return this.milesToKm(value);
     }
-    
-    if (fromUnit === 'km' && toUnit === 'mi') {
+
+    if (fromUnit === "km" && toUnit === "mi") {
       return this.kmToMiles(value);
     }
-    
+
     return value;
   }
 
@@ -62,7 +67,7 @@ class DistanceConverter {
    * Convert Tesla API value (always in miles) to user's preferred unit
    */
   static fromMiles(miles: number, targetUnit: DistanceUnit): number {
-    return targetUnit === 'km' ? this.milesToKm(miles) : miles;
+    return targetUnit === "km" ? this.milesToKm(miles) : miles;
   }
 }
 
@@ -72,6 +77,18 @@ module.exports = class CarDevice extends Homey.Device {
   async onInit() {
     // TODO
     this.log("TessieDevice has been initialized");
+
+    // Migrate device class from 'other' to 'car' if needed
+    if (this.getClass() !== "car") {
+      this.log(`Migrating device class from '${this.getClass()}' to 'car'`);
+      try {
+        await this.setClass("car").catch(this.error);
+      } catch (error) {
+        this.error("Failed to migrate device class:", error);
+      }
+    }
+
+    await this._migrateDeviceClass();
     await this._updateCapabilities();
     await this._initDistanceUnits(); // Initialize distance units
     await this._updateDisplaySettings();
@@ -84,21 +101,21 @@ module.exports = class CarDevice extends Homey.Device {
    * Handle settings changes
    */
   async onSettings(event: SettingsEvent): Promise<void> {
-    this.log('Settings changed:', event.changedKeys);
-    
-    if (event.changedKeys.includes('odometer_unit')) {
+    this.log("Settings changed:", event.changedKeys);
+
+    if (event.changedKeys.includes("odometer_unit")) {
       const oldUnit = event.oldSettings.odometer_unit as DistanceUnit;
       const newUnit = event.newSettings.odometer_unit as DistanceUnit;
       this.log(`Distance unit changed: ${oldUnit} → ${newUnit}`);
-      
+
       // Defer updates to avoid settings conflicts
       setImmediate(() => {
         this._updateDistanceUnits(oldUnit, newUnit);
-        
+
         // Update display settings after unit change
         setTimeout(() => {
-          this._updateDisplaySettings().catch(error => {
-            this.error('Failed to update display settings:', error);
+          this._updateDisplaySettings().catch((error) => {
+            this.error("Failed to update display settings:", error);
           });
         }, DISPLAY_SETTINGS_DELAY);
       });
@@ -139,6 +156,18 @@ module.exports = class CarDevice extends Homey.Device {
   async stopPolling() {
     if (this.timeout) {
       clearInterval(this.timeout);
+    }
+  }
+
+  async _migrateDeviceClass() {
+    // Migrate device class from 'other' to 'car' if needed
+    if (this.getClass() !== "car") {
+      this.log(`Migrating device class from '${this.getClass()}' to 'car'`);
+      try {
+        await this.setClass("car").catch(this.error);
+      } catch (error) {
+        this.error("Failed to migrate device class:", error);
+      }
     }
   }
 
@@ -249,11 +278,11 @@ module.exports = class CarDevice extends Homey.Device {
    * Get the user's preferred distance unit
    */
   private _getDistanceUnit(): DistanceUnit {
-    return (this.getSetting('odometer_unit') as DistanceUnit) || 'km';
+    return (this.getSetting("odometer_unit") as DistanceUnit) || "km";
   }
 
   /**
-   * Convert Tesla API distance value (miles) to user's preferred unit
+   * Convert Tesla API distance value (always in miles) to user's preferred unit
    */
   private _convertDistance(valueInMiles: number): number {
     return DistanceConverter.fromMiles(valueInMiles, this._getDistanceUnit());
@@ -262,10 +291,15 @@ module.exports = class CarDevice extends Homey.Device {
   /**
    * Update distance capability units and convert existing values
    */
-  private async _updateDistanceUnits(oldUnit?: DistanceUnit, newUnit?: DistanceUnit): Promise<void> {
+  private async _updateDistanceUnits(
+    oldUnit?: DistanceUnit,
+    newUnit?: DistanceUnit
+  ): Promise<void> {
     const targetUnit = newUnit || this._getDistanceUnit();
-    
-    this.log(`Updating distance units to: ${targetUnit} (was: ${oldUnit || 'unknown'})`);
+
+    this.log(
+      `Updating distance units to: ${targetUnit} (was: ${oldUnit || "unknown"})`
+    );
 
     for (const capabilityId of DISTANCE_CAPABILITIES) {
       if (!this.hasCapability(capabilityId)) continue;
@@ -282,21 +316,28 @@ module.exports = class CarDevice extends Homey.Device {
    * Update a single capability's unit and convert its value if needed
    */
   private async _updateCapabilityUnit(
-    capabilityId: string, 
-    oldUnit?: DistanceUnit, 
+    capabilityId: string,
+    oldUnit?: DistanceUnit,
     newUnit: DistanceUnit = this._getDistanceUnit()
   ): Promise<void> {
     const currentValue = this.getCapabilityValue(capabilityId);
-    
+    const currentOptions = this.getCapabilityOptions(capabilityId);
+    const currentUnitInHomey =
+      (currentOptions?.units as DistanceUnit) || TESLA_API_DISTANCE_UNIT;
+
     // Convert existing value if units changed and we have a valid value
     let convertedValue = currentValue;
     if (
-      currentValue !== null && 
-      currentValue !== undefined && 
-      oldUnit && 
+      currentValue !== null &&
+      currentValue !== undefined &&
+      oldUnit &&
       oldUnit !== newUnit
     ) {
-      convertedValue = DistanceConverter.convert(currentValue, oldUnit, newUnit);
+      convertedValue = DistanceConverter.convert(
+        currentValue,
+        oldUnit,
+        newUnit
+      );
       this.log(
         `Converting ${capabilityId}: ${currentValue} ${oldUnit} → ${convertedValue} ${newUnit}`
       );
@@ -324,21 +365,23 @@ module.exports = class CarDevice extends Homey.Device {
    */
   private async _updateDisplaySettings(): Promise<void> {
     const unit = this._getDistanceUnit();
-    
-    const distanceFormatText = unit === 'mi' ? 'Miles (mi)' : 'Kilometers (km)';
-    const temperatureFormatText = 'Celsius (°C)'; // Tesla always uses Celsius internally
-    
+
+    const distanceFormatText = unit === "mi" ? "Miles (mi)" : "Kilometers (km)";
+    const temperatureFormatText = "Celsius (°C)"; // Tesla always uses Celsius internally
+
     try {
       await this.setSettings({
         distance_format_display: distanceFormatText,
         temperature_format_display: temperatureFormatText,
       });
     } catch (error) {
-      this.error('Failed to update display settings:', error);
+      this.error("Failed to update display settings:", error);
     }
   }
 
   async updateDevice(data: GetStateResponse) {
+    console.log(JSON.stringify(data, null, 2));
+
     if (
       this.hasCapability("measure_battery") &&
       data.charge_state?.battery_level
@@ -350,13 +393,16 @@ module.exports = class CarDevice extends Homey.Device {
     }
 
     if (this.hasCapability("meter_car_odo") && data.vehicle_state?.odometer) {
-      const convertedOdometer = this._convertDistance(
-        data.vehicle_state.odometer
+      const targetUnit = this._getDistanceUnit();
+      const convertedOdometer = DistanceConverter.convert(
+        data.vehicle_state.odometer,
+        TESLA_API_DISTANCE_UNIT,
+        targetUnit
       );
-      await this.setCapabilityValue(
-        "meter_car_odo",
-        convertedOdometer
-      );
+      await this.setCapabilityOptions("meter_car_odo", {
+        units: targetUnit,
+      });
+      await this.setCapabilityValue("meter_car_odo", convertedOdometer);
     }
 
     if (
@@ -523,9 +569,16 @@ module.exports = class CarDevice extends Homey.Device {
       this.hasCapability("measure_soc_range_estimated") &&
       data.charge_state?.est_battery_range
     ) {
-      const convertedRange = this._convertDistance(
-        data.charge_state.est_battery_range
+      const targetUnit = this._getDistanceUnit();
+      const convertedRange = DistanceConverter.convert(
+        data.charge_state.est_battery_range,
+        TESLA_API_DISTANCE_UNIT,
+        targetUnit
       );
+
+      await this.setCapabilityOptions("measure_soc_range_estimated", {
+        units: targetUnit,
+      });
       await this.setCapabilityValue(
         "measure_soc_range_estimated",
         convertedRange
@@ -536,13 +589,17 @@ module.exports = class CarDevice extends Homey.Device {
       this.hasCapability("measure_soc_range_ideal") &&
       data.charge_state?.ideal_battery_range
     ) {
-      const convertedRange = this._convertDistance(
-        data.charge_state.ideal_battery_range
+      const targetUnit = this._getDistanceUnit();
+      const convertedRange = DistanceConverter.convert(
+        data.charge_state.ideal_battery_range,
+        TESLA_API_DISTANCE_UNIT,
+        targetUnit
       );
-      await this.setCapabilityValue(
-        "measure_soc_range_ideal",
-        convertedRange
-      );
+
+      await this.setCapabilityOptions("measure_soc_range_ideal", {
+        units: targetUnit,
+      });
+      await this.setCapabilityValue("measure_soc_range_ideal", convertedRange);
     }
 
     if (

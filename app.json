@@ -7774,6 +7774,104 @@
           }
         ],
         "id": "media_prev_fav"
+      },
+      {
+        "id": "start_charging",
+        "title": "Start Charging",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          }
+        ]
+      },
+      {
+        "id": "stop_charging",
+        "title": "Stop Charging",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          }
+        ]
+      },
+      {
+        "id": "set_charge_current_request",
+        "title": "Set Charging Current",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          },
+          {
+            "name": "amps",
+            "type": "number",
+            "min": 0,
+            "max": 16,
+            "step": 1,
+            "title": "Charging Current (A)",
+            "titleFormatted": "Set Charging Current to [[amps]]A",
+            "placeholder": "0A-16A"
+          }
+        ]
+      },
+      {
+        "id": "start_climate",
+        "title": "Start Climate",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          },
+          {
+            "name": "climate_temperature",
+            "type": "number",
+            "min": 15,
+            "max": 28,
+            "step": 1,
+            "title": "Temperature",
+            "titleFormatted": "Start Climate at [[climate_temperature]]°C",
+            "placeholder": "15°C-28°C",
+            "required": false
+          }
+        ]
+      },
+      {
+        "id": "stop_climate",
+        "title": "Stop Climate",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          }
+        ]
+      },
+      {
+        "id": "lock_doors",
+        "title": "Lock Doors",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          }
+        ]
+      },
+      {
+        "id": "unlock_doors",
+        "title": "Unlock Doors",
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=car"
+          }
+        ]
       }
     ]
   },
@@ -7831,6 +7929,7 @@
         "measure_location_heading",
         "measure_location_latitude",
         "measure_location_longitude",
+        "measure_speed",
         "measure_soc_level",
         "measure_soc_range_estimated",
         "measure_soc_range_ideal",
@@ -8000,3145 +8099,298 @@
     }
   },
   "capabilities": {
-    "alarm_api_error": {
-      "type": "boolean",
-      "title": {
-        "en": "API error",
-        "de": "API-Fehler",
-        "nl": "API-fout",
-        "fr": "Erreur API",
-        "it": "Errore API",
-        "sv": "API-fel",
-        "no": "API-feil",
-        "es": "Error de API",
-        "da": "API-fejl",
-        "ru": "Ошибка API",
-        "pl": "Błąd API"
-      },
-      "insights": false,
-      "titleTrue": {
-        "en": "API error present",
-        "de": "API-Fehler vorhanden",
-        "nl": "API-fout opgetreden",
-        "fr": "Erreur API présente",
-        "it": "Errore API presente",
-        "sv": "API-fel närvarande",
-        "no": "API-feil tilstede",
-        "es": "Error de API presente",
-        "da": "API-fejl til stede",
-        "ru": "Ошибка API присутствует",
-        "pl": "Obecny błąd API"
-      },
-      "titleFalse": {
-        "en": "No API error",
-        "de": "Kein API-Fehler",
-        "nl": "Geen API-fout",
-        "fr": "Pas d'erreur API",
-        "it": "Nessun errore API",
-        "sv": "Ingen API-fel",
-        "no": "Ingen API-feil",
-        "es": "Sin error de API",
-        "da": "Ingen API-fejl",
-        "ru": "Нет ошибки API",
-        "pl": "Brak błędu API"
-      },
-      "insightsTitleTrue": {
-        "en": "API error present",
-        "de": "API-Fehler vorhanden",
-        "nl": "API-fout opgetreden",
-        "fr": "Erreur API présente",
-        "it": "Errore API presente",
-        "sv": "API-fel närvarande",
-        "no": "API-feil tilstede",
-        "es": "Error de API presente",
-        "da": "API-fejl til stede",
-        "ru": "Ошибка API присутствует",
-        "pl": "Obecny błąd API"
-      },
-      "insightsTitleFalse": {
-        "en": "No API error",
-        "de": "Kein API-Fehler",
-        "nl": "Geen API-fout",
-        "fr": "Pas d'erreur API",
-        "it": "Nessun errore API",
-        "sv": "Ingen API-fel",
-        "no": "Ingen API-feil",
-        "es": "Sin error de API",
-        "da": "Ingen API-fejl",
-        "ru": "Нет ошибки API",
-        "pl": "Brak błędu API"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": null,
-      "icon": "/assets/capability_icons/alarm_api_error.svg"
-    },
-    "api_error": {
-      "type": "string",
-      "title": {
-        "en": "API error",
-        "de": "API-Fehler",
-        "nl": "API-fout",
-        "fr": "Erreur API",
-        "it": "Errore API",
-        "sv": "API-fel",
-        "no": "API-feil",
-        "es": "Error de API",
-        "da": "API-fejl",
-        "ru": "Ошибка API",
-        "pl": "Błąd API"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "uiComponent": null,
-      "icon": "./assets/capability_icons/api_error.svg"
-    },
-    "battery_heater": {
-      "type": "boolean",
-      "title": {
-        "en": "Battery heater",
-        "de": "Batterie-Heizung",
-        "nl": "Batterijverwarmer",
-        "fr": "Chauffage de la batterie",
-        "it": "Riscaldatore della batteria",
-        "sv": "Batterivärmare",
-        "no": "Batterivarmer",
-        "es": "Calentador de batería",
-        "da": "Batterivarmer",
-        "ru": "Подогрев аккумулятора",
-        "pl": "Podgrzewacz baterii"
-      },
-      "titleTrue": {
-        "en": "Battery heater on",
-        "de": "Batterie-Heizung an",
-        "nl": "Batterijverwarmer aan",
-        "fr": "Chauffage de la batterie activé",
-        "it": "Riscaldatore della batteria acceso",
-        "sv": "Batterivärmare på",
-        "no": "Batterivarmer på",
-        "es": "Calentador de batería encendido",
-        "da": "Batterivarmer tændt",
-        "ru": "Подогрев аккумулятора включен",
-        "pl": "Podgrzewacz baterii włączony"
-      },
-      "titleFalse": {
-        "en": "Battery heater off",
-        "de": "Batterie-Heizung aus",
-        "nl": "Batterijverwarmer uit",
-        "fr": "Chauffage de la batterie désactivé",
-        "it": "Riscaldatore della batteria spento",
-        "sv": "Batterivärmare av",
-        "no": "Batterivarmer av",
-        "es": "Calentador de batería apagado",
-        "da": "Batterivarmer slukket",
-        "ru": "Подогрев аккумулятора выключен",
-        "pl": "Podgrzewacz baterii wyłączony"
-      },
-      "insightsTitleTrue": {
-        "en": "Battery heater on",
-        "de": "Batterie-Heizung an",
-        "nl": "Batterijverwarmer aan",
-        "fr": "Chauffage de la batterie activé",
-        "it": "Riscaldatore della batteria acceso",
-        "sv": "Batterivärmare på",
-        "no": "Batterivarmer på",
-        "es": "Calentador de batería encendido",
-        "da": "Batterivarmer tændt",
-        "ru": "Подогрев аккумулятора включен",
-        "pl": "Podgrzewacz baterii włączony"
-      },
-      "insightsTitleFalse": {
-        "en": "Battery heater off",
-        "de": "Batterie-Heizung aus",
-        "nl": "Batterijverwarmer uit",
-        "fr": "Chauffage de la batterie désactivé",
-        "it": "Riscaldatore della batteria spento",
-        "sv": "Batterivärmare av",
-        "no": "Batterivarmer av",
-        "es": "Calentador de batería apagado",
-        "da": "Batterivarmer slukket",
-        "ru": "Подогрев аккумулятора выключен",
-        "pl": "Podgrzewacz baterii wyłączony"
-      },
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/capability_icons/battery_heater.svg"
-    },
     "car_doors_locked": {
       "type": "boolean",
-      "title": {
-        "en": "Doors",
-        "de": "Türen",
-        "nl": "Deuren",
-        "fr": "Portes",
-        "it": "Porte",
-        "sv": "Dörrar",
-        "no": "Dører",
-        "es": "Puertas",
-        "da": "Døre",
-        "ru": "Двери",
-        "pl": "Drzwi"
-      },
-      "insights": false,
-      "getable": true,
+      "uiComponent": "toggle",
       "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/car_doors_locked.svg"
-    },
-    "car_refresh": {
-      "type": "boolean",
-      "title": {
-        "en": "Refresh",
-        "de": "Aktualisieren",
-        "nl": "Updaten",
-        "fr": "Actualiser",
-        "it": "Aggiorna",
-        "sv": "Uppdatera",
-        "no": "Oppdater",
-        "es": "Actualizar",
-        "da": "Opdater",
-        "ru": "Обновить",
-        "pl": "Odśwież"
-      },
-      "insights": false,
-      "getable": false,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/car_refresh.svg"
-    },
-    "car_sentry_mode": {
-      "type": "boolean",
-      "title": {
-        "en": "Sentry mode",
-        "de": "Sentry-Modus",
-        "nl": "Sentry mode",
-        "fr": "Mode sentinelle",
-        "it": "Modalità sentinella",
-        "sv": "Vaktpostläge",
-        "no": "Vakthundmodus",
-        "es": "Modo centinela",
-        "da": "Vagttilstand",
-        "ru": "Режим сторожа",
-        "pl": "Tryb strażnika"
-      },
-      "titleTrue": {
-        "en": "Sentry mode activated",
-        "de": "Sentry-Modus aktiviert",
-        "nl": "Sentry mode geactiveerd",
-        "fr": "Mode sentinelle activé",
-        "it": "Modalità sentinella attivata",
-        "sv": "Vaktpostläge aktiverat",
-        "no": "Vakthundmodus aktivert",
-        "es": "Modo centinela activado",
-        "da": "Vagttilstand aktiveret",
-        "ru": "Режим сторожа активирован",
-        "pl": "Tryb strażnika aktywowany"
-      },
-      "titleFalse": {
-        "en": "Sentry mode deactivated",
-        "de": "Sentry-Modus deaktiviert",
-        "nl": "Sentry mode gedeactiveerd",
-        "fr": "Mode sentinelle désactivé",
-        "it": "Modalità sentinella disattivata",
-        "sv": "Vaktpostläge inaktiverat",
-        "no": "Vakthundmodus deaktivert",
-        "es": "Modo centinela desactivado",
-        "da": "Vagttilstand deaktiveret",
-        "ru": "Режим сторожа деактивирован",
-        "pl": "Tryb strażnika dezaktywowany"
-      },
-      "insightsTitleTrue": {
-        "en": "Sentry mode activated",
-        "de": "Sentry-Modus aktiviert",
-        "nl": "Sentry mode geactiveerd",
-        "fr": "Mode sentinelle activé",
-        "it": "Modalità sentinella attivata",
-        "sv": "Vaktpostläge aktiverat",
-        "no": "Vakthundmodus aktivert",
-        "es": "Modo centinela activado",
-        "da": "Vagttilstand aktiveret",
-        "ru": "Режим сторожа активирован",
-        "pl": "Tryb strażnika aktywowany"
-      },
-      "insightsTitleFalse": {
-        "en": "Sentry mode deactivated",
-        "de": "Sentry-Modus deaktiviert",
-        "nl": "Sentry mode gedeactiveerd",
-        "fr": "Mode sentinelle désactivé",
-        "it": "Modalità sentinella disattivata",
-        "sv": "Vaktpostläge inaktiverat",
-        "no": "Vakthundmodus deaktivert",
-        "es": "Modo centinela desactivado",
-        "da": "Vagttilstand deaktiveret",
-        "ru": "Режим сторожа деактивирован",
-        "pl": "Tryb strażnika dezaktywowany"
-      },
-      "insights": true,
       "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/car_sentry_mode.svg"
-    },
-    "car_shift_state": {
-      "type": "string",
-      "title": {
-        "en": "Shift state",
-        "de": "Schaltzustand",
-        "nl": "Schakelstand",
-        "fr": "État de changement",
-        "it": "Stato di cambio",
-        "sv": "Växelläge",
-        "no": "Skiftetilstand",
-        "es": "Estado de cambio",
-        "da": "Skiftetilstand",
-        "ru": "Состояние переключения",
-        "pl": "Stan zmiany"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/car_shift_state.svg"
-    },
-    "car_software_update_state": {
-      "type": "enum",
-      "title": {
-        "en": "Update state",
-        "de": "Aktualisierungs-Status",
-        "nl": "Status bijwerken",
-        "fr": "État de mise à jour",
-        "it": "Stato aggiornamento",
-        "sv": "Uppdateringsstatus",
-        "no": "Oppdateringsstatus",
-        "es": "Estado de actualización",
-        "da": "Opdateringsstatus",
-        "ru": "Статус обновления",
-        "pl": "Stan aktualizacji"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/car_software_update_state.svg",
-      "values": [
-        {
-          "id": "",
-          "title": {
-            "en": "-"
-          }
-        },
-        {
-          "id": "available",
-          "title": {
-            "en": "Available",
-            "de": "Verfügbar",
-            "nl": "Beschikbaar",
-            "fr": "Disponible",
-            "it": "Disponibile",
-            "sv": "Tillgänglig",
-            "no": "Tilgjengelig",
-            "es": "Disponible",
-            "da": "Tilgængelig",
-            "ru": "Доступно",
-            "pl": "Dostępne"
-          }
-        },
-        {
-          "id": "scheduled",
-          "title": {
-            "en": "Planned",
-            "de": "Geplant",
-            "nl": "Gepland",
-            "fr": "Planifié",
-            "it": "Pianificato",
-            "sv": "Planerad",
-            "no": "Planlagt",
-            "es": "Planificado",
-            "da": "Planlagt",
-            "ru": "Запланировано",
-            "pl": "Zaplanowane"
-          }
-        },
-        {
-          "id": "downloading_wifi_wait",
-          "title": {
-            "en": "Waiting for Wifi download",
-            "de": "Warte auf Wifi-Download",
-            "nl": "Wachten op wifi-download",
-            "fr": "En attente du téléchargement Wifi",
-            "it": "In attesa del download tramite Wifi",
-            "sv": "Väntar på Wifi-nedladdning",
-            "no": "Venter på Wifi-nedlasting",
-            "es": "Esperando descarga por Wifi",
-            "da": "Venter på Wifi-download",
-            "ru": "Ожидание загрузки по Wi-Fi",
-            "pl": "Oczekiwanie na pobieranie przez Wifi"
-          }
-        },
-        {
-          "id": "downloading",
-          "title": {
-            "en": "Downloading",
-            "de": "Wird heruntergeladen",
-            "nl": "Downloaden",
-            "fr": "Téléchargement en cours",
-            "it": "Download in corso",
-            "sv": "Laddar ner",
-            "no": "Laster ned",
-            "es": "Descargando",
-            "da": "Downloader",
-            "ru": "Загрузка",
-            "pl": "Pobieranie"
-          }
-        },
-        {
-          "id": "installing",
-          "title": {
-            "en": "Installing",
-            "de": "Wird installiert",
-            "nl": "Is being installed",
-            "fr": "Installation en cours",
-            "it": "Installazione in corso",
-            "sv": "Installerar",
-            "no": "Installerer",
-            "es": "Instalando",
-            "da": "Installerer",
-            "ru": "Установка",
-            "pl": "Instalowanie"
-          }
-        }
-      ]
-    },
-    "car_software_update_version": {
-      "type": "string",
-      "title": {
-        "en": "Available software",
-        "de": "Verfügbare Software",
-        "nl": "Beschikbare software",
-        "fr": "Logiciel disponible",
-        "it": "Software disponibile",
-        "sv": "Tillgänglig programvara",
-        "no": "Tilgjengelig programvare",
-        "es": "Software disponible",
-        "da": "Tilgængelig software",
-        "ru": "Доступное программное обеспечение",
-        "pl": "Dostępne oprogramowanie"
-      },
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/car_software_update_version.svg"
-    },
-    "car_software_version": {
-      "type": "string",
-      "title": {
-        "en": "Software",
-        "de": "Software",
-        "nl": "Software",
-        "fr": "Logiciel",
-        "it": "Software",
-        "sv": "Programvara",
-        "no": "Programvare",
-        "es": "Software",
-        "da": "Software",
-        "ru": "Программное обеспечение",
-        "pl": "Oprogramowanie"
-      },
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/car_software_version.svg"
-    },
-    "car_state": {
-      "type": "enum",
-      "title": {
-        "en": "State",
-        "de": "Status",
-        "nl": "Toestand",
-        "fr": "État",
-        "it": "Stato",
-        "sv": "Tillstånd",
-        "no": "Tilstand",
-        "es": "Estado",
-        "da": "Tilstand",
-        "ru": "Состояние",
-        "pl": "Stan"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/car_state.svg",
-      "values": [
-        {
-          "id": "online",
-          "title": {
-            "en": "Online"
-          }
-        },
-        {
-          "id": "offline",
-          "title": {
-            "en": "Offline"
-          }
-        },
-        {
-          "id": "asleep",
-          "title": {
-            "en": "Asleep",
-            "de": "Schlafend",
-            "nl": "In slaap",
-            "fr": "Endormi",
-            "it": "Addormentato",
-            "sv": "Sovande",
-            "no": "Søvn",
-            "es": "Dormido",
-            "da": "Sovende",
-            "ru": "Спит",
-            "pl": "Śpiący"
-          }
-        },
-        {
-          "id": "ratelimit",
-          "title": {
-            "en": "Rate limit",
-            "de": "Rate limit",
-            "nl": "Rate limit",
-            "fr": "Limite de taux",
-            "it": "Limite di velocità",
-            "sv": "Hastighetsbegränsning",
-            "no": "Hastighetsgrense",
-            "es": "Límite de velocidad",
-            "da": "Hastighedsbegrænsning",
-            "ru": "Ограничение скорости",
-            "pl": "Ograniczenie prędkości"
-          }
-        }
-      ]
-    },
-    "car_trunk_front": {
-      "type": "boolean",
-      "title": {
-        "en": "Front trunk",
-        "de": "Vorderer Kofferraum",
-        "nl": "Voorste kofferbak",
-        "fr": "Coffre avant",
-        "it": "Bagagliaio anteriore",
-        "sv": "Framre bagageutrymme",
-        "no": "Fremre bagasjerom",
-        "es": "Maletero delantero",
-        "da": "Forreste bagagerum",
-        "ru": "Передний багажник",
-        "pl": "Przednia klapa bagażnika"
-      },
-      "titleTrue": {
-        "en": "Front trunk open",
-        "de": "Vorderer Kofferraum geöffnet",
-        "nl": "Voorste kofferbak open",
-        "fr": "Coffre avant ouvert",
-        "it": "Bagagliaio anteriore aperto",
-        "sv": "Framre bagageutrymme öppet",
-        "no": "Fremre bagasjerom åpent",
-        "es": "Maletero delantero abierto",
-        "da": "Forreste bagagerum åbent",
-        "ru": "Передний багажник открыт",
-        "pl": "Przednia klapa bagażnika otwarta"
-      },
-      "titleFalse": {
-        "en": "Front trunk closed",
-        "de": "Vorderer Kofferraum geschlossen",
-        "nl": "Voorste kofferbak gesloten",
-        "fr": "Coffre avant fermé",
-        "it": "Bagagliaio anteriore chiuso",
-        "sv": "Framre bagageutrymme stängd",
-        "no": "Fremre bagasjerom lukket",
-        "es": "Maletero delantero cerrado",
-        "da": "Forreste bagagerum lukket",
-        "ru": "Передний багажник закрыт",
-        "pl": "Przednia klapa bagażnika zamknięta"
-      },
-      "insightsTitleTrue": {
-        "en": "Front trunk open",
-        "de": "Vorderer Kofferraum geöffnet",
-        "nl": "Voorste kofferbak open",
-        "fr": "Coffre avant ouvert",
-        "it": "Bagagliaio anteriore aperto",
-        "sv": "Framre bagageutrymme öppet",
-        "no": "Fremre bagasjerom åpent",
-        "es": "Maletero delantero abierto",
-        "da": "Forreste bagagerum åbent",
-        "ru": "Передний багажник открыт",
-        "pl": "Przednia klapa bagażnika otwarta"
-      },
-      "insightsTitleFalse": {
-        "en": "Front trunk closed",
-        "de": "Vorderer Kofferraum geschlossen",
-        "nl": "Voorste kofferbak gesloten",
-        "fr": "Coffre avant fermé",
-        "it": "Bagagliaio anteriore chiuso",
-        "sv": "Framre bagageutrymme stängd",
-        "no": "Fremre bagasjerom lukket",
-        "es": "Maletero delantero cerrado",
-        "da": "Forreste bagagerum lukket",
-        "ru": "Передний багажник закрыт",
-        "pl": "Przednia klapa bagażnika zamknięta"
-      },
-      "insights": true,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/car_trunk_front.svg"
-    },
-    "car_trunk_rear": {
-      "type": "boolean",
-      "title": {
-        "en": "Trunk",
-        "de": "Kofferraum",
-        "nl": "Kofferbak",
-        "fr": "Coffre",
-        "it": "Bagagliaio",
-        "sv": "Baklucka",
-        "no": "Bagasjerom",
-        "es": "Maletero",
-        "da": "Bagagerum",
-        "ru": "Багажник",
-        "pl": "Bagażnik"
-      },
-      "titleTrue": {
-        "en": "Trunk open",
-        "de": "Kofferraum geöffnet",
-        "nl": "Kofferbak open",
-        "fr": "Coffre ouvert",
-        "it": "Bagagliaio aperto",
-        "sv": "Baklucka öppen",
-        "no": "Bagasjerom åpent",
-        "es": "Maletero abierto",
-        "da": "Bagagerum åbent",
-        "ru": "Багажник открыт",
-        "pl": "Bagażnik otwarty"
-      },
-      "titleFalse": {
-        "en": "Trunk closed",
-        "de": "Kofferraum geschlossen",
-        "nl": "Kofferbak gesloten",
-        "fr": "Coffre fermé",
-        "it": "Bagagliaio chiuso",
-        "sv": "Baklucka stängd",
-        "no": "Bagasjerom lukket",
-        "es": "Maletero cerrado",
-        "da": "Bagagerum lukket",
-        "ru": "Багажник закрыт",
-        "pl": "Bagażnik zamknięty"
-      },
-      "insightsTitleTrue": {
-        "en": "Trunk open",
-        "de": "Kofferraum geöffnet",
-        "nl": "Kofferbak open",
-        "fr": "Coffre ouvert",
-        "it": "Bagagliaio aperto",
-        "sv": "Baklucka öppen",
-        "no": "Bagasjerom åpent",
-        "es": "Maletero abierto",
-        "da": "Bagagerum åbent",
-        "ru": "Багажник открыт",
-        "pl": "Bagażnik otwarty"
-      },
-      "insightsTitleFalse": {
-        "en": "Trunk closed",
-        "de": "Kofferraum geschlossen",
-        "nl": "Kofferbak gesloten",
-        "fr": "Coffre fermé",
-        "it": "Bagagliaio chiuso",
-        "sv": "Baklucka stängd",
-        "no": "Bagasjerom lukket",
-        "es": "Maletero cerrado",
-        "da": "Bagagerum lukket",
-        "ru": "Багажник закрыт",
-        "pl": "Bagażnik zamknięty"
-      },
-      "insights": true,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/car_trunk_rear.svg"
-    },
-    "car_user_present": {
-      "type": "boolean",
-      "title": {
-        "en": "User is present",
-        "de": "Benutzer anwesend",
-        "nl": "Gebruiker aanwezig",
-        "fr": "Utilisateur présent",
-        "it": "Utente presente",
-        "sv": "Användaren är närvarande",
-        "no": "Bruker er tilstede",
-        "es": "Usuario presente",
-        "da": "Bruger er til stede",
-        "ru": "Пользователь присутствует",
-        "pl": "Użytkownik jest obecny"
-      },
-      "titleTrue": {
-        "en": "User is present",
-        "de": "Benutzer anwesend",
-        "nl": "Gebruiker aanwezig",
-        "fr": "Utilisateur présent",
-        "it": "Utente presente",
-        "sv": "Användaren är närvarande",
-        "no": "Bruker er tilstede",
-        "es": "Usuario presente",
-        "da": "Bruger er til stede",
-        "ru": "Пользователь присутствует",
-        "pl": "Użytkownik jest obecny"
-      },
-      "titleFasle": {
-        "en": "User is absent",
-        "de": "Benutzer abwesend",
-        "nl": "Gebruiker afwezig",
-        "fr": "Utilisateur absent",
-        "it": "Utente assente",
-        "sv": "Användaren är frånvarande",
-        "no": "Bruker er fraværende",
-        "es": "Usuario ausente",
-        "da": "Bruger er fraværende",
-        "ru": "Пользователь отсутствует",
-        "pl": "Użytkownik jest nieobecny"
-      },
-      "insightsTitleTrue": {
-        "en": "User is present",
-        "de": "Benutzer anwesend",
-        "nl": "Gebruiker aanwezig",
-        "fr": "Utilisateur présent",
-        "it": "Utente presente",
-        "sv": "Användaren är närvarande",
-        "no": "Bruker er tilstede",
-        "es": "Usuario presente",
-        "da": "Bruger er til stede",
-        "ru": "Пользователь присутствует",
-        "pl": "Użytkownik jest obecny"
-      },
-      "insightsTitleFalse": {
-        "en": "User is absent",
-        "de": "Benutzer abwesend",
-        "nl": "Gebruiker afwezig",
-        "fr": "Utilisateur absent",
-        "it": "Utente assente",
-        "sv": "Användaren är frånvarande",
-        "no": "Bruker er fraværende",
-        "es": "Usuario ausente",
-        "da": "Bruger er fraværende",
-        "ru": "Пользователь отсутствует",
-        "pl": "Użytkownik jest nieobecny"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": true,
-      "uiComponent": null,
-      "icon": "./assets/capability_icons/car_user_present.svg"
-    },
-    "car_wake_up": {
-      "type": "boolean",
-      "title": {
-        "en": "Wake up",
-        "de": "Aufwecken",
-        "nl": "Wakker worden",
-        "fr": "Réveiller",
-        "it": "Sveglia",
-        "sv": "Vakna",
-        "no": "Våkne opp",
-        "es": "Despertar",
-        "da": "Vågn op",
-        "ru": "Проснуться",
-        "pl": "Obudź się"
-      },
-      "insights": false,
-      "getable": false,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/car_wake_up.svg"
+      "title": "Doors Locked"
     },
     "charging_on": {
       "type": "boolean",
-      "title": {
-        "en": "Charging",
-        "de": "Laden",
-        "nl": "Laden",
-        "fr": "Chargement",
-        "it": "Caricamento",
-        "sv": "Laddning",
-        "no": "Lading",
-        "es": "Carga",
-        "da": "Opladning",
-        "ru": "Зарядка",
-        "pl": "Ładowanie"
-      },
-      "titleTrue": {
-        "en": "started",
-        "de": "gestartet",
-        "nl": "gestart",
-        "fr": "démarré",
-        "it": "avviato",
-        "sv": "startad",
-        "no": "startet",
-        "es": "iniciado",
-        "da": "startet",
-        "ru": "запущен",
-        "pl": "rozpoczęte"
-      },
-      "titleFalse": {
-        "en": "stopped",
-        "de": "gestoppt",
-        "nl": "gestopt",
-        "fr": "arrêté",
-        "it": "fermato",
-        "sv": "stoppad",
-        "no": "stoppet",
-        "es": "detenido",
-        "da": "stoppet",
-        "ru": "остановлен",
-        "pl": "zatrzymane"
-      },
-      "insightsTitleTrue": {
-        "en": "Charging started",
-        "de": "Laden gestartet",
-        "nl": "Laden is gestart",
-        "fr": "Chargement démarré",
-        "it": "Caricamento avviato",
-        "sv": "Laddning startad",
-        "no": "Lading startet",
-        "es": "Carga iniciada",
-        "da": "Opladning startet",
-        "ru": "Зарядка запущена",
-        "pl": "Ładowanie rozpoczęte"
-      },
-      "insightsTitleFalse": {
-        "en": "Charging stopped",
-        "de": "Laden gestoppt",
-        "nl": "Laden is gestopt",
-        "fr": "Chargement arrêté",
-        "it": "Caricamento fermato",
-        "sv": "Laddning stoppad",
-        "no": "Lading stoppet",
-        "es": "Carga detenida",
-        "da": "Opladning stoppet",
-        "ru": "Зарядка остановлена",
-        "pl": "Ładowanie zatrzymane"
-      },
-      "insights": true,
+      "uiComponent": "sensor",
+      "setable": false,
       "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/charging_on.svg"
+      "title": "Charging",
+      "icon": "/drivers/car/assets/battery-charging.svg"
     },
-    "charging_port": {
+    "climate_control": {
       "type": "boolean",
-      "title": {
-        "en": "Charge port",
-        "de": "Ladeanschluss",
-        "nl": "Laadpoort",
-        "fr": "Port de charge",
-        "it": "Porta di ricarica",
-        "sv": "Laddport",
-        "no": "Ladeport",
-        "es": "Puerto de carga",
-        "da": "Opladningsport",
-        "ru": "Порт зарядки",
-        "pl": "Port ładowania"
-      },
-      "titleTrue": {
-        "en": "opened",
-        "de": "geöffnet",
-        "nl": "geopend",
-        "fr": "ouvert",
-        "it": "aperto",
-        "sv": "öppen",
-        "no": "åpnet",
-        "es": "abierto",
-        "da": "åben",
-        "ru": "открыт",
-        "pl": "otwarty"
-      },
-      "titleFalse": {
-        "en": "closed",
-        "de": "gesloten",
-        "nl": "gesloten",
-        "fr": "fermé",
-        "it": "chiuso",
-        "sv": "stängd",
-        "no": "lukket",
-        "es": "cerrado",
-        "da": "lukket",
-        "ru": "закрыт",
-        "pl": "zamknięty"
-      },
-      "insightsTitleTrue": {
-        "en": "Charge port opened",
-        "de": "Ladeanschluss geöffnet",
-        "nl": "Laadpoort geopend",
-        "fr": "Port de charge ouvert",
-        "it": "Porta di ricarica aperta",
-        "sv": "Laddport öppen",
-        "no": "Ladeport åpnet",
-        "es": "Puerto de carga abierto",
-        "da": "Opladningsport åben",
-        "ru": "Порт зарядки открыт",
-        "pl": "Port ładowania otwarty"
-      },
-      "insightsTitleFalse": {
-        "en": "Charge port closed",
-        "de": "Ladeanschluss gesloten",
-        "nl": "Laadpoort gesloten",
-        "fr": "Port de charge fermé",
-        "it": "Porta di ricarica chiusa",
-        "sv": "Laddport stängd",
-        "no": "Ladeport lukket",
-        "es": "Puerto de carga cerrado",
-        "da": "Opladningsport lukket",
-        "ru": "Порт зарядки закрыт",
-        "pl": "Port ładowania zamknięty"
-      },
-      "insights": false,
-      "getable": true,
+      "uiComponent": "toggle",
       "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/charging_port.svg"
-    },
-    "charging_port_cable": {
-      "type": "string",
-      "title": {
-        "en": "Charging cable",
-        "de": "Ladekabel",
-        "nl": "Oplaadkabel",
-        "fr": "Câble de charge",
-        "it": "Cavo di ricarica",
-        "sv": "Laddningskabel",
-        "no": "Ladekabel",
-        "es": "Cable de carga",
-        "da": "Opladningskabel",
-        "ru": "Зарядный кабель",
-        "pl": "Kabel ładowania"
-      },
-      "uiComponent": "sensor",
       "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/charging_port_cable.svg"
+      "title": "Climate Control",
+      "icon": "/drivers/car/assets/thermometer-half.svg"
     },
-    "charging_port_latch": {
-      "type": "boolean",
-      "title": {
-        "en": "Charge port latch",
-        "de": "Ladeanschlussverriegelung",
-        "nl": "Laadpoortvergrendeling",
-        "fr": "Verrouillage du port de charge",
-        "it": "Serratura della porta di ricarica",
-        "sv": "Laddportlås",
-        "no": "Ladelås",
-        "es": "Cierre del puerto de carga",
-        "da": "Opladningsportlås",
-        "ru": "Замок порта зарядки",
-        "pl": "Zamek portu ładowania"
-      },
-      "titleTrue": {
-        "en": "locked",
-        "de": "verriegelt",
-        "nl": "op slot",
-        "fr": "verrouillé",
-        "it": "bloccato",
-        "sv": "låst",
-        "no": "låst",
-        "es": "bloqueado",
-        "da": "låst",
-        "ru": "заблокировано",
-        "pl": "zamknięte"
-      },
-      "titleFalse": {
-        "en": "unlocked",
-        "de": "entriegelt",
-        "nl": "ontgrendeld",
-        "fr": "déverrouillé",
-        "it": "sbloccato",
-        "sv": "olåst",
-        "no": "ulåst",
-        "es": "desbloqueado",
-        "da": "ulåst",
-        "ru": "разблокировано",
-        "pl": "otwarte"
-      },
-      "insightsTitleTrue": {
-        "en": "locked",
-        "de": "verriegelt",
-        "nl": "op slot",
-        "fr": "verrouillé",
-        "it": "bloccato",
-        "sv": "låst",
-        "no": "låst",
-        "es": "bloqueado",
-        "da": "låst",
-        "ru": "заблокировано",
-        "pl": "zamknięte"
-      },
-      "insightsTitleFalse": {
-        "en": "unlocked",
-        "de": "entriegelt",
-        "nl": "ontgrendeld",
-        "fr": "déverrouillé",
-        "it": "sbloccato",
-        "sv": "olåst",
-        "no": "ulåst",
-        "es": "desbloqueado",
-        "da": "ulåst",
-        "ru": "разблокировано",
-        "pl": "otwarte"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/charging_port_latch.svg"
-    },
-    "charging_port_unlock": {
-      "type": "boolean",
-      "title": {
-        "en": "Unlock/open charge port",
-        "de": "Ladeanschluss entriegeln/öffnen",
-        "nl": "Ontgrendel/open laadpoort",
-        "fr": "Déverrouiller/ouvrir le port de charge",
-        "it": "Sblocca/apri la porta di ricarica",
-        "sv": "Lås upp/öppna laddporten",
-        "no": "Lås opp/åpne ladeporten",
-        "es": "Desbloquear/abrir puerto de carga",
-        "da": "Lås op/åbn opladningsporten",
-        "ru": "Разблокировать/открыть зарядный порт",
-        "pl": "Odblokuj/otwórz port ładowania"
-      },
-      "insights": false,
-      "getable": false,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/charging_port_unlock.svg"
-    },
-    "charging_state": {
-      "type": "enum",
-      "title": {
-        "en": "Charging state",
-        "de": "Ladezustand",
-        "nl": "Oplaadstatus",
-        "fr": "État de charge",
-        "it": "Stato di carica",
-        "sv": "Laddningstillstånd",
-        "no": "Ladetilstand",
-        "es": "Estado de carga",
-        "da": "Opladningstilstand",
-        "ru": "Состояние зарядки",
-        "pl": "Stan ładowania"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/charging_state.svg",
-      "values": [
-        {
-          "id": "Disconnected",
-          "title": {
-            "en": "Disconnected",
-            "de": "Getrennt",
-            "nl": "Losgekoppeld",
-            "fr": "Déconnecté",
-            "it": "Disconnesso",
-            "sv": "Frånkopplad",
-            "no": "Frakoblet",
-            "es": "Desconectado",
-            "da": "Afbrydet",
-            "ru": "Отключено",
-            "pl": "Odłączony"
-          }
-        },
-        {
-          "id": "Calibrating",
-          "title": {
-            "en": "Calibrating",
-            "de": "Kalibrieren",
-            "nl": "Kalibreren",
-            "fr": "Calibrage",
-            "it": "Calibrando",
-            "sv": "Kalibrering",
-            "no": "Kalibrering",
-            "es": "Calibrando",
-            "da": "Kalibrering",
-            "ru": "Калибровка",
-            "pl": "Kalibracja"
-          }
-        },
-        {
-          "id": "Starting",
-          "title": {
-            "en": "Starting",
-            "de": "Beginnend",
-            "nl": "Beginnend",
-            "fr": "Démarrage",
-            "it": "Avvio",
-            "sv": "Startar",
-            "no": "Starter",
-            "es": "Iniciando",
-            "da": "Starter",
-            "ru": "Запуск",
-            "pl": "Rozpoczynanie"
-          }
-        },
-        {
-          "id": "Charging",
-          "title": {
-            "en": "Charging",
-            "de": "Laden",
-            "nl": "Opladen",
-            "fr": "En charge",
-            "it": "In carica",
-            "sv": "Laddar",
-            "no": "Lader",
-            "es": "Cargando",
-            "da": "Oplader",
-            "ru": "Зарядка",
-            "pl": "Ładowanie"
-          }
-        },
-        {
-          "id": "Stopped",
-          "title": {
-            "en": "Stopped",
-            "de": "Gestoppt",
-            "nl": "Gestopt",
-            "fr": "Arrêté",
-            "it": "Fermato",
-            "sv": "Stoppad",
-            "no": "Stoppet",
-            "es": "Detenido",
-            "da": "Stoppet",
-            "ru": "Остановлено",
-            "pl": "Zatrzymany"
-          }
-        },
-        {
-          "id": "Complete",
-          "title": {
-            "en": "Complete",
-            "de": "Abgeschlossen",
-            "nl": "Compleet",
-            "fr": "Terminé",
-            "it": "Completo",
-            "sv": "Slutförd",
-            "no": "Fullført",
-            "es": "Completo",
-            "da": "Fuldført",
-            "ru": "Завершено",
-            "pl": "Zakończony"
-          }
-        },
-        {
-          "id": "NoPower",
-          "title": {
-            "en": "No Power",
-            "de": "Keine Energie",
-            "nl": "Geen kracht",
-            "fr": "Pas de courant",
-            "it": "Nessuna alimentazione",
-            "sv": "Ingen ström",
-            "no": "Ingen strøm",
-            "es": "Sin energía",
-            "da": "Ingen strøm",
-            "ru": "Нет питания",
-            "pl": "Brak zasilania"
-          }
-        },
-        {
-          "id": "Unknown",
-          "title": {
-            "en": "Unknown",
-            "de": "Unbekannt",
-            "nl": "Onbekend",
-            "fr": "Inconnu",
-            "it": "Sconosciuto",
-            "sv": "Okänd",
-            "no": "Ukjent",
-            "es": "Desconocido",
-            "da": "Ukendt",
-            "ru": "Неизвестно",
-            "pl": "Nieznany"
-          }
-        }
-      ]
-    },
-    "climate_ac": {
-      "type": "boolean",
-      "title": {
-        "en": "A/C",
-        "de": "A/C",
-        "nl": "A/C",
-        "fr": "A/C",
-        "it": "A/C",
-        "sv": "A/C",
-        "no": "A/C",
-        "es": "A/C",
-        "da": "A/C",
-        "ru": "A/C",
-        "pl": "A/C"
-      },
-      "insights": false,
-      "titleTrue": {
-        "en": "A/C on",
-        "de": "A/C an",
-        "nl": "A/C aan",
-        "fr": "A/C allumé",
-        "it": "A/C acceso",
-        "sv": "A/C på",
-        "no": "A/C på",
-        "es": "A/C encendido",
-        "da": "A/C tændt",
-        "ru": "A/C включено",
-        "pl": "A/C włączone"
-      },
-      "titleFalse": {
-        "en": "A/C off",
-        "de": "A/C aus",
-        "nl": "A/C uit",
-        "fr": "A/C éteint",
-        "it": "A/C spento",
-        "sv": "A/C av",
-        "no": "A/C av",
-        "es": "A/C apagado",
-        "da": "A/C slukket",
-        "ru": "A/C выключено",
-        "pl": "A/C wyłączone"
-      },
-      "insightsTitleTrue": {
-        "en": "A/C on",
-        "de": "A/C an",
-        "nl": "A/C aan",
-        "fr": "A/C allumé",
-        "it": "A/C acceso",
-        "sv": "A/C på",
-        "no": "A/C på",
-        "es": "A/C encendido",
-        "da": "A/C tændt",
-        "ru": "A/C включено",
-        "pl": "A/C włączone"
-      },
-      "insightsTitleFalse": {
-        "en": "A/C off",
-        "de": "A/C aus",
-        "nl": "A/C uit",
-        "fr": "A/C éteint",
-        "it": "A/C spento",
-        "sv": "A/C av",
-        "no": "A/C av",
-        "es": "A/C apagado",
-        "da": "A/C slukket",
-        "ru": "A/C выключено",
-        "pl": "A/C wyłączone"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/capability_icons/climate_ac.svg"
-    },
-    "climate_ac_auto": {
-      "type": "boolean",
-      "title": {
-        "en": "A/C auto",
-        "de": "A/C auto",
-        "nl": "A/C auto",
-        "fr": "A/C auto",
-        "it": "A/C auto",
-        "sv": "A/C auto",
-        "no": "A/C auto",
-        "es": "A/C auto",
-        "da": "A/C auto",
-        "ru": "A/C auto",
-        "pl": "A/C auto"
-      },
-      "insights": false,
-      "titleTrue": {
-        "en": "A/C auto on",
-        "de": "A/C auto an",
-        "nl": "A/C auto aan",
-        "fr": "A/C auto activé",
-        "it": "A/C auto attivo",
-        "sv": "A/C auto på",
-        "no": "A/C auto på",
-        "es": "A/C auto encendido",
-        "da": "A/C auto tændt",
-        "ru": "A/C авто вкл",
-        "pl": "A/C auto włączone"
-      },
-      "titleFalse": {
-        "en": "A/C auto off",
-        "de": "A/C auto aus",
-        "nl": "A/C auto uit",
-        "fr": "A/C auto désactivé",
-        "it": "A/C auto spento",
-        "sv": "A/C auto av",
-        "no": "A/C auto av",
-        "es": "A/C auto apagado",
-        "da": "A/C auto slukket",
-        "ru": "A/C авто выкл",
-        "pl": "A/C auto wyłączone"
-      },
-      "insightsTitleTrue": {
-        "en": "A/C auto on",
-        "de": "A/C auto an",
-        "nl": "A/C auto aan",
-        "fr": "A/C auto activé",
-        "it": "A/C auto attivo",
-        "sv": "A/C auto på",
-        "no": "A/C auto på",
-        "es": "A/C auto encendido",
-        "da": "A/C auto tændt",
-        "ru": "A/C авто вкл",
-        "pl": "A/C auto włączone"
-      },
-      "insightsTitleFalse": {
-        "en": "A/C auto off",
-        "de": "A/C auto aus",
-        "nl": "A/C auto uit",
-        "fr": "A/C auto désactivé",
-        "it": "A/C auto spento",
-        "sv": "A/C auto av",
-        "no": "A/C auto av",
-        "es": "A/C auto apagado",
-        "da": "A/C auto slukket",
-        "ru": "A/C авто выкл",
-        "pl": "A/C auto wyłączone"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/capability_icons/climate_ac_auto.svg"
-    },
-    "climate_defrost": {
-      "type": "boolean",
-      "title": {
-        "en": "Defrost",
-        "de": "Enteisen",
-        "nl": "Ontdooien",
-        "fr": "Désembuage",
-        "it": "Sbrinamento",
-        "sv": "Avfrostning",
-        "no": "Avising",
-        "es": "Descongelar",
-        "da": "Afrimning",
-        "ru": "Разморозка",
-        "pl": "Odszranianie"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "/assets/capability_icons/climate_defrost.svg"
-    },
-    "climate_keeper_mode": {
-      "type": "enum",
-      "title": {
-        "en": "Climate control mode",
-        "de": "Klimatisierungsoption",
-        "nl": "Klimaatregelingsoptie",
-        "fr": "Mode de contrôle climatique",
-        "it": "Modalità di controllo del clima",
-        "sv": "Klimatkontrollsläge",
-        "no": "Klimakontrollmodus",
-        "es": "Modo de control climático",
-        "da": "Klimakontroltilstand",
-        "ru": "Режим климат-контроля",
-        "pl": "Tryb kontroli klimatyzacji"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "picker",
-      "values": [
-        {
-          "id": "off",
-          "title": {
-            "en": "Off",
-            "de": "Aus",
-            "nl": "Uit",
-            "fr": "Éteint",
-            "it": "Spento",
-            "sv": "Av",
-            "no": "Av",
-            "es": "Apagado",
-            "da": "Fra",
-            "ru": "Выключено",
-            "pl": "Wyłączone"
-          }
-        },
-        {
-          "id": "on",
-          "title": {
-            "en": "Keep activated",
-            "de": "Aktiviert lassen",
-            "nl": "Actief houden",
-            "fr": "Maintenir activé",
-            "it": "Mantieni attivo",
-            "sv": "Håll aktiverad",
-            "no": "Hold aktivert",
-            "es": "Mantener activado",
-            "da": "Hold aktiveret",
-            "ru": "Сохранить активированным",
-            "pl": "Zachowaj aktywowane"
-          }
-        },
-        {
-          "id": "dog",
-          "title": {
-            "en": "Dog mode",
-            "de": "Hundemodus",
-            "nl": "Hondenmodus",
-            "fr": "Mode chien",
-            "it": "Modalità cane",
-            "sv": "Hundläge",
-            "no": "Hundemodus",
-            "es": "Modo perro",
-            "da": "Hundetilstand",
-            "ru": "Режим собаки",
-            "pl": "Tryb psa"
-          }
-        },
-        {
-          "id": "camp",
-          "title": {
-            "en": "Camp mode",
-            "de": "Camping-Modus",
-            "nl": "Kampeermodus",
-            "fr": "Mode camping",
-            "it": "Modalità campeggio",
-            "sv": "Campingläge",
-            "no": "Campingmodus",
-            "es": "Modo camping",
-            "da": "Campingtilstand",
-            "ru": "Режим кемпинга",
-            "pl": "Tryb kempingowy"
-          }
-        }
-      ]
-    },
-    "climate_overheat_protection_level": {
-      "type": "enum",
-      "title": {
-        "en": "Overheat protection level",
-        "de": "Überhitzungsschutz-Stufe",
-        "nl": "Beveiligingsniveau tegen oververhitting",
-        "fr": "Niveau de protection contre la surchauffe",
-        "it": "Livello di protezione da surriscaldamento",
-        "sv": "Överhettningsskyddsnivå",
-        "no": "Overopphetingsbeskyttelsesnivå",
-        "es": "Nivel de protección contra sobrecalentamiento",
-        "da": "Overophedningsbeskyttelsesniveau",
-        "ru": "Уровень защиты от перегрева",
-        "pl": "Poziom ochrony przed przegrzaniem"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "picker",
-      "values": [
-        {
-          "id": "low",
-          "title": {
-            "en": "Low",
-            "de": "Niedrig",
-            "nl": "Laag",
-            "fr": "Faible",
-            "it": "Basso",
-            "sv": "Låg",
-            "no": "Lav",
-            "es": "Bajo",
-            "da": "Lav",
-            "ru": "Низкий",
-            "pl": "Niski"
-          }
-        },
-        {
-          "id": "medium",
-          "title": {
-            "en": "Medium",
-            "de": "Mittel",
-            "nl": "Medium",
-            "fr": "Moyen",
-            "it": "Medio",
-            "sv": "Medium",
-            "no": "Medium",
-            "es": "Medio",
-            "da": "Medium",
-            "ru": "Средний",
-            "pl": "Średni"
-          }
-        },
-        {
-          "id": "high",
-          "title": {
-            "en": "High",
-            "de": "Hoch",
-            "nl": "Hoog",
-            "fr": "Élevé",
-            "it": "Alto",
-            "sv": "Hög",
-            "no": "Høy",
-            "es": "Alto",
-            "da": "Høj",
-            "ru": "Высокий",
-            "pl": "Wysoki"
-          }
-        }
-      ]
-    },
-    "climate_overheat_protection_mode": {
-      "type": "enum",
-      "title": {
-        "en": "Overheat protection mode",
-        "de": "Überhitzungsschutz-Modus",
-        "nl": "Beveiligingsmodus tegen oververhitting",
-        "fr": "Mode de protection contre la surchauffe",
-        "it": "Modalità di protezione da surriscaldamento",
-        "sv": "Överhettningsskyddsläge",
-        "no": "Overopphetingsbeskyttelsesmodus",
-        "es": "Modo de protección contra el sobrecalentamiento",
-        "da": "Overophedningsbeskyttelsesfunktion",
-        "ru": "Режим защиты от перегрева",
-        "pl": "Tryb ochrony przed przegrzaniem"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "picker",
-      "values": [
-        {
-          "id": "off",
-          "title": {
-            "en": "Off",
-            "de": "Aus",
-            "nl": "Uit",
-            "fr": "Désactivé",
-            "it": "Spento",
-            "sv": "Av",
-            "no": "Av",
-            "es": "Apagado",
-            "da": "Slukket",
-            "ru": "Выключено",
-            "pl": "Wyłączone"
-          }
-        },
-        {
-          "id": "fan_only",
-          "title": {
-            "en": "Without A/C",
-            "de": "Ohne A/C",
-            "nl": "Zonder A/C",
-            "fr": "Sans A/C",
-            "it": "Senza A/C",
-            "sv": "Utan A/C",
-            "no": "Uten A/C",
-            "es": "Sin A/C",
-            "da": "Uden A/C",
-            "ru": "Без A/C",
-            "pl": "Bez A/C"
-          }
-        },
-        {
-          "id": "on",
-          "title": {
-            "en": "On",
-            "de": "An",
-            "nl": "Bij",
-            "fr": "Activé",
-            "it": "Acceso",
-            "sv": "På",
-            "no": "På",
-            "es": "Encendido",
-            "da": "Tændt",
-            "ru": "Включено",
-            "pl": "Włączone"
-          }
-        }
-      ]
-    },
-    "climate_preconditioning": {
-      "type": "boolean",
-      "title": {
-        "en": "Preconditioning",
-        "de": "Klimatisierung",
-        "nl": "Climate control",
-        "fr": "Préconditionnement",
-        "it": "Condizionamento",
-        "sv": "Klimatkontroll",
-        "no": "Klimakontroll",
-        "es": "Climatización",
-        "da": "Klimakontrol",
-        "ru": "Климат-контроль",
-        "pl": "Klimatyzacja"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "/assets/capability_icons/climate_preconditioning.svg"
-    },
-    "climate_seat_fl_heat_level": {
-      "type": "enum",
-      "title": {
-        "en": "Driver seat heating",
-        "de": "Sitzheizung Fahrer",
-        "nl": "Verwarming bestuurdersstoel",
-        "fr": "Chauffage siège conducteur",
-        "it": "Riscaldamento sedile guidatore",
-        "sv": "Förarstolsvärme",
-        "no": "Førersetevarme",
-        "es": "Calefacción del asiento del conductor",
-        "da": "Førersædevarme",
-        "ru": "Обогрев водительского сиденья",
-        "pl": "Ogrzewanie fotela kierowcy"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/capability_icons/climate_seat_fl_heat_level.svg",
-      "values": [
-        {
-          "id": "0-auto",
-          "title": {
-            "en": "Off (auto)",
-            "de": "Aus (auto)",
-            "nl": "Uit (auto)",
-            "fr": "Éteint (auto)",
-            "it": "Spento (auto)",
-            "sv": "Av (auto)",
-            "no": "Av (auto)",
-            "es": "Apagado (auto)",
-            "da": "Slukket (auto)",
-            "ru": "Выкл. (авто)",
-            "pl": "Wyłączone (auto)"
-          }
-        },
-        {
-          "id": "0",
-          "title": {
-            "en": "Off",
-            "de": "Aus",
-            "nl": "Uit",
-            "fr": "Éteint",
-            "it": "Spento",
-            "sv": "Av",
-            "no": "Av",
-            "es": "Apagado",
-            "da": "Slukket",
-            "ru": "Выкл.",
-            "pl": "Wyłączone"
-          }
-        },
-        {
-          "id": "1-auto",
-          "title": {
-            "en": "1 (auto)",
-            "de": "1 (auto)",
-            "nl": "1 (auto)",
-            "fr": "1 (auto)",
-            "it": "1 (auto)",
-            "sv": "1 (auto)",
-            "no": "1 (auto)",
-            "es": "1 (auto)",
-            "da": "1 (auto)",
-            "ru": "1 (авто)",
-            "pl": "1 (auto)"
-          }
-        },
-        {
-          "id": "1",
-          "title": {
-            "en": "1"
-          }
-        },
-        {
-          "id": "2-auto",
-          "title": {
-            "en": "2 (auto)",
-            "de": "2 (auto)",
-            "nl": "2 (auto)",
-            "fr": "2 (auto)",
-            "it": "2 (auto)",
-            "sv": "2 (auto)",
-            "no": "2 (auto)",
-            "es": "2 (auto)",
-            "da": "2 (auto)",
-            "ru": "2 (авто)",
-            "pl": "2 (auto)"
-          }
-        },
-        {
-          "id": "2",
-          "title": {
-            "en": "2"
-          }
-        },
-        {
-          "id": "3-auto",
-          "title": {
-            "en": "3 (auto)",
-            "de": "3 (auto)",
-            "nl": "3 (auto)",
-            "fr": "3 (auto)",
-            "it": "3 (auto)",
-            "sv": "3 (auto)",
-            "no": "3 (auto)",
-            "es": "3 (auto)",
-            "da": "3 (auto)",
-            "ru": "3 (авто)",
-            "pl": "3 (auto)"
-          }
-        },
-        {
-          "id": "3",
-          "title": {
-            "en": "3"
-          }
-        }
-      ]
-    },
-    "climate_seat_fr_heat_level": {
-      "type": "enum",
-      "title": {
-        "en": "Passenger seat heating",
-        "de": "Sitzheizung Beifahrer",
-        "nl": "Verwarmde passagiersstoelen",
-        "fr": "Chauffage siège passager",
-        "it": "Riscaldamento sedile passeggero",
-        "sv": "Passagerarsätesvärme",
-        "no": "Passasjerseteoppvarming",
-        "es": "Calefacción del asiento del pasajero",
-        "da": "Passagersædevarme",
-        "ru": "Обогрев пассажирского сиденья",
-        "pl": "Ogrzewanie fotela pasażera"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/capability_icons/climate_seat_fr_heat_level.svg",
-      "values": [
-        {
-          "id": "0-auto",
-          "title": {
-            "en": "Off (auto)",
-            "de": "Aus (auto)",
-            "nl": "Uit (auto)",
-            "fr": "Éteint (auto)",
-            "it": "Spento (auto)",
-            "sv": "Av (auto)",
-            "no": "Av (auto)",
-            "es": "Apagado (auto)",
-            "da": "Fra (auto)",
-            "ru": "Выкл. (авто)",
-            "pl": "Wyłączone (auto)"
-          }
-        },
-        {
-          "id": "0",
-          "title": {
-            "en": "Off",
-            "de": "Aus",
-            "nl": "Uit",
-            "fr": "Éteint",
-            "it": "Spento",
-            "sv": "Av",
-            "no": "Av",
-            "es": "Apagado",
-            "da": "Fra",
-            "ru": "Выкл.",
-            "pl": "Wyłączone"
-          }
-        },
-        {
-          "id": "1-auto",
-          "title": {
-            "en": "1 (auto)",
-            "de": "1 (auto)",
-            "nl": "1 (auto)",
-            "fr": "1 (auto)",
-            "it": "1 (auto)",
-            "sv": "1 (auto)",
-            "no": "1 (auto)",
-            "es": "1 (auto)",
-            "da": "1 (auto)",
-            "ru": "1 (авто)",
-            "pl": "1 (auto)"
-          }
-        },
-        {
-          "id": "1",
-          "title": {
-            "en": "1"
-          }
-        },
-        {
-          "id": "2-auto",
-          "title": {
-            "en": "2 (auto)",
-            "de": "2 (auto)",
-            "nl": "2 (auto)",
-            "fr": "2 (auto)",
-            "it": "2 (auto)",
-            "sv": "2 (auto)",
-            "no": "2 (auto)",
-            "es": "2 (auto)",
-            "da": "2 (auto)",
-            "ru": "2 (авто)",
-            "pl": "2 (auto)"
-          }
-        },
-        {
-          "id": "2",
-          "title": {
-            "en": "2"
-          }
-        },
-        {
-          "id": "3-auto",
-          "title": {
-            "en": "3 (auto)",
-            "de": "3 (auto)",
-            "nl": "3 (auto)",
-            "fr": "3 (auto)",
-            "it": "3 (auto)",
-            "sv": "3 (auto)",
-            "no": "3 (auto)",
-            "es": "3 (auto)",
-            "da": "3 (auto)",
-            "ru": "3 (авто)",
-            "pl": "3 (auto)"
-          }
-        },
-        {
-          "id": "3",
-          "title": {
-            "en": "3"
-          }
-        }
-      ]
-    },
-    "climate_steering_wheel_heat_level": {
-      "type": "enum",
-      "title": {
-        "en": "Heated steering wheel",
-        "de": "Lenkradheizung",
-        "nl": "Verwarmd stuur",
-        "fr": "Volant chauffant",
-        "it": "Volante riscaldato",
-        "sv": "Uppvärmd ratt",
-        "no": "Oppvarmet ratt",
-        "es": "Volante calefactable",
-        "da": "Opvarmet rat",
-        "ru": "Подогрев руля",
-        "pl": "Podgrzewane koło kierownicy"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "/assets/capability_icons/climate_steering_wheel_heat_level.svg",
-      "values": [
-        {
-          "id": "0-auto",
-          "title": {
-            "en": "Off (auto)",
-            "de": "Aus (auto)",
-            "nl": "Uit (auto)",
-            "fr": "Éteint (auto)",
-            "it": "Spento (auto)",
-            "sv": "Av (auto)",
-            "no": "Av (auto)",
-            "es": "Apagado (auto)",
-            "da": "Fra (auto)",
-            "ru": "Выключено (авто)",
-            "pl": "Wyłączone (auto)"
-          }
-        },
-        {
-          "id": "0",
-          "title": {
-            "en": "Off",
-            "de": "Aus",
-            "nl": "Uit",
-            "fr": "Éteint",
-            "it": "Spento",
-            "sv": "Av",
-            "no": "Av",
-            "es": "Apagado",
-            "da": "Fra",
-            "ru": "Выключено",
-            "pl": "Wyłączone"
-          }
-        },
-        {
-          "id": "1-auto",
-          "title": {
-            "en": "1 (auto)",
-            "de": "1 (auto)",
-            "nl": "1 (auto)",
-            "fr": "1 (auto)",
-            "it": "1 (auto)",
-            "sv": "1 (auto)",
-            "no": "1 (auto)",
-            "es": "1 (auto)",
-            "da": "1 (auto)",
-            "ru": "1 (авто)",
-            "pl": "1 (auto)"
-          }
-        },
-        {
-          "id": "1",
-          "title": {
-            "en": "1"
-          }
-        },
-        {
-          "id": "3-auto",
-          "title": {
-            "en": "2 (auto)",
-            "de": "2 (auto)",
-            "nl": "2 (auto)",
-            "fr": "2 (auto)",
-            "it": "2 (auto)",
-            "sv": "2 (auto)",
-            "no": "2 (auto)",
-            "es": "2 (auto)",
-            "da": "2 (auto)",
-            "ru": "2 (авто)",
-            "pl": "2 (auto)"
-          }
-        },
-        {
-          "id": "3",
-          "title": {
-            "en": "2"
-          }
-        }
-      ]
-    },
-    "climate_window_vent": {
-      "type": "boolean",
-      "title": {
-        "en": "Window vent mode",
-        "de": "Fensterlüftungsmodus",
-        "nl": "Raamventilatiemodus",
-        "fr": "Mode de ventilation des fenêtres",
-        "it": "Modalità di aerazione finestra",
-        "sv": "Fönsterluftningsläge",
-        "no": "Vindusluftingsmodus",
-        "es": "Modo de ventilación de ventanas",
-        "da": "Vinduesventilationsfunktion",
-        "ru": "Режим вентиляции окна",
-        "pl": "Tryb wentylacji okna"
-      },
-      "titleTrue": {
-        "en": "Windows in vent position",
-        "de": "Fenster in Lüftungsposition",
-        "nl": "Raam in ventilatiestand",
-        "fr": "Fenêtres en position de ventilation",
-        "it": "Finestre in posizione di aerazione",
-        "sv": "Fönster i luftningsläge",
-        "no": "Vinduer i luftingsposisjon",
-        "es": "Ventanas en posición de ventilación",
-        "da": "Vinduer i ventilationsposition",
-        "ru": "Окна в положении вентиляции",
-        "pl": "Okna w pozycji wentylacji"
-      },
-      "titleFalse": {
-        "en": "Windows closed",
-        "de": "Fenster geschlossen",
-        "nl": "Raam gesloten",
-        "fr": "Fenêtres fermées",
-        "it": "Finestre chiuse",
-        "sv": "Fönster stängda",
-        "no": "Vinduer lukket",
-        "es": "Ventanas cerradas",
-        "da": "Vinduer lukket",
-        "ru": "Окна закрыты",
-        "pl": "Okna zamknięte"
-      },
-      "insightsTitleTrue": {
-        "en": "Windows in vent position",
-        "de": "Fenster in Lüftungsposition",
-        "nl": "Raam in ventilatiestand",
-        "fr": "Fenêtres en position de ventilation",
-        "it": "Finestre in posizione di aerazione",
-        "sv": "Fönster i luftningsläge",
-        "no": "Vinduer i luftingsposisjon",
-        "es": "Ventanas en posición de ventilación",
-        "da": "Vinduer i ventilationsposition",
-        "ru": "Окна в положении вентиляции",
-        "pl": "Okna w pozycji wentylacji"
-      },
-      "insightsTitleFalse": {
-        "en": "Windows closed",
-        "de": "Fenster geschlossen",
-        "nl": "Raam gesloten",
-        "fr": "Fenêtres fermées",
-        "it": "Finestre chiuse",
-        "sv": "Fönster stängda",
-        "no": "Vinduer lukket",
-        "es": "Ventanas cerradas",
-        "da": "Vinduer lukket",
-        "ru": "Окна закрыты",
-        "pl": "Okna zamknięte"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": true,
-      "uiComponent": "button",
-      "icon": "./assets/capability_icons/climate_window_vent.svg"
-    },
-    "device_state": {
-      "type": "boolean",
-      "uiQuickAction": true,
-      "getable": true,
-      "setable": false,
-      "uiComponent": null,
-      "insights": false,
-      "preventInsights": true,
-      "preventTag": true,
-      "title": {
-        "en": "Online state",
-        "de": "Online-Status",
-        "nl": "Online status",
-        "fr": "État en ligne",
-        "it": "Stato online",
-        "sv": "Online-status",
-        "no": "Online-tilstand",
-        "es": "Estado en línea",
-        "da": "Online-tilstand",
-        "ru": "Онлайн-состояние",
-        "pl": "Stan online"
-      },
-      "titleTrue": {
-        "en": "Online",
-        "de": "Online",
-        "nl": "Online",
-        "fr": "En ligne",
-        "it": "Online",
-        "sv": "Online",
-        "no": "Online",
-        "es": "En línea",
-        "da": "Online",
-        "ru": "Онлайн",
-        "pl": "Online"
-      },
-      "titleFalse": {
-        "en": "Offline",
-        "de": "Offline",
-        "nl": "Offline",
-        "fr": "Hors ligne",
-        "it": "Offline",
-        "sv": "Offline",
-        "no": "Offline",
-        "es": "Desconectado",
-        "da": "Offline",
-        "ru": "Офлайн",
-        "pl": "Offline"
-      },
-      "insightsTitleTrue": {
-        "en": "Online",
-        "de": "Online",
-        "nl": "Online",
-        "fr": "En ligne",
-        "it": "Online",
-        "sv": "Online",
-        "no": "Online",
-        "es": "En línea",
-        "da": "Online",
-        "ru": "Онлайн",
-        "pl": "Online"
-      },
-      "insightsTitleFalse": {
-        "en": "Offline",
-        "de": "Offline",
-        "nl": "Offline",
-        "fr": "Hors ligne",
-        "it": "Offline",
-        "sv": "Offline",
-        "no": "Offline",
-        "es": "Desconectado",
-        "da": "Offline",
-        "ru": "Офлайн",
-        "pl": "Offline"
-      }
-    },
-    "device_state_insights": {
-      "type": "boolean",
-      "uiQuickAction": true,
-      "getable": true,
-      "setable": false,
-      "uiComponent": null,
-      "insights": true,
-      "preventTag": true,
-      "title": {
-        "en": "Online state",
-        "de": "Online-Status",
-        "nl": "Online status",
-        "fr": "État en ligne",
-        "it": "Stato online",
-        "sv": "Online-status",
-        "no": "Online-tilstand",
-        "es": "Estado en línea",
-        "da": "Online-status",
-        "ru": "Онлайн-состояние",
-        "pl": "Stan online"
-      },
-      "titleTrue": {
-        "en": "Online",
-        "de": "Online",
-        "nl": "Online",
-        "fr": "En ligne",
-        "it": "Online",
-        "sv": "Online",
-        "no": "Online",
-        "es": "En línea",
-        "da": "Online",
-        "ru": "Онлайн",
-        "pl": "Online"
-      },
-      "titleFalse": {
-        "en": "Offline",
-        "de": "Offline",
-        "nl": "Offline",
-        "fr": "Hors ligne",
-        "it": "Offline",
-        "sv": "Offline",
-        "no": "Offline",
-        "es": "Desconectado",
-        "da": "Offline",
-        "ru": "Офлайн",
-        "pl": "Offline"
-      },
-      "insightsTitleTrue": {
-        "en": "Online",
-        "de": "Online",
-        "nl": "Online",
-        "fr": "En ligne",
-        "it": "Online",
-        "sv": "Online",
-        "no": "Online",
-        "es": "En línea",
-        "da": "Online",
-        "ru": "Онлайн",
-        "pl": "Online"
-      },
-      "insightsTitleFalse": {
-        "en": "Offline",
-        "de": "Offline",
-        "nl": "Offline",
-        "fr": "Hors ligne",
-        "it": "Offline",
-        "sv": "Offline",
-        "no": "Offline",
-        "es": "Desconectado",
-        "da": "Offline",
-        "ru": "Офлайн",
-        "pl": "Offline"
-      }
-    },
-    "last_online": {
-      "type": "string",
-      "title": {
-        "en": "Last online",
-        "de": "Zuletzt online",
-        "nl": "Laatst online",
-        "fr": "Dernier en ligne",
-        "it": "Ultimo aggiornamento",
-        "sv": "Senaste uppdatering",
-        "no": "Siste oppdatering",
-        "es": "Última actualización",
-        "da": "Seneste opdatering",
-        "ru": "Последнее обновление",
-        "pl": "Ostatnia aktualizacja"
-      },
-      "uiComponent": null,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/last_online.svg"
-    },
-    "last_update": {
-      "type": "string",
-      "title": {
-        "en": "Last update",
-        "de": "Letzte Aktualisierung",
-        "nl": "Laatste keer bijgewerkt",
-        "fr": "Dernière mise à jour",
-        "it": "Ultimo aggiornamento",
-        "sv": "Senaste uppdatering",
-        "no": "Siste oppdatering",
-        "es": "Última actualización",
-        "da": "Seneste opdatering",
-        "ru": "Последнее обновление",
-        "pl": "Ostatnia aktualizacja"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/last_update.svg"
-    },
-    "location_last_update": {
-      "type": "string",
-      "title": {
-        "en": "Last update",
-        "de": "Letzte Aktualisierung",
-        "nl": "Laatste keer bijgewerkt",
-        "fr": "Dernière mise à jour",
-        "it": "Ultimo aggiornamento",
-        "sv": "Senaste uppdatering",
-        "no": "Siste oppdatering",
-        "es": "Última actualización",
-        "da": "Seneste opdatering",
-        "ru": "Последнее обновление",
-        "pl": "Ostatnia aktualizacja"
-      },
-      "uiComponent": "sensor",
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/location_last_update.svg"
-    },
-    "location_name": {
-      "type": "string",
-      "title": {
-        "en": "Location",
-        "de": "Standort",
-        "nl": "Locatie",
-        "fr": "Emplacement",
-        "it": "Posizione",
-        "sv": "Plats",
-        "no": "Sted",
-        "es": "Ubicación",
-        "da": "Placering",
-        "ru": "Местоположение",
-        "pl": "Lokalizacja"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/location_name.svg"
-    },
-    "location_route_destination_address": {
-      "type": "string",
-      "title": {
-        "en": "Destination address",
-        "de": "Zieladresse",
-        "nl": "Bestemming adres",
-        "fr": "Adresse de destination",
-        "it": "Indirizzo di destinazione",
-        "sv": "Destination adress",
-        "no": "Destinasjonsadresse",
-        "es": "Dirección de destino",
-        "da": "Destination adresse",
-        "ru": "Адрес назначения маршрута",
-        "pl": "Cel trasy"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "./assets/capability_icons/location_route_destination_address.svg"
-    },
-    "location_route_destination_distance": {
+    "measure_battery": {
       "type": "number",
-      "title": {
-        "en": "Distance to destination",
-        "de": "Entfernung zum Ziel",
-        "nl": "Afstand tot bestemming",
-        "fr": "Distance vers destination",
-        "it": "Distanza verso destinazione",
-        "sv": "Avuien till destination",
-        "no": "Avstand til destinasjon",
-        "es": "Distancia hasta destino",
-        "da": "Afstand til destination",
-        "ru": "Расстояние до места назначения",
-        "pl": "Odległosść do celu"
-      },
-      "units": "km",
-      "decimals": 2,
+      "uiComponent": "battery",
+      "title": "Battery Level",
       "insights": true,
       "getable": true,
       "setable": false,
+      "icon": "/assets/icon.svg"
+    },
+    "measure_battery_range": {
+      "type": "number",
       "uiComponent": "sensor",
-      "icon": "./assets/capability_icons/location_route_destination_distance.svg"
-    },
-    "location_route_destination_energy": {
-      "type": "number",
-      "title": {
-        "en": "Energy at arrival",
-        "de": "Energie bei Ankunft",
-        "nl": "Energie bij vertrek",
-        "fr": "Energie à l'arrivee",
-        "it": "Energia all'arrivo",
-        "sv": "Energitid vid ankomst",
-        "no": "Energi ved ankomst",
-        "es": "Energía de llegada",
-        "da": "Opladningsenergi tilføjet",
-        "ru": "Энергия при прибытии",
-        "pl": "Energia dojazdu"
-      },
-      "units": "%",
-      "decimals": 0,
+      "title": "Estimated Range",
       "insights": true,
       "getable": true,
       "setable": false,
-      "uiComponent": "sensor",
-      "icon": "./assets/capability_icons/location_route_destination_energy.svg"
-    },
-    "location_route_destination_name": {
-      "type": "string",
-      "title": {
-        "en": "Route destination",
-        "de": "Navigationsziel",
-        "nl": "Route bestemming",
-        "fr": "Destination de la route",
-        "it": "Destinazione della rotta",
-        "sv": "Rutet destination",
-        "no": "Rutet destinasjon",
-        "es": "Destino de la ruta",
-        "da": "Rutet destination",
-        "ru": "Место назначения маршрута",
-        "pl": "Cel trasy"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "./assets/capability_icons/location_route_destination_name.svg"
-    },
-    "location_route_destination_time": {
-      "type": "string",
-      "title": {
-        "en": "Time to destination",
-        "de": "Zeit zum Ziel",
-        "nl": "Tijd tot bestemming",
-        "fr": "Temps vers destination",
-        "it": "Tempo verso destinazione",
-        "sv": "Tid till destination",
-        "no": "Tid til destinasjon",
-        "es": "Tiempo hasta destino",
-        "da": "Tid til destination",
-        "ru": "Время до места назначения",
-        "pl": "Czas do celu"
-      },
-      "insights": false,
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "icon": "./assets/capability_icons/location_route_destination_time.svg"
-    },
-    "measure_api_command_charge_count": {
-      "type": "number",
-      "title": {
-        "en": "Tesla API charge command count",
-        "de": "Tesla API Lade-Kommandoanzahl",
-        "nl": "Aantal Tesla API lade-commando's",
-        "fr": "Nombre de commandes de l'API Tesla",
-        "it": "Conteggio comandi API Tesla",
-        "sv": "Tesla API kommandoräkning",
-        "no": "Tesla API kommandotelling",
-        "es": "Recuento de comandos de la API de Tesla",
-        "da": "Tesla API kommandotal",
-        "ru": "Количество команд API Tesla",
-        "pl": "Liczba poleceń API Tesli"
-      },
-      "units": {
-        "en": "Commands per day",
-        "de": "Kommandos pro Tag",
-        "nl": "Commando's per dag",
-        "fr": "Commandes par jour",
-        "it": "Comandi al giorno",
-        "sv": "Kommandon per dag",
-        "no": "Kommandoer per dag",
-        "es": "Comandos por día",
-        "da": "Kommandoer pr. dag",
-        "ru": "Команд в день",
-        "pl": "Polecenia na dzień"
-      },
-      "decimals": 0,
-      "insights": true,
-      "getable": true,
-      "setable": true,
-      "uiComponent": null,
-      "icon": "./assets/capability_icons/measure_api_command_count.svg"
-    },
-    "measure_api_command_count": {
-      "type": "number",
-      "title": {
-        "en": "Tesla API command count",
-        "de": "Tesla API Kommandoanzahl",
-        "nl": "Aantal Tesla API commando's",
-        "fr": "Nombre de commandes de l'API Tesla",
-        "it": "Conteggio comandi API Tesla",
-        "sv": "Tesla API kommandoräkning",
-        "no": "Tesla API kommandotelling",
-        "es": "Recuento de comandos de la API de Tesla",
-        "da": "Tesla API kommandotal",
-        "ru": "Количество команд API Tesla",
-        "pl": "Liczba poleceń API Tesli"
-      },
-      "units": {
-        "en": "Commands per day",
-        "de": "Kommandos pro Tag",
-        "nl": "Commando's per dag",
-        "fr": "Commandes par jour",
-        "it": "Comandi al giorno",
-        "sv": "Kommandon per dag",
-        "no": "Kommandoer per dag",
-        "es": "Comandos por día",
-        "da": "Kommandoer pr. dag",
-        "ru": "Команд в день",
-        "pl": "Polecenia na dzień"
-      },
-      "decimals": 0,
-      "insights": true,
-      "getable": true,
-      "setable": true,
-      "uiComponent": null,
-      "icon": "./assets/capability_icons/measure_api_command_count.svg"
-    },
-    "measure_api_command_wakes_count": {
-      "type": "number",
-      "title": {
-        "en": "Tesla API wake command count",
-        "de": "Tesla API Weck-Kommandoanzahl",
-        "nl": "Aantal Tesla API wek-commando's",
-        "fr": "Nombre de commandes de l'API de Wake",
-        "it": "Conteggio comandi API Wake",
-        "sv": "Tesla API weck-kommandoräkning",
-        "no": "Tesla API weck-kommandotelling",
-        "es": "Recuento de comandos de Wake de la API de Tesla",
-        "da": "Tesla API weck-kommandotal",
-        "ru": "Количество команд API Wake",
-        "pl": "Liczba poleceń API Wake"
-      },
-      "units": {
-        "en": "Commands per day",
-        "de": "Kommandos pro Tag",
-        "nl": "Commando's per dag",
-        "fr": "Commandes par jour",
-        "it": "Comandi al giorno",
-        "sv": "Kommandon per dag",
-        "no": "Kommandoer per dag",
-        "es": "Comandos por día",
-        "da": "Kommandoer pr. dag",
-        "ru": "Команд в день",
-        "pl": "Polecenia na dzień"
-      },
-      "decimals": 0,
-      "insights": true,
-      "getable": true,
-      "setable": true,
-      "uiComponent": null,
-      "icon": "./assets/capability_icons/measure_api_command_count.svg"
-    },
-    "measure_api_rate_limit": {
-      "type": "number",
-      "title": {
-        "en": "Command API rate limit usage",
-        "de": "Command-API Rate-Limit Verbrauch",
-        "nl": "Command-API rate-limit gebruik",
-        "fr": "Utilisation de la limite de taux de l'API de commande",
-        "it": "Utilizzo del limite di velocità dell'API di comando",
-        "sv": "Användning av kommandot API-hastighetsbegränsning",
-        "no": "Bruk av kommandoen API-hastighetsgrense",
-        "es": "Uso del límite de velocidad de la API de comando",
-        "da": "Brug af kommando API-hastighedsgrænse",
-        "ru": "Использование ограничения скорости API команды",
-        "pl": "Użycie limitu prędkości API polecenia"
-      },
-      "units": "%",
-      "decimals": 0,
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "uiComponent": null,
-      "icon": "./assets/capability_icons/measure_api_rate_limit.svg"
-    },
-    "measure_api_request_count": {
-      "type": "number",
-      "title": {
-        "en": "Tesla API queries count",
-        "de": "Tesla API Abfragenanzahl",
-        "nl": "Tesla API aanvragen tellen",
-        "fr": "Nombre de requêtes API Tesla",
-        "it": "Conteggio delle richieste API Tesla",
-        "sv": "Antal Tesla API-förfrågningar",
-        "no": "Antall Tesla API-forespørsler",
-        "es": "Recuento de consultas de API de Tesla",
-        "da": "Antal Tesla API-forespørgsler",
-        "ru": "Количество запросов к API Tesla",
-        "pl": "Liczba zapytań API Tesli"
-      },
-      "units": {
-        "en": "Queries per day",
-        "de": "Abfragen pro Tag",
-        "nl": "Aanvragen per dag",
-        "fr": "Requêtes par jour",
-        "it": "Richieste al giorno",
-        "sv": "Förfrågningar per dag",
-        "no": "Forespørsler per dag",
-        "es": "Consultas por día",
-        "da": "Forespørgsler pr. dag",
-        "ru": "Запросов в день",
-        "pl": "Zapytań na dzień"
-      },
-      "decimals": 0,
-      "insights": true,
-      "getable": true,
-      "setable": true,
-      "uiComponent": null,
-      "icon": "./assets/capability_icons/measure_api_request_count.svg"
-    },
-    "measure_car_drive_speed": {
-      "type": "number",
-      "title": {
-        "en": "Speed",
-        "de": "Geschwindigkeit",
-        "nl": "Snelheid",
-        "fr": "Vitesse",
-        "it": "Velocità",
-        "sv": "Hastighet",
-        "no": "Hastighet",
-        "es": "Velocidad",
-        "da": "Hastighed",
-        "ru": "Скорость",
-        "pl": "Prędkość"
-      },
-      "units": "km/h",
-      "decimals": 0,
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/measure_car_drive_speed.svg"
-    },
-    "measure_car_tpms_pressure_fl": {
-      "type": "number",
-      "title": {
-        "en": "TPMS front left",
-        "de": "TPMS vorn links",
-        "nl": "TPMS linksvoor",
-        "fr": "TPMS avant gauche",
-        "it": "TPMS anteriore sinistra",
-        "sv": "TPMS fram vänster",
-        "no": "TPMS venstre foran",
-        "es": "TPMS delantero izquierdo",
-        "da": "TPMS forreste venstre",
-        "ru": "TPMS переднее левое",
-        "pl": "TPMS przód lewy"
-      },
-      "units": {
-        "en": "Bar",
-        "de": "Bar",
-        "nl": "Bar",
-        "fr": "Bar",
-        "it": "Bar",
-        "sv": "Bar",
-        "no": "Bar",
-        "es": "Bar",
-        "da": "Bar",
-        "ru": "Bar",
-        "pl": "Bar"
-      },
-      "decimals": 2,
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/measure_car_tpms_pressure.svg"
-    },
-    "measure_car_tpms_pressure_fr": {
-      "type": "number",
-      "title": {
-        "en": "TPMS front right",
-        "de": "TPMS vorn rechts",
-        "nl": "TPMS rechtsvoor",
-        "fr": "TPMS avant droit",
-        "it": "TPMS anteriore destro",
-        "sv": "TPMS fram höger",
-        "no": "TPMS foran høyre",
-        "es": "TPMS delantero derecho",
-        "da": "TPMS forreste højre",
-        "ru": "TPMS передний правый",
-        "pl": "TPMS przedni prawy"
-      },
-      "units": {
-        "en": "Bar",
-        "de": "Bar",
-        "nl": "Bar",
-        "fr": "Bar",
-        "it": "Bar",
-        "sv": "Bar",
-        "no": "Bar",
-        "es": "Bar",
-        "da": "Bar",
-        "ru": "Bar",
-        "pl": "Bar"
-      },
-      "decimals": 2,
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/measure_car_tpms_pressure.svg"
-    },
-    "measure_car_tpms_pressure_rl": {
-      "type": "number",
-      "title": {
-        "en": "TPMS rear left",
-        "de": "TPMS hinten links",
-        "nl": "TPMS linksachter",
-        "fr": "TPMS arrière gauche",
-        "it": "TPMS posteriore sinistro",
-        "sv": "TPMS bakre vänster",
-        "no": "TPMS bakre venstre",
-        "es": "TPMS trasero izquierdo",
-        "da": "TPMS bag venstre",
-        "ru": "TPMS задний левый",
-        "pl": "TPMS tył lewy"
-      },
-      "units": {
-        "en": "Bar",
-        "de": "Bar",
-        "nl": "Bar",
-        "fr": "Bar",
-        "it": "Bar",
-        "sv": "Bar",
-        "no": "Bar",
-        "es": "Bar",
-        "da": "Bar",
-        "ru": "Bar",
-        "pl": "Bar"
-      },
-      "decimals": 2,
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/measure_car_tpms_pressure.svg"
-    },
-    "measure_car_tpms_pressure_rr": {
-      "type": "number",
-      "title": {
-        "en": "TPMS rear right",
-        "de": "TPMS hinten rechts",
-        "nl": "TPMS rechtsachter",
-        "fr": "TPMS arrière droit",
-        "it": "TPMS posteriore destro",
-        "sv": "TPMS bakre höger",
-        "no": "TPMS bakre høyre",
-        "es": "TPMS trasero derecho",
-        "da": "TPMS baghøjre",
-        "ru": "TPMS задний правый",
-        "pl": "TPMS tył prawy"
-      },
-      "units": {
-        "en": "Bar",
-        "de": "Bar",
-        "nl": "Bar",
-        "fr": "Bar",
-        "it": "Bar",
-        "sv": "Bar",
-        "no": "Bar",
-        "es": "Bar",
-        "da": "Bar",
-        "ru": "Bar",
-        "pl": "Bar"
-      },
-      "decimals": 2,
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/measure_car_tpms_pressure.svg"
+      "icon": "/drivers/car/assets/geo-fill.svg"
     },
     "measure_charge_current": {
       "type": "number",
-      "title": {
-        "en": "Charge current",
-        "de": "Ladestrom",
-        "nl": "Laadstroom",
-        "fr": "Courant de charge",
-        "it": "Corrente di carica",
-        "sv": "Laddningsström",
-        "no": "Lade strøm",
-        "es": "Corriente de carga",
-        "da": "Opladningsstrøm",
-        "ru": "Ток зарядки",
-        "pl": "Prąd ładowania"
-      },
-      "units": {
-        "en": "A"
-      },
+      "uiComponent": "sensor",
+      "title": "Charging Current",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_charge_current.svg"
+      "icon": "/drivers/car/assets/battery-charging.svg",
+      "units": "A"
     },
     "measure_charge_current_max": {
       "type": "number",
-      "title": {
-        "en": "Max. charge current",
-        "de": "Max. Ladestrom",
-        "nl": "Max. laadstroom",
-        "fr": "Courant de charge max.",
-        "it": "Corrente di carica massima",
-        "sv": "Maximal laddningsström",
-        "no": "Maks. ladestrøm",
-        "es": "Corriente máxima de carga",
-        "da": "Maks. ladestrøm",
-        "ru": "Максимальный ток зарядки",
-        "pl": "Maksymalny prąd ładowania"
-      },
-      "units": {
-        "en": "A"
-      },
+      "uiComponent": "sensor",
+      "title": "Max Charging Current",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_charge_current_max.svg"
+      "icon": "/drivers/car/assets/battery-charging.svg",
+      "units": "A"
+    },
+    "measure_charge_current_request": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Current Charging Amps",
+      "insights": true,
+      "getable": true,
+      "setable": true,
+      "icon": "/drivers/car/assets/battery-charging.svg",
+      "units": "A"
     },
     "measure_charge_energy_added": {
       "type": "number",
-      "title": {
-        "en": "Charge energy added",
-        "de": "Ladeenergie hinzugefügt",
-        "nl": "Laadenergie toegevoegd",
-        "fr": "Énergie de charge ajoutée",
-        "it": "Energia di ricarica aggiunta",
-        "sv": "Laddad energi tillagd",
-        "no": "Ladet energi lagt til",
-        "es": "Energía de carga añadida",
-        "da": "Opladningsenergi tilføjet",
-        "ru": "Добавленная энергия заряда",
-        "pl": "Dodana energia ładowania"
-      },
-      "units": {
-        "en": "kWh"
-      },
+      "uiComponent": "sensor",
+      "title": "Energy Added",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_charge_energy_added.svg"
+      "icon": "/drivers/car/assets/battery-charging.svg",
+      "units": "kWh"
     },
     "measure_charge_limit_soc": {
       "type": "number",
-      "title": {
-        "en": "Charge limit SoC",
-        "de": "Ladelimit SoC",
-        "nl": "Laadlimiet SoC",
-        "fr": "Limite de charge SoC",
-        "it": "Limite di carica SoC",
-        "sv": "Laddningsgräns SoC",
-        "no": "Ladegrense SoC",
-        "es": "Límite de carga SoC",
-        "da": "Opladningsgrænse SoC",
-        "ru": "Предел заряда SoC",
-        "pl": "Limit ładowania SoC"
-      },
-      "units": {
-        "en": "%"
-      },
-      "insights": true,
+      "uiComponent": "sensor",
+      "title": "Charge Limit",
+      "insights": false,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_charge_limit_soc.svg"
+      "icon": "/drivers/car/assets/battery-charging.svg",
+      "units": "%",
+      "min": 0,
+      "max": 100
     },
     "measure_charge_minutes_to_full_charge": {
       "type": "number",
-      "title": {
-        "en": "Minutes to full charge",
-        "de": "Minuten bis zur vollständigen Aufladung",
-        "nl": "Minuten tot volledig opladen",
-        "fr": "Minutes pour une charge complète",
-        "it": "Minuti per una carica completa",
-        "sv": "Minuter till full laddning",
-        "no": "Minutter til fulladet",
-        "es": "Minutos para carga completa",
-        "da": "Minutter til fuld opladning",
-        "ru": "Минуты до полной зарядки",
-        "pl": "Minuty do pełnego naładowania"
-      },
-      "units": {
-        "en": "min",
-        "de": "min",
-        "nl": "min",
-        "fr": "min",
-        "it": "min",
-        "sv": "min",
-        "no": "min",
-        "es": "min",
-        "da": "min",
-        "ru": "мин",
-        "pl": "min"
-      },
+      "uiComponent": "sensor",
+      "title": "Minutes to Full Charge",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_charge_minutes_to_full_charge.svg"
+      "icon": "/drivers/car/assets/hourglass-split.svg",
+      "units": "minutes"
     },
     "measure_charge_phases": {
       "type": "number",
-      "title": {
-        "en": "Charge phases",
-        "de": "Ladephasen",
-        "nl": "Laad fasen",
-        "fr": "Phases de charge",
-        "it": "Fasi di carica",
-        "sv": "Laddningsfaser",
-        "no": "Ladefaser",
-        "es": "Fases de carga",
-        "da": "Opladningsfaser",
-        "ru": "Фазы зарядки",
-        "pl": "Fazy ładowania"
-      },
-      "insights": true,
+      "uiComponent": "sensor",
+      "title": "Charge Phases",
+      "insights": false,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_charge_phases.svg"
+      "icon": "/drivers/car/assets/battery-charging.svg"
     },
     "measure_charge_power": {
       "type": "number",
-      "title": {
-        "en": "Charge power",
-        "de": "Ladeleistung",
-        "nl": "Laad vermogen",
-        "fr": "Puissance de charge",
-        "it": "Potenza di ricarica",
-        "sv": "Laddningskraft",
-        "no": "Ladekraft",
-        "es": "Potencia de carga",
-        "da": "Opladningskraft",
-        "ru": "Мощность зарядки",
-        "pl": "Moc ładowania"
-      },
-      "units": {
-        "en": "kW"
-      },
+      "uiComponent": "sensor",
+      "title": "Charging Power",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_charge_power.svg"
+      "icon": "/drivers/car/assets/battery-charging.svg",
+      "units": "kW"
     },
     "measure_charge_voltage": {
       "type": "number",
-      "title": {
-        "en": "Charge voltage",
-        "de": "Ladespannung",
-        "nl": "Laad spanning",
-        "fr": "Tension de charge",
-        "it": "Tensione di carica",
-        "sv": "Laddningsspänning",
-        "no": "Ladespenning",
-        "es": "Voltaje de carga",
-        "da": "Opladningsspænding",
-        "ru": "Напряжение заряда",
-        "pl": "Napięcie ładowania"
-      },
-      "units": {
-        "en": "V"
-      },
+      "uiComponent": "sensor",
+      "title": "Charging Voltage",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_charge_voltage.svg"
+      "icon": "/drivers/car/assets/battery-charging.svg",
+      "units": "V"
+    },
+    "measure_charging": {
+      "type": "boolean",
+      "uiComponent": "button",
+      "setable": true,
+      "getable": true,
+      "title": "Charging",
+      "icon": "/drivers/car/assets/battery-charging.svg"
     },
     "measure_climate_temperature_in": {
       "type": "number",
-      "title": {
-        "en": "Inside temperature",
-        "de": "Innentemperatur",
-        "nl": "Binnentemperatuur",
-        "fr": "Température intérieure",
-        "it": "Temperatura interna",
-        "sv": "Innetemperatur",
-        "no": "Innetemperatur",
-        "es": "Temperatura interior",
-        "da": "Indendørstemperatur",
-        "ru": "Температура внутри",
-        "pl": "Temperatura wewnątrz"
-      },
-      "units": "°C",
-      "decimals": 2,
+      "uiComponent": "sensor",
+      "title": "Inside Temperature",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_climate_temperature_in.svg"
+      "icon": "/drivers/car/assets/thermometer-half.svg"
     },
     "measure_climate_temperature_out": {
       "type": "number",
-      "title": {
-        "en": "Outside temperature",
-        "de": "Außentemperatur",
-        "nl": "Buitentemperatuur",
-        "fr": "Température extérieure",
-        "it": "Temperatura esterna",
-        "sv": "Utomhustemperatur",
-        "no": "Utvendig temperatur",
-        "es": "Temperatura exterior",
-        "da": "Udendørstemperatur",
-        "ru": "Температура на улице",
-        "pl": "Temperatura na zewnątrz"
-      },
-      "units": "°C",
-      "decimals": 2,
+      "uiComponent": "sensor",
+      "title": "Outside Temperature",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_climate_temperature_out.svg"
+      "icon": "/drivers/car/assets/thermometer-half.svg"
+    },
+    "measure_est_battery_range": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Estimated Range",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/geo-fill.svg"
     },
     "measure_io_battery_power": {
       "type": "number",
-      "title": {
-        "en": "Battery power",
-        "de": "Batterieleistung",
-        "nl": "Batterij vermogen",
-        "fr": "Puissance de la batterie",
-        "it": "Potenza della batteria",
-        "sv": "Batterikraft",
-        "no": "Batterikraft",
-        "es": "Potencia de la batería",
-        "da": "Batterikraft",
-        "ru": "Мощность батареи",
-        "pl": "Moc baterii"
-      },
-      "units": {
-        "en": "kW"
-      },
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/measure_io_battery_power.svg"
-    },
-    "measure_location_distance_from_home": {
-      "type": "number",
-      "title": {
-        "en": "Distance from home",
-        "de": "Entfernung von zu Hause",
-        "nl": "Afstand van huis",
-        "fr": "Distance depuis chez soi",
-        "it": "Distanza da casa",
-        "sv": "Avstånd från hemmet",
-        "no": "Avstand fra hjemmet",
-        "es": "Distancia desde casa",
-        "da": "Afstand fra hjemmet",
-        "ru": "Расстояние от дома",
-        "pl": "Odległość od domu"
-      },
-      "units": "km",
-      "decimals": 2,
-      "insights": true,
-      "getable": true,
-      "setable": false,
       "uiComponent": "sensor",
-      "icon": "./assets/capability_icons/measure_location_distance_from_home.svg"
+      "title": "Battery Current",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/assets/icon.svg",
+      "units": "A"
     },
     "measure_location_heading": {
       "type": "number",
-      "title": {
-        "en": "Compass",
-        "de": "Kompass",
-        "nl": "Kompas",
-        "fr": "Boussole",
-        "it": "Bussola",
-        "sv": "Kompass",
-        "no": "Kompass",
-        "es": "Brújula",
-        "da": "Kompas",
-        "ru": "Компас",
-        "pl": "Kompas"
-      },
-      "unit": {
-        "en": "°"
-      },
+      "uiComponent": "sensor",
+      "title": "Heading",
       "insights": false,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_location_heading.svg"
+      "units": "°",
+      "min": 0,
+      "max": 360
     },
     "measure_location_latitude": {
       "type": "number",
-      "title": {
-        "en": "Latitude",
-        "de": "Breitengrad",
-        "nl": "Breedtegraad",
-        "fr": "Latitude",
-        "it": "Latitudine",
-        "sv": "Latitud",
-        "no": "Breddegrad",
-        "es": "Latitud",
-        "da": "Breddegrad",
-        "ru": "Широта",
-        "pl": "Szerokość geograficzna"
-      },
-      "decimals": 8,
+      "uiComponent": "sensor",
+      "title": "Latitude",
       "insights": false,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_location_latitude.svg"
+      "icon": "/drivers/car/assets/geo-fill.svg"
     },
     "measure_location_longitude": {
       "type": "number",
-      "title": {
-        "en": "Longitude",
-        "de": "Längengrad",
-        "nl": "Lengtegraad",
-        "fr": "Longitude",
-        "it": "Longitudine",
-        "sv": "Longitud",
-        "no": "Lengdegrad",
-        "es": "Longitud",
-        "da": "Længdegrad",
-        "ru": "Долгота",
-        "pl": "Długość geograficzna"
-      },
-      "decimals": 8,
+      "uiComponent": "sensor",
+      "title": "Longitude",
       "insights": false,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_location_longitude.svg"
+      "icon": "/drivers/car/assets/geo-fill.svg"
+    },
+    "measure_minutes_to_full_charge": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Minutes to Full Charge",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/hourglass-split.svg",
+      "units": "minutes"
     },
     "measure_soc_level": {
       "type": "number",
-      "title": {
-        "en": "Battery level",
-        "de": "Batteriestand",
-        "nl": "Batterijniveau",
-        "fr": "Niveau de batterie",
-        "it": "Livello della batteria",
-        "sv": "Batterinivå",
-        "no": "Batterinivå",
-        "es": "Nivel de batería",
-        "da": "Batteriniveau",
-        "ru": "Уровень заряда батареи",
-        "pl": "Poziom baterii"
-      },
-      "units": {
-        "en": "%"
-      },
+      "uiComponent": "battery",
+      "title": "Battery Level",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_soc_level.svg"
+      "icon": "/assets/icon.svg",
+      "units": "%",
+      "min": 0,
+      "max": 100
     },
     "measure_soc_range_estimated": {
       "type": "number",
-      "title": {
-        "en": "Battery range estimated",
-        "de": "Batteriereichweite geschätzt",
-        "nl": "Batterijbereik geschat",
-        "fr": "Autonomie estimée de la batterie",
-        "it": "Autonomia stimata della batteria",
-        "sv": "Uppskattat batteriområde",
-        "no": "Estimert batterirekkevidde",
-        "es": "Autonomía estimada de la batería",
-        "da": "Estimeret batterirækkevidde",
-        "ru": "Предполагаемый запас хода батареи",
-        "pl": "Szacowany zasięg baterii"
-      },
-      "units": {
-        "en": "km"
-      },
-      "decimals": 2,
+      "uiComponent": "sensor",
+      "title": "Estimated Range",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_soc_range_estimated.svg"
+      "icon": "/drivers/car/assets/geo-fill.svg"
     },
     "measure_soc_range_ideal": {
       "type": "number",
-      "title": {
-        "en": "Battery range ideal",
-        "de": "Batteriereichweite ideal",
-        "nl": "Batterijbereik ideaal",
-        "fr": "Autonomie idéale de la batterie",
-        "it": "Autonomia ideale della batteria",
-        "sv": "Ideal batteriräckvidd",
-        "no": "Ideell batterirekkevidde",
-        "es": "Rango ideal de la batería",
-        "da": "Ideel batterirækkevidde",
-        "ru": "Идеальный запас хода батареи",
-        "pl": "Idealny zasięg baterii"
-      },
-      "units": {
-        "en": "km"
-      },
-      "decimals": 2,
+      "uiComponent": "sensor",
+      "title": "Ideal Range",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_soc_range_ideal.svg"
+      "icon": "/drivers/car/assets/geo-fill.svg"
     },
     "measure_soc_usable": {
       "type": "number",
-      "title": {
-        "en": "Battery level (usable)",
-        "de": "Batteriestand (nutzbar)",
-        "nl": "Batterijniveau (bruikbaar)",
-        "fr": "Niveau de batterie (utilisable)",
-        "it": "Livello della batteria (utilizzabile)",
-        "sv": "Batterinivå (användbar)",
-        "no": "Batterinivå (brukbar)",
-        "es": "Nivel de batería (utilizable)",
-        "da": "Batteriniveau (brugbar)",
-        "ru": "Уровень заряда батареи (используемый)",
-        "pl": "Poziom baterii (użyteczny)"
-      },
-      "units": {
-        "en": "%"
-      },
+      "uiComponent": "sensor",
+      "title": "Usable Battery Level",
       "insights": true,
       "getable": true,
       "setable": false,
-      "icon": "./assets/capability_icons/measure_soc_usable.svg"
+      "icon": "/assets/icon.svg",
+      "units": "%",
+      "min": 0,
+      "max": 100
+    },
+    "measure_speed": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Speed",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/speedometer2.svg"
+    },
+    "measure_temperature_inside": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Inside Temperature",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/thermometer-half.svg"
+    },
+    "measure_temperature_outside": {
+      "type": "number",
+      "uiComponent": "sensor",
+      "title": "Outside Temperature",
+      "insights": true,
+      "getable": true,
+      "setable": false,
+      "icon": "/drivers/car/assets/thermometer-half.svg"
     },
     "meter_car_odo": {
       "type": "number",
-      "title": {
-        "en": "Odometer",
-        "de": "Kilometerzähler",
-        "nl": "Kilometerteller",
-        "fr": "Compteur kilométrique",
-        "it": "Contachilometri",
-        "sv": "Mätarställning",
-        "no": "Kilometerteller",
-        "es": "Odómetro",
-        "da": "Kilometertæller",
-        "ru": "Счетчик пробега",
-        "pl": "Licznik kilometrów"
-      },
-      "units": "km",
-      "decimals": 2,
-      "insights": true,
-      "getable": true,
-      "setable": false,
-      "icon": "./assets/capability_icons/meter_car_odo.svg"
-    },
-    "meter_charge_power": {
-      "type": "number",
-      "title": {
-        "en": "Charging energy meter",
-        "de": "Ladeenergiezähler",
-        "nl": "Energiemeter opladen",
-        "fr": "Compteur d'énergie de charge",
-        "it": "Contatore di energia di ricarica",
-        "sv": "Laddningsenergimätare",
-        "no": "Ladeenergimåler",
-        "es": "Medidor de energía de carga",
-        "da": "Opladningsenergimåler",
-        "ru": "Счетчик энергии зарядки",
-        "pl": "Licznik energii ładowania"
-      },
-      "units": {
-        "en": "kWh"
-      },
-      "decimals": 2,
-      "insights": true,
-      "getable": true,
-      "setable": false,
       "uiComponent": "sensor",
-      "icon": "./assets/capability_icons/meter_charge_power.svg"
+      "title": "Odometer",
+      "insights": true,
+      "getable": true,
+      "setable": false
     }
   }
 }

@@ -253,11 +253,11 @@
                   </div>
                   <div class="detail-item">
                     <span class="detail-label"><i class="fas fa-gauge"></i> Avg Speed</span>
-                    <div class="detail-value">${Math.round(result.average_speed || 0)} km/h</div>
+                    <div class="detail-value">${Math.round(result.average_speed || 0)} ${result.distance_unit === 'km' ? 'km/h' : 'mph'}</div>
                   </div>
                   <div class="detail-item">
                     <span class="detail-label"><i class="fas fa-tachometer-alt"></i> Max Speed</span>
-                    <div class="detail-value">${Math.round(result.max_speed || 0)} km/h</div>
+                    <div class="detail-value">${Math.round(result.max_speed || 0)} ${result.distance_unit === 'km' ? 'km/h' : 'mph'}</div>
                   </div>
                   <div class="detail-item">
                     <span class="detail-label"><i class="fas fa-battery-half"></i> Battery</span>

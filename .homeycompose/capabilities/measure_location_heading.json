@@ -1,23 +1,11 @@
 {
   "type": "number",
-  "title": {
-    "en": "Compass",
-    "de": "Kompass",
-    "nl": "Kompas",
-    "fr": "Boussole",
-    "it": "Bussola",
-    "sv": "Kompass",
-    "no": "Kompass",
-    "es": "Brújula",
-    "da": "Kompas",
-    "ru": "Компас",
-    "pl": "Kompas"
-  },
-  "unit":{
-    "en": "°"
-  },
+  "uiComponent": "sensor",
+  "title": "Heading",
   "insights": false,
   "getable": true,
   "setable": false,
-  "icon": "./assets/capability_icons/measure_location_heading.svg"
+  "units": "°",
+  "min": 0,
+  "max": 360
 }

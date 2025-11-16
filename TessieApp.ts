@@ -99,7 +99,7 @@ export default class TessieApp extends Homey.App {
     const vin = deviceData.vin;
     const driver = this.homey.drivers.getDriver("car");
     const device = driver.getDevice(deviceData);
-    
+
     if (!device) {
       return { success: false, error: "Device not found" };
     }
@@ -122,7 +122,7 @@ export default class TessieApp extends Homey.App {
     const vin = deviceData.vin;
     const driver = this.homey.drivers.getDriver("car");
     const device = driver.getDevice(deviceData);
-    
+
     if (!device) {
       return { success: false, error: "Device not found" };
     }
@@ -141,11 +141,14 @@ export default class TessieApp extends Homey.App {
   }
 
   // Widget API method - set climate temperature
-  async setClimateTemperature(deviceData: { [key: string]: any }, temperature: number) {
+  async setClimateTemperature(
+    deviceData: { [key: string]: any },
+    temperature: number
+  ) {
     const vin = deviceData.vin;
     const driver = this.homey.drivers.getDriver("car");
     const device = driver.getDevice(deviceData);
-    
+
     if (!device) {
       return { success: false, error: "Device not found" };
     }
@@ -181,13 +184,18 @@ export default class TessieApp extends Homey.App {
         device.getStoreValue("heading") ||
         0;
       const speed = device.getStoreValue("speed") || 0;
+      const distanceUnit = device.getSetting("odometer_unit") || "km";
+
+      // Convert speed from mph to kmh if needed
+      const convertedSpeed = distanceUnit === "km" ? speed * 1.60934 : speed;
 
       return {
         success: true,
         latitude,
         longitude,
         heading,
-        speed,
+        speed: convertedSpeed,
+        distance_unit: distanceUnit,
         location: `${latitude?.toFixed(4) || "N/A"}, ${
           longitude?.toFixed(4) || "N/A"
         }`,
@@ -254,6 +262,11 @@ export default class TessieApp extends Homey.App {
             return rangeUnit === "km" ? miles * 1.60934 : miles;
           };
 
+          // Convert speed values from mph to kmh if needed
+          const speedConverter = (mph: number) => {
+            return rangeUnit === "km" ? mph * 1.60934 : mph;
+          };
+
           return {
             success: true,
             started_at: drive.started_at,
@@ -262,8 +275,8 @@ export default class TessieApp extends Homey.App {
             ending_location: drive.ending_location || "Unknown",
             starting_battery: drive.starting_battery,
             ending_battery: drive.ending_battery,
-            average_speed: drive.average_speed,
-            max_speed: drive.max_speed,
+            average_speed: speedConverter(drive.average_speed),
+            max_speed: speedConverter(drive.max_speed),
             distance: distanceConverter(drive.odometer_distance),
             distance_unit: rangeUnit,
             energy_used: drive.energy_used,

@@ -1,21 +1,9 @@
 {
   "type": "number",
-  "title": {
-    "en": "Latitude",
-    "de": "Breitengrad",
-    "nl": "Breedtegraad",
-    "fr": "Latitude",
-    "it": "Latitudine",
-    "sv": "Latitud",
-    "no": "Breddegrad",
-    "es": "Latitud",
-    "da": "Breddegrad",
-    "ru": "Широта",
-    "pl": "Szerokość geograficzna"
-  },
-  "decimals": 8,
+  "uiComponent": "sensor",
+  "title": "Latitude",
   "insights": false,
   "getable": true,
   "setable": false,
-  "icon": "./assets/capability_icons/measure_location_latitude.svg"
+  "icon": "/drivers/car/assets/geo-fill.svg"
 }

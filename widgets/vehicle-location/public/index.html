@@ -141,6 +141,7 @@
             const longitude = parseFloat(result.longitude) || 0;
             heading = parseFloat(result.heading) || 0;
             const speed = parseFloat(result.speed) || 0;
+            const distanceUnit = result.distance_unit || 'km';
 
             if (!map) {
               contentEl.innerHTML = `
@@ -161,7 +162,7 @@
                     </div>
                     <div class="detail-item">
                       <span class="detail-label"><i class="fas fa-gauge"></i> Speed</span>
-                      <div class="detail-value" id="speed">${Math.round(speed)} km/h</div>
+                      <div class="detail-value" id="speed">${Math.round(speed)} ${distanceUnit === 'km' ? 'km/h' : 'mph'}</div>
                     </div>
                   </div>
                 </div>
@@ -193,7 +194,7 @@
               document.querySelectorAll('[id="latitude"]').forEach(el => el.textContent = latitude.toFixed(6));
               document.querySelectorAll('[id="longitude"]').forEach(el => el.textContent = longitude.toFixed(6));
               document.getElementById('heading').textContent = Math.round(heading) + '°';
-              document.getElementById('speed').textContent = Math.round(speed) + ' km/h';
+              document.getElementById('speed').textContent = Math.round(speed) + ` ${distanceUnit === 'km' ? 'km/h' : 'mph'}`;
             }
           } catch (error) {
             console.error('Error updating location:', error);

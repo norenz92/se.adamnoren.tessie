@@ -3,5 +3,6 @@
   "uiComponent": "toggle",
   "setable": true,
   "getable": true,
-  "title": "Doors Locked"
+  "title": "Climate Control",
+  "icon": "/drivers/car/assets/thermometer-half.svg"
 }

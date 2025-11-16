@@ -74,9 +74,7 @@ export default class TessieDevice extends Homey.Device {
     this.log(`TessieDevice has been added`);
   }
 
-  async handleCapabilities(
-    data: any
-  ) {
+  async handleCapabilities(data: any) {
     const access_token = (this.homey.app as TessieApp).accessToken;
     const vin = this.getData().id;
     if (!access_token) {
@@ -187,7 +185,7 @@ export default class TessieDevice extends Homey.Device {
         }
 
         const transformedValue = capability.transformData
-          ? capability.transformData(value)
+          ? capability.transformData(value, this)
           : value;
         this.setCapabilityValue(
           capability.capability_id,
@@ -214,7 +212,7 @@ export default class TessieDevice extends Homey.Device {
 
             if (capability && this.hasCapability(capability.capability_id)) {
               const transformedValue = capability.transformRealtimeData
-                ? capability.transformRealtimeData(realtimeData)
+                ? capability.transformRealtimeData(realtimeData, this)
                 : value;
 
               this.setCapabilityValue(

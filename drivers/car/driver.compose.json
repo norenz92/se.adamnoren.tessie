@@ -49,6 +49,7 @@
     "measure_location_heading",
     "measure_location_latitude",
     "measure_location_longitude",
+    "measure_speed",
     "measure_soc_level",
     "measure_soc_range_estimated",
     "measure_soc_range_ideal",

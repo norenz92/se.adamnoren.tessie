@@ -224,6 +224,17 @@ export class CapabilityUpdater {
         );
       }
 
+      // Speed with unit conversion
+      if (
+        data.drive_state?.speed &&
+        this.device.hasCapability("measure_speed")
+      ) {
+        const convertedSpeed = this.distanceHandler.convertSpeed(
+          data.drive_state.speed
+        );
+        await this.device.setCapabilityValue("measure_speed", convertedSpeed);
+      }
+
       // SOC level
       if (
         data.charge_state?.battery_level &&

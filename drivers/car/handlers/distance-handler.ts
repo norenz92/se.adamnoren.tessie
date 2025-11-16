@@ -21,6 +21,20 @@ const DISTANCE_CAPABILITIES = [
  */
 export class DistanceConverter {
   /**
+   * Convert miles per hour to kilometers per hour
+   */
+  static mphToKmh(mph: number): number {
+    return mph * MILES_TO_KM_FACTOR;
+  }
+
+  /**
+   * Convert kilometers per hour to miles per hour
+   */
+  static kmhToMph(kmh: number): number {
+    return kmh / MILES_TO_KM_FACTOR;
+  }
+
+  /**
    * Convert miles to kilometers
    */
   static milesToKm(miles: number): number {
@@ -61,6 +75,13 @@ export class DistanceConverter {
   static fromMiles(miles: number, targetUnit: DistanceUnit): number {
     return targetUnit === "km" ? this.milesToKm(miles) : miles;
   }
+
+  /**
+   * Convert speed from mph to user's preferred unit
+   */
+  static convertSpeed(speedInMph: number, targetUnit: DistanceUnit): number {
+    return targetUnit === "km" ? this.mphToKmh(speedInMph) : speedInMph;
+  }
 }
 
 /**
@@ -87,6 +108,13 @@ export class DistanceHandler {
    */
   convertDistance(valueInMiles: number): number {
     return DistanceConverter.fromMiles(valueInMiles, this.getDistanceUnit());
+  }
+
+  /**
+   * Convert speed from mph to user's preferred unit
+   */
+  convertSpeed(speedInMph: number): number {
+    return DistanceConverter.convertSpeed(speedInMph, this.getDistanceUnit());
   }
 
   /**

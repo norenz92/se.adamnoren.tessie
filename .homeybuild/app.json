@@ -7884,6 +7884,25 @@
               "value": "Celsius (°C)"
             }
           ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Fleet Telemetry"
+          },
+          "children": [
+            {
+              "id": "fleet_telemetry_enabled",
+              "type": "checkbox",
+              "label": {
+                "en": "Enable Fleet Telemetry"
+              },
+              "hint": {
+                "en": "Enable real-time vehicle data streaming for more up-to-date values"
+              },
+              "value": true
+            }
+          ]
         }
       ]
     }

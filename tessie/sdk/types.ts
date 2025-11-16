@@ -96,7 +96,7 @@ export type GetStateResponse200 = GetStateResponse;
 
 // Vehicle Status
 export interface VehicleStatus {
-  status: 'asleep' | 'waiting_for_sleep' | 'awake';
+  status: "asleep" | "waiting_for_sleep" | "awake";
 }
 
 // Battery Status
@@ -202,9 +202,9 @@ export interface GetDrivesParams {
   destination_latitude?: number;
   destination_longitude?: number;
   destination_radius?: number;
-  distance_format?: 'mi' | 'km';
-  temperature_format?: 'f' | 'c';
-  format?: 'json' | 'csv';
+  distance_format?: "mi" | "km";
+  temperature_format?: "f" | "c";
+  format?: "json" | "csv";
 }
 
 export interface GetChargesParams {
@@ -215,7 +215,7 @@ export interface GetChargesParams {
   origin_radius?: number;
   minimum_energy_added?: number;
   limit?: number;
-  format?: 'json' | 'csv';
+  format?: "json" | "csv";
 }
 
 export interface SetChargingAmpsParams {
@@ -236,4 +236,37 @@ export interface SetTemperatures {
 
 export interface WaitForCompletion {
   wait_for_completion?: boolean;
+}
+
+// Fleet Telemetry Configuration
+export interface FleetTelemetryField {
+  interval_seconds: number;
+}
+
+export interface FleetTelemetryConfig {
+  fields: {
+    [key: string]: FleetTelemetryField;
+  };
+}
+
+export interface FleetTelemetryConfigResponse {
+  synced: boolean;
+  config: {
+    hostname: string;
+    ca: string;
+    exp: number;
+    port: number;
+    fields: {
+      [key: string]: FleetTelemetryField;
+    };
+    alert_types: string[];
+  };
+  update_available: boolean;
+}
+
+export interface SetFleetTelemetryConfigParams {
+  vin: string;
+  fields: {
+    [key: string]: FleetTelemetryField;
+  };
 }

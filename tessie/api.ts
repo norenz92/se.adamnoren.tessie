@@ -4,20 +4,30 @@ import { EventEmitter } from "events";
 import getTessieSDK from "./sdk/index";
 import { VehicleData } from "./sdk/types";
 import { Realtime } from "./realtime";
+import {
+  processTelemetryData,
+  ProcessedTelemetryData,
+  isConnected,
+  getAlertSummary,
+} from "./telemetry-processor";
 
 const apiEventEmitter = new EventEmitter();
+const telemetryEventEmitter = new EventEmitter();
 
 const POLL_INTERVAL = 30 * 1000; // 30 seconds
 
 export class TessieApi {
   private apiEventEmitter: EventEmitter;
+  private telemetryEventEmitter: EventEmitter;
   private accessToken: string;
   private timeout: NodeJS.Timeout | null = null;
   public realtime: Realtime | null = null;
+  private activeTelemetryClients: Map<string, boolean> = new Map();
 
   constructor(access_token: string) {
     console.log("TessieApi initialized");
     this.apiEventEmitter = apiEventEmitter;
+    this.telemetryEventEmitter = telemetryEventEmitter;
     this.accessToken = access_token;
     this.realtime = new Realtime(access_token);
     getTessieSDK().setAccessToken(access_token);
@@ -59,6 +69,7 @@ export class TessieApi {
 
   stop() {
     this.stopPolling();
+    this.stopAllTelemetry();
   }
 
   private emitData(vin: string, data: VehicleData) {
@@ -67,6 +78,89 @@ export class TessieApi {
 
   onData(vin: string, callback: (data: VehicleData) => void) {
     this.apiEventEmitter.on(vin, callback);
+  }
+
+  /**
+   * Start telemetry stream for a vehicle
+   */
+  startTelemetry(vin: string): void {
+    if (this.activeTelemetryClients.get(vin)) {
+      console.log(`Telemetry already active for ${vin}`);
+      return;
+    }
+
+    if (!this.realtime) {
+      console.error("Realtime client not initialized");
+      return;
+    }
+
+    try {
+      const client = this.realtime.getClient(vin);
+      console.log(`Starting telemetry stream for ${vin}`);
+
+      client.onData((response) => {
+        const processed = processTelemetryData(response);
+        this.emitTelemetryData(vin, processed);
+      });
+
+      this.activeTelemetryClients.set(vin, true);
+    } catch (error) {
+      console.error(`Failed to start telemetry for ${vin}:`, error);
+    }
+  }
+
+  /**
+   * Stop telemetry stream for a vehicle
+   */
+  stopTelemetry(vin: string): void {
+    if (!this.activeTelemetryClients.get(vin)) {
+      console.log(`Telemetry not active for ${vin}`);
+      return;
+    }
+
+    try {
+      if (this.realtime) {
+        const client = this.realtime.getClient(vin);
+        client.disconnectClient();
+        console.log(`Telemetry stopped for ${vin}`);
+      }
+
+      this.activeTelemetryClients.set(vin, false);
+    } catch (error) {
+      console.error(`Failed to stop telemetry for ${vin}:`, error);
+    }
+  }
+
+  /**
+   * Stop all active telemetry streams
+   */
+  private stopAllTelemetry(): void {
+    this.activeTelemetryClients.forEach((active, vin) => {
+      if (active) {
+        this.stopTelemetry(vin);
+      }
+    });
+  }
+
+  /**
+   * Emit processed telemetry data to listeners
+   */
+  private emitTelemetryData(vin: string, data: ProcessedTelemetryData) {
+    this.telemetryEventEmitter.emit(`telemetry:${vin}`, data);
+  }
+
+  /**
+   * Listen for telemetry data updates
+   */
+  onTelemetry(vin: string, callback: (data: ProcessedTelemetryData) => void) {
+    this.telemetryEventEmitter.on(`telemetry:${vin}`, callback);
+  }
+
+  /**
+   * Remove telemetry listener
+   */
+  offTelemetry(vin: string, callback: (data: ProcessedTelemetryData) => void) {
+    this.telemetryEventEmitter.off(`telemetry:${vin}`, callback);
   }
 
   // Climate control methods

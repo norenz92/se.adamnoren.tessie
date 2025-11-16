@@ -11,6 +11,7 @@ import {
   CommandResponse,
   Drive,
   DrivesResponse,
+  FleetTelemetryConfigResponse,
   GetChargesParams,
   GetDrivesParams,
   GetStateResponse,
@@ -19,14 +20,15 @@ import {
   Location,
   SetChargingAmpsParams,
   SetChargeLimit,
+  SetFleetTelemetryConfigParams,
   SetTemperatures,
   VehicleData,
   VehicleStatus,
   WaitForCompletion,
-} from './types';
+} from "./types";
 
 export class TessieSDK {
-  private baseUrl = 'https://api.tessie.com';
+  private baseUrl = "https://api.tessie.com";
   private accessToken: string | null = null;
 
   /**
@@ -46,7 +48,7 @@ export class TessieSDK {
     body?: Record<string, any>
   ): Promise<T> {
     if (!this.accessToken) {
-      throw new Error('Access token not set. Call setAccessToken() first.');
+      throw new Error("Access token not set. Call setAccessToken() first.");
     }
 
     const url = new URL(`${this.baseUrl}${endpoint}`);
@@ -63,8 +65,8 @@ export class TessieSDK {
     const options: RequestInit = {
       method,
       headers: {
-        'Authorization': `Bearer ${this.accessToken}`,
-        'Content-Type': 'application/json',
+        Authorization: `Bearer ${this.accessToken}`,
+        "Content-Type": "application/json",
       },
     };
 
@@ -89,7 +91,7 @@ export class TessieSDK {
    * Returns complete vehicle state for all vehicles in the account
    */
   async getVehicles(): Promise<GetVehiclesResponse> {
-    return this.request<GetVehiclesResponse>('GET', '/vehicles');
+    return this.request<GetVehiclesResponse>("GET", "/vehicles");
   }
 
   /**
@@ -103,7 +105,7 @@ export class TessieSDK {
     }
 
     return this.request<GetStateResponse>(
-      'GET',
+      "GET",
       `/${params.vin}/state`,
       queryParams
     );
@@ -114,7 +116,7 @@ export class TessieSDK {
    * Check if vehicle is asleep, waiting to sleep, or awake
    */
   async getStatus(vin: string): Promise<VehicleStatus> {
-    return this.request<VehicleStatus>('GET', `/${vin}/status`);
+    return this.request<VehicleStatus>("GET", `/${vin}/status`);
   }
 
   /**
@@ -122,7 +124,7 @@ export class TessieSDK {
    * Retrieve detailed battery information and metrics
    */
   async getBattery(vin: string): Promise<BatteryStatus> {
-    return this.request<BatteryStatus>('GET', `/${vin}/battery`);
+    return this.request<BatteryStatus>("GET", `/${vin}/battery`);
   }
 
   /**
@@ -130,7 +132,7 @@ export class TessieSDK {
    * Get current GPS coordinates and reverse-geocoded address
    */
   async getLocation(vin: string): Promise<Location> {
-    return this.request<Location>('GET', `/${vin}/location`);
+    return this.request<Location>("GET", `/${vin}/location`);
   }
 
   // ==================== History Endpoints ====================
@@ -163,7 +165,7 @@ export class TessieSDK {
     if (params.format !== undefined) queryParams.format = params.format;
 
     return this.request<DrivesResponse>(
-      'GET',
+      "GET",
       `/${params.vin}/drives`,
       queryParams
     );
@@ -195,7 +197,7 @@ export class TessieSDK {
     if (params.format !== undefined) queryParams.format = params.format;
 
     return this.request<ChargesResponse>(
-      'GET',
+      "GET",
       `/${params.vin}/charges`,
       queryParams
     );
@@ -208,31 +210,47 @@ export class TessieSDK {
    * Wake a sleeping vehicle and wait up to 90 seconds for confirmation
    */
   async wake(vin: string): Promise<CommandResponse> {
-    return this.request<CommandResponse>('POST', `/${vin}/wake`);
+    return this.request<CommandResponse>("POST", `/${vin}/wake`);
   }
 
   /**
    * Lock vehicle
    * Lock all vehicle doors
    */
-  async lock(vin: string, options?: WaitForCompletion): Promise<CommandResponse> {
-    const params = options?.wait_for_completion !== undefined
-      ? { wait_for_completion: options.wait_for_completion }
-      : undefined;
+  async lock(
+    vin: string,
+    options?: WaitForCompletion
+  ): Promise<CommandResponse> {
+    const params =
+      options?.wait_for_completion !== undefined
+        ? { wait_for_completion: options.wait_for_completion }
+        : undefined;
 
-    return this.request<CommandResponse>('POST', `/${vin}/command/lock`, params);
+    return this.request<CommandResponse>(
+      "POST",
+      `/${vin}/command/lock`,
+      params
+    );
   }
 
   /**
    * Unlock vehicle
    * Unlock all vehicle doors
    */
-  async unlock(vin: string, options?: WaitForCompletion): Promise<CommandResponse> {
-    const params = options?.wait_for_completion !== undefined
-      ? { wait_for_completion: options.wait_for_completion }
-      : undefined;
+  async unlock(
+    vin: string,
+    options?: WaitForCompletion
+  ): Promise<CommandResponse> {
+    const params =
+      options?.wait_for_completion !== undefined
+        ? { wait_for_completion: options.wait_for_completion }
+        : undefined;
 
-    return this.request<CommandResponse>('POST', `/${vin}/command/unlock`, params);
+    return this.request<CommandResponse>(
+      "POST",
+      `/${vin}/command/unlock`,
+      params
+    );
   }
 
   /**
@@ -240,7 +258,7 @@ export class TessieSDK {
    * Sound the vehicle horn
    */
   async honk(vin: string): Promise<CommandResponse> {
-    return this.request<CommandResponse>('POST', `/${vin}/command/honk`);
+    return this.request<CommandResponse>("POST", `/${vin}/command/honk`);
   }
 
   /**
@@ -248,7 +266,7 @@ export class TessieSDK {
    * Flash exterior lights
    */
   async flash(vin: string): Promise<CommandResponse> {
-    return this.request<CommandResponse>('POST', `/${vin}/command/flash`);
+    return this.request<CommandResponse>("POST", `/${vin}/command/flash`);
   }
 
   // ==================== Climate Control ====================
@@ -257,35 +275,49 @@ export class TessieSDK {
    * Start climate control
    * Start HVAC and battery preconditioning
    */
-  async startClimate(params: { vin: string } & WaitForCompletion): Promise<CommandResponse> {
+  async startClimate(
+    params: { vin: string } & WaitForCompletion
+  ): Promise<CommandResponse> {
     const queryParams: Record<string, any> = {};
 
     if (params.wait_for_completion !== undefined) {
       queryParams.wait_for_completion = params.wait_for_completion;
     }
 
-    return this.request<CommandResponse>('POST', `/${params.vin}/command/start_climate`, queryParams);
+    return this.request<CommandResponse>(
+      "POST",
+      `/${params.vin}/command/start_climate`,
+      queryParams
+    );
   }
 
   /**
    * Stop climate control
    * Stop HVAC system
    */
-  async stopClimate(params: { vin: string } & WaitForCompletion): Promise<CommandResponse> {
+  async stopClimate(
+    params: { vin: string } & WaitForCompletion
+  ): Promise<CommandResponse> {
     const queryParams: Record<string, any> = {};
 
     if (params.wait_for_completion !== undefined) {
       queryParams.wait_for_completion = params.wait_for_completion;
     }
 
-    return this.request<CommandResponse>('POST', `/${params.vin}/command/stop_climate`, queryParams);
+    return this.request<CommandResponse>(
+      "POST",
+      `/${params.vin}/command/stop_climate`,
+      queryParams
+    );
   }
 
   /**
    * Set temperatures
    * Set cabin temperature in Celsius (15-28°C range)
    */
-  async setTemperatures(params: SetTemperatures & WaitForCompletion): Promise<CommandResponse> {
+  async setTemperatures(
+    params: SetTemperatures & WaitForCompletion
+  ): Promise<CommandResponse> {
     const queryParams: Record<string, any> = {
       temperature: params.temperature,
     };
@@ -295,7 +327,7 @@ export class TessieSDK {
     }
 
     return this.request<CommandResponse>(
-      'POST',
+      "POST",
       `/${params.vin}/command/set_temperatures`,
       queryParams
     );
@@ -308,7 +340,10 @@ export class TessieSDK {
    * Open charge port door or unlock charge cable
    */
   async openChargePort(vin: string): Promise<CommandResponse> {
-    return this.request<CommandResponse>('POST', `/${vin}/command/open_charge_port`);
+    return this.request<CommandResponse>(
+      "POST",
+      `/${vin}/command/open_charge_port`
+    );
   }
 
   /**
@@ -316,42 +351,59 @@ export class TessieSDK {
    * Close charge port (only works when unplugged)
    */
   async closeChargePort(vin: string): Promise<CommandResponse> {
-    return this.request<CommandResponse>('POST', `/${vin}/command/close_charge_port`);
+    return this.request<CommandResponse>(
+      "POST",
+      `/${vin}/command/close_charge_port`
+    );
   }
 
   /**
    * Start charging
    * Start charging session
    */
-  async startCharging(params: { vin: string } & WaitForCompletion): Promise<CommandResponse> {
+  async startCharging(
+    params: { vin: string } & WaitForCompletion
+  ): Promise<CommandResponse> {
     const queryParams: Record<string, any> = {};
 
     if (params.wait_for_completion !== undefined) {
       queryParams.wait_for_completion = params.wait_for_completion;
     }
 
-    return this.request<CommandResponse>('POST', `/${params.vin}/command/start_charging`, queryParams);
+    return this.request<CommandResponse>(
+      "POST",
+      `/${params.vin}/command/start_charging`,
+      queryParams
+    );
   }
 
   /**
    * Stop charging
    * Stop charging session
    */
-  async stopCharging(params: { vin: string } & WaitForCompletion): Promise<CommandResponse> {
+  async stopCharging(
+    params: { vin: string } & WaitForCompletion
+  ): Promise<CommandResponse> {
     const queryParams: Record<string, any> = {};
 
     if (params.wait_for_completion !== undefined) {
       queryParams.wait_for_completion = params.wait_for_completion;
     }
 
-    return this.request<CommandResponse>('POST', `/${params.vin}/command/stop_charging`, queryParams);
+    return this.request<CommandResponse>(
+      "POST",
+      `/${params.vin}/command/stop_charging`,
+      queryParams
+    );
   }
 
   /**
    * Set charge limit
    * Set maximum state of charge (50-100%)
    */
-  async setChargeLimit(params: SetChargeLimit & WaitForCompletion): Promise<CommandResponse> {
+  async setChargeLimit(
+    params: SetChargeLimit & WaitForCompletion
+  ): Promise<CommandResponse> {
     const queryParams: Record<string, any> = {
       percent: params.percent,
     };
@@ -361,7 +413,7 @@ export class TessieSDK {
     }
 
     return this.request<CommandResponse>(
-      'POST',
+      "POST",
       `/${params.vin}/command/set_charge_limit`,
       queryParams
     );
@@ -371,7 +423,9 @@ export class TessieSDK {
    * Set charging amps
    * Set charging current in amps
    */
-  async setChargingAmps(params: SetChargingAmpsParams): Promise<CommandResponse> {
+  async setChargingAmps(
+    params: SetChargingAmpsParams
+  ): Promise<CommandResponse> {
     const queryParams: Record<string, any> = {
       amps: params.amps,
     };
@@ -381,9 +435,50 @@ export class TessieSDK {
     }
 
     return this.request<CommandResponse>(
-      'POST',
+      "POST",
       `/${params.vin}/command/set_charging_amps`,
       queryParams
+    );
+  }
+
+  // ==================== Fleet Telemetry ====================
+
+  /**
+   * Get Fleet Telemetry configuration
+   * Retrieve the current Fleet Telemetry configuration for a vehicle
+   */
+  async getFleetTelemetryConfig(
+    vin: string
+  ): Promise<FleetTelemetryConfigResponse> {
+    return this.request<FleetTelemetryConfigResponse>(
+      "GET",
+      `/${vin}/fleet_telemetry_config`
+    );
+  }
+
+  /**
+   * Set Fleet Telemetry configuration
+   * Configure Fleet Telemetry with specific fields and update intervals
+   */
+  async setFleetTelemetryConfig(
+    params: SetFleetTelemetryConfigParams
+  ): Promise<CommandResponse> {
+    return this.request<CommandResponse>(
+      "POST",
+      `/${params.vin}/fleet_telemetry_config`,
+      {},
+      { fields: params.fields }
+    );
+  }
+
+  /**
+   * Delete Fleet Telemetry configuration
+   * Remove the Fleet Telemetry configuration for a vehicle
+   */
+  async deleteFleetTelemetryConfig(vin: string): Promise<CommandResponse> {
+    return this.request<CommandResponse>(
+      "DELETE",
+      `/${vin}/fleet_telemetry_config`
     );
   }
 }

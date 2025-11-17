@@ -31,32 +31,37 @@ export default class TessieApp extends Homey.App {
       const rangeUnit = device.getSetting("odometer_unit") || "mi";
 
       const capabilities = device.getCapabilities();
+      console.log("Device capabilities:", capabilities);
       capabilities.forEach((capability) => {
+        const value = device.getCapabilityValue(capability);
         console.log(
-          `Capability: ${capability}`,
-          device.getCapabilityValue(capability)
+          `Capability: ${capability} = ${value} (type: ${typeof value})`
         );
       });
 
       // Return an object mapping capability IDs to their values
-      return {
+      const batteryStatus = {
         success: true,
         range_unit: rangeUnit,
-        measure_battery: device.getCapabilityValue("measure_battery") || 0,
-        measure_charge_limit_soc: device.getCapabilityValue(
-          "measure_charge_limit_soc"
-        ),
-        measure_soc_range_estimated: device.getCapabilityValue(
-          "measure_soc_range_estimated"
-        ),
+        measure_battery: device.getCapabilityValue("measure_battery") ?? 0,
+        measure_charge_limit_soc:
+          device.getCapabilityValue("measure_charge_limit_soc") ?? null,
+        measure_soc_range_estimated:
+          device.getCapabilityValue("measure_soc_range_estimated") ?? null,
+        measure_soc_range_ideal:
+          device.getCapabilityValue("measure_soc_range_ideal") ?? null,
         measure_charge_power:
-          device.getCapabilityValue("measure_charge_power") || 0,
-        charging_on: device.getCapabilityValue("charging_on"),
+          device.getCapabilityValue("measure_charge_power") ?? 0,
+        charging_on: device.getCapabilityValue("charging_on") ?? false,
         measure_charge_minutes_to_full_charge:
-          device.getCapabilityValue("measure_charge_minutes_to_full_charge") ||
+          device.getCapabilityValue("measure_charge_minutes_to_full_charge") ??
           0,
       };
+
+      console.log("Battery status response:", batteryStatus);
+      return batteryStatus;
     } catch (error) {
+      console.error("Error in getWidgetBatteryStatus:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",

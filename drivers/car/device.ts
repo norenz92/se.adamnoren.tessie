@@ -36,7 +36,7 @@ module.exports = class CarDevice extends Homey.Device {
    * Device initialization
    */
   async onInit(): Promise<void> {
-    this.log("TessieDevice has been initialized");
+    this.log("CarDevice has been initialized");
 
     // Initialize all handlers
     this.deviceInitializer = new DeviceInitializer(this, this.log.bind(this));
@@ -86,7 +86,7 @@ module.exports = class CarDevice extends Homey.Device {
    * Device uninitialization
    */
   async onUninit(): Promise<void> {
-    this.log("TessieDevice has been uninitialized");
+    this.log("CarDevice has been uninitialized");
     try {
       await this.pollingHandler.stop();
       await this.telemetryHandler.stopTelemetryStream();

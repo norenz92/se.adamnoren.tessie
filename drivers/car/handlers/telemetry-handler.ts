@@ -8,6 +8,87 @@ import getTessieSDK from "../../../tessie/sdk/index";
 import { ProcessedTelemetryData } from "../../../tessie/telemetry-processor";
 
 /**
+ * Default Fleet Telemetry field configuration
+ * Organized by category for better maintainability
+ */
+const FLEET_TELEMETRY_CONFIG = {
+  // Charging & Battery
+  ACChargingPower: { interval_seconds: 60 },
+  BatteryLevel: { interval_seconds: 60 },
+  ChargeState: { interval_seconds: 60 },
+  DetailedChargeState: { interval_seconds: 60 },
+  DCChargingPower: { interval_seconds: 60 },
+  EnergyRemaining: { interval_seconds: 60 },
+  EstBatteryRange: { interval_seconds: 60 },
+  IdealBatteryRange: { interval_seconds: 60 },
+  RatedRange: { interval_seconds: 60 },
+  ChargeLimitSoc: { interval_seconds: 60 },
+  TimeToFullCharge: { interval_seconds: 60 },
+  ChargeAmps: { interval_seconds: 60 },
+  ChargeCurrentRequest: { interval_seconds: 60 },
+  ChargeCurrentRequestMax: { interval_seconds: 60 },
+  ChargerPhases: { interval_seconds: 60 },
+  FastChargerPresent: { interval_seconds: 60 },
+
+  // Vehicle State & Location
+  Gear: { interval_seconds: 60 },
+  Location: { interval_seconds: 60 },
+  GpsHeading: { interval_seconds: 60 },
+  Odometer: { interval_seconds: 60 },
+  VehicleSpeed: { interval_seconds: 60 },
+
+  // Climate
+  InsideTemp: { interval_seconds: 60 },
+  OutsideTemp: { interval_seconds: 60 },
+  HvacPower: { interval_seconds: 60 },
+  HvacACEnabled: { interval_seconds: 60 },
+  HvacAutoMode: { interval_seconds: 60 },
+  HvacFanSpeed: { interval_seconds: 60 },
+  HvacLeftTemperatureRequest: { interval_seconds: 60 },
+  HvacRightTemperatureRequest: { interval_seconds: 60 },
+  HvacSteeringWheelHeatLevel: { interval_seconds: 60 },
+
+  // Door/Window/Security
+  Locked: { interval_seconds: 60 },
+  DoorState: { interval_seconds: 60 },
+  FdWindow: { interval_seconds: 60 },
+  FpWindow: { interval_seconds: 60 },
+  RdWindow: { interval_seconds: 60 },
+  RpWindow: { interval_seconds: 60 },
+  SentryMode: { interval_seconds: 60 },
+
+  // Tire Pressure
+  TpmsPressureFl: { interval_seconds: 60 },
+  TpmsPressureFr: { interval_seconds: 60 },
+  TpmsPressureRl: { interval_seconds: 60 },
+  TpmsPressureRr: { interval_seconds: 60 },
+
+  // Battery Health
+  PackVoltage: { interval_seconds: 60 },
+  PackCurrent: { interval_seconds: 60 },
+  ModuleTempMax: { interval_seconds: 60 },
+  ModuleTempMin: { interval_seconds: 60 },
+  BMSState: { interval_seconds: 60 },
+
+  // Vehicle Information
+  CarType: { interval_seconds: 3600 },
+  Version: { interval_seconds: 3600 },
+
+  // Seat Belts
+  DriverSeatBelt: { interval_seconds: 60 },
+  PassengerSeatBelt: { interval_seconds: 60 },
+  DriverSeatOccupied: { interval_seconds: 60 },
+
+  // Energy & Efficiency
+  LifetimeEnergyUsed: { interval_seconds: 3600 },
+  LifetimeEnergyGainedRegen: { interval_seconds: 3600 },
+
+  // Acceleration
+  LateralAcceleration: { interval_seconds: 60 },
+  LongitudinalAcceleration: { interval_seconds: 60 },
+};
+
+/**
  * Handler for Fleet Telemetry initialization, configuration, and streaming
  */
 export class TelemetryHandler {
@@ -51,23 +132,9 @@ export class TelemetryHandler {
       if (enabled) {
         this.logger("Configuring Fleet Telemetry with default fields...");
 
-        // Set recommended Fleet Telemetry configuration with common fields
-        const defaultFields = {
-          ACChargingPower: { interval_seconds: 60 },
-          BatteryLevel: { interval_seconds: 60 },
-          ChargeState: { interval_seconds: 60 },
-          DCChargingPower: { interval_seconds: 60 },
-          EnergyRemaining: { interval_seconds: 60 },
-          Gear: { interval_seconds: 60 },
-          IdealBatteryRange: { interval_seconds: 60 },
-          Location: { interval_seconds: 60 },
-          Odometer: { interval_seconds: 60 },
-          RatedRange: { interval_seconds: 60 },
-        };
-
         await getTessieSDK().setFleetTelemetryConfig({
           vin,
-          fields: defaultFields,
+          fields: FLEET_TELEMETRY_CONFIG,
         });
 
         this.logger("Fleet Telemetry configured successfully");
@@ -148,6 +215,7 @@ export class TelemetryHandler {
   private _updateDeviceFromTelemetry(telemetry: ProcessedTelemetryData): void {
     // Delegate to capability updater
     // Note: This will be integrated with the CapabilityUpdater
+    console.log("TELEMETRY DATA:", JSON.stringify(telemetry, null, 2));
     this.device.emit("telemetry:data", telemetry);
   }
 

@@ -35,11 +35,6 @@
         <label class="homey-form-label" for="accessToken">Access token</label>
         <input class="homey-form-input" id="accessToken" type="text" value="" />
       </div>
-      <label class="homey-form-checkbox">
-        <input class="homey-form-checkbox-input" type="checkbox" name="checkbox-example" id="telemetryEnabled"/>
-        <span class="homey-form-checkbox-checkmark"></span>
-        <span class="homey-form-checkbox-text">Enable telemetry</span>
-      </label>
     </fieldset>
     <div id="buttons">
       <button id="getTessie" class="homey-button-secondary-small">Get Tessie</button>
@@ -54,7 +49,6 @@
         Homey.ready();
 
         var accessTokenElement = document.getElementById("accessToken");
-        var telemetryEnabledElement = document.getElementById("telemetryEnabled");
         var saveElement = document.getElementById("save");
 
         const getTessie = document.getElementById("getTessie");
@@ -84,9 +78,6 @@
             saveElement.classList.remove("is-disabled");
             saveElement.classList.remove("is-loading");
             saveElement.innerHTML = "Save changes";
-            if (err) return Homey.alert(err);
-          });
-          Homey.set("telemetryEnabled", telemetryEnabledElement.checked, function (err) {
             if (err) return Homey.alert(err);
           });
 

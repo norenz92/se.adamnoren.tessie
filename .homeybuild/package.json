@@ -3,8 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "build": "tsc",
-    "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "generate": "npx ts-node ./tools/generate-capabilities.ts"
+    "lint": "eslint --ext .js,.ts --ignore-path .gitignore ."
   },
   "devDependencies": {
     "@tsconfig/node16": "^16.1.3",

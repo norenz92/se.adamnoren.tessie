@@ -23,13 +23,14 @@ export class TessieApi {
   private timeout: NodeJS.Timeout | null = null;
   public realtime: Realtime | null = null;
   private activeTelemetryClients: Map<string, boolean> = new Map();
+  private logger: any;
 
-  constructor(access_token: string) {
-    console.log("TessieApi initialized");
+  constructor(access_token: string, logger?: any) {
     this.apiEventEmitter = apiEventEmitter;
     this.telemetryEventEmitter = telemetryEventEmitter;
     this.accessToken = access_token;
     this.realtime = new Realtime(access_token);
+    this.logger = logger || console;
     getTessieSDK().setAccessToken(access_token);
     this.startPolling();
   }
@@ -85,18 +86,18 @@ export class TessieApi {
    */
   startTelemetry(vin: string): void {
     if (this.activeTelemetryClients.get(vin)) {
-      console.log(`Telemetry already active for ${vin}`);
+      this.logger.log(`Telemetry already active for ${vin}`);
       return;
     }
 
     if (!this.realtime) {
-      console.error("Realtime client not initialized");
+      this.logger.error("Realtime client not initialized");
       return;
     }
 
     try {
       const client = this.realtime.getClient(vin);
-      console.log(`Starting telemetry stream for ${vin}`);
+      this.logger.log(`Starting telemetry stream for ${vin}`);
 
       client.onData((response) => {
         const processed = processTelemetryData(response);
@@ -105,7 +106,7 @@ export class TessieApi {
 
       this.activeTelemetryClients.set(vin, true);
     } catch (error) {
-      console.error(`Failed to start telemetry for ${vin}:`, error);
+      this.logger.error(`Failed to start telemetry for ${vin}:`, error);
     }
   }
 
@@ -114,7 +115,7 @@ export class TessieApi {
    */
   stopTelemetry(vin: string): void {
     if (!this.activeTelemetryClients.get(vin)) {
-      console.log(`Telemetry not active for ${vin}`);
+      this.logger.log(`Telemetry not active for ${vin}`);
       return;
     }
 
@@ -122,7 +123,7 @@ export class TessieApi {
       if (this.realtime) {
         const client = this.realtime.getClient(vin);
         client.disconnectClient();
-        console.log(`Telemetry stopped for ${vin}`);
+        this.logger.log(`Telemetry stopped for ${vin}`);
       }
 
       this.activeTelemetryClients.set(vin, false);

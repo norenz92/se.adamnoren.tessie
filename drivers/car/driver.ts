@@ -21,7 +21,6 @@ module.exports = class CarDriver extends Homey.Driver {
     let accessToken: string | undefined;
 
     session.setHandler("accessToken", async (data) => {
-      console.log(data);
       accessToken = data.accessToken;
 
       if (!accessToken) {

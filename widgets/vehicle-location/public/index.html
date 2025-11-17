@@ -88,6 +88,21 @@
       let map = null;
       let marker = null;
       let heading = 0;
+      let currentMapStyle = 'openstreetmap';
+
+      // Map style configurations (no API key required)
+      const mapStyles = {
+        openstreetmap: {
+          tileLayer: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+          attribution: '© OpenStreetMap contributors',
+          subdomains: 'abc'
+        },
+        darkmatter: {
+          tileLayer: 'https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png',
+          attribution: '© CartoDB © OpenStreetMap contributors',
+          subdomains: 'abcd'
+        }
+      };
 
       // Create a custom marker with heading indicator
       function createHeadingIcon(headingDegrees) {
@@ -118,6 +133,9 @@
         const deviceId = deviceIds[0];
         const contentEl = document.getElementById('content');
 
+        console.log('Widget initialized:', { deviceIds, deviceId });
+        console.log('Widget instance ID:', Homey.getWidgetInstanceId());
+
         if (!deviceId) {
           contentEl.innerHTML = '<div class="error">Please select a vehicle for this widget.</div>';
           Homey.setHeight(80);
@@ -130,7 +148,15 @@
           try {
             const result = await Homey.api('GET', '/?deviceId=' + encodeURIComponent(deviceId));
 
-            if (!result || !result.success) {
+            console.log('API Response:', result);
+
+            if (!result) {
+              contentEl.innerHTML = `<div class="error">Error: No response from API</div>`;
+              Homey.setHeight(80);
+              return;
+            }
+
+            if (!result.success) {
               const errorMsg = result?.error || 'Unknown error';
               contentEl.innerHTML = `<div class="error">Error: ${errorMsg}</div>`;
               Homey.setHeight(80);
@@ -173,9 +199,11 @@
                 const location = [latitude, longitude];
                 map = L.map('map').setView(location, 17);
 
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                  attribution: '',
-                  maxZoom: 19,
+                const styleConfig = mapStyles[currentMapStyle] || mapStyles.openstreetmap;
+                L.tileLayer(styleConfig.tileLayer, {
+                  attribution: styleConfig.attribution,
+                  subdomains: styleConfig.subdomains,
+                  maxZoom: 20,
                 }).addTo(map);
 
                 marker = L.marker(location, {
@@ -198,13 +226,49 @@
             }
           } catch (error) {
             console.error('Error updating location:', error);
-            contentEl.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            contentEl.innerHTML = `<div class="error">Error: ${error instanceof Error ? error.message : String(error)}</div>`;
             Homey.setHeight(80);
           }
         }
 
+        // Start updates immediately
         updateLocation();
         setInterval(updateLocation, 30000);
+
+        // Get the map style setting asynchronously (doesn't block initial load)
+        Homey.get('mapStyle', (err, mapStyle) => {
+          if (err) {
+            console.error('Error getting mapStyle setting:', err);
+          } else {
+            console.log('Map style setting:', mapStyle);
+            if (mapStyle) {
+              currentMapStyle = mapStyle;
+            }
+          }
+        });
+        
+          // Listen for settings changes to update map style
+          Homey.on('settings', (settings) => {
+            if (settings && settings.mapStyle && settings.mapStyle !== currentMapStyle) {
+              currentMapStyle = settings.mapStyle;
+              // If map is already initialized, update the tile layer
+              if (map) {
+                // Remove all tile layers
+                map.eachLayer(layer => {
+                  if (layer instanceof L.TileLayer) {
+                    map.removeLayer(layer);
+                  }
+                });
+                // Add new tile layer
+                const styleConfig = mapStyles[currentMapStyle] || mapStyles.openstreetmap;
+                L.tileLayer(styleConfig.tileLayer, {
+                  attribution: styleConfig.attribution,
+                  subdomains: styleConfig.subdomains,
+                  maxZoom: 20,
+                }).addTo(map);
+              }
+            }
+          });
       }
     </script>
   </body>

@@ -37,7 +37,6 @@ export class CapabilityUpdater {
    */
   async updateFromState(data: GetStateResponse): Promise<void> {
     try {
-      //console.log(JSON.stringify(data, null, 2));
 
       // Battery & Charging
       if (this.device.hasCapability("measure_battery")) {

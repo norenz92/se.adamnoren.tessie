@@ -31,13 +31,6 @@ export default class TessieApp extends Homey.App {
       const rangeUnit = device.getSetting("odometer_unit") || "mi";
 
       const capabilities = device.getCapabilities();
-      console.log("Device capabilities:", capabilities);
-      capabilities.forEach((capability) => {
-        const value = device.getCapabilityValue(capability);
-        console.log(
-          `Capability: ${capability} = ${value} (type: ${typeof value})`
-        );
-      });
 
       // Return an object mapping capability IDs to their values
       const batteryStatus = {
@@ -58,10 +51,9 @@ export default class TessieApp extends Homey.App {
           0,
       };
 
-      console.log("Battery status response:", batteryStatus);
       return batteryStatus;
     } catch (error) {
-      console.error("Error in getWidgetBatteryStatus:", error);
+      this.error("Error in getWidgetBatteryStatus:", error);
       return {
         success: false,
         error: error instanceof Error ? error.message : "Unknown error",
@@ -116,7 +108,7 @@ export default class TessieApp extends Homey.App {
 
     // Update tessieApi with new access token if needed
     if (!this.tessieApi) {
-      this.tessieApi = new TessieApi(access_token);
+      this.tessieApi = new TessieApi(access_token, this);
     }
 
     return await this.tessieApi.startClimate(vin);
@@ -139,7 +131,7 @@ export default class TessieApp extends Homey.App {
 
     // Update tessieApi with new access token if needed
     if (!this.tessieApi) {
-      this.tessieApi = new TessieApi(access_token);
+      this.tessieApi = new TessieApi(access_token, this);
     }
 
     return await this.tessieApi.stopClimate(vin);
@@ -165,7 +157,7 @@ export default class TessieApp extends Homey.App {
 
     // Update tessieApi with new access token if needed
     if (!this.tessieApi) {
-      this.tessieApi = new TessieApi(access_token);
+      this.tessieApi = new TessieApi(access_token, this);
     }
 
     return await this.tessieApi.setClimateTemperature(vin, temperature);
@@ -326,7 +318,7 @@ export default class TessieApp extends Homey.App {
     if (accessToken) {
       this.accessToken = accessToken;
       this.tessieApi?.stop();
-      this.tessieApi = new TessieApi(accessToken);
+      this.tessieApi = new TessieApi(accessToken, this);
     }
 
     this.homey.settings.on("set", async (key) => {
@@ -336,7 +328,7 @@ export default class TessieApp extends Homey.App {
         if (updatedAccessToken) {
           this.accessToken = updatedAccessToken;
           this.tessieApi?.stop();
-          this.tessieApi = new TessieApi(updatedAccessToken);
+          this.tessieApi = new TessieApi(updatedAccessToken, this);
         }
       }
     });

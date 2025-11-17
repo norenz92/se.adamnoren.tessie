@@ -215,7 +215,6 @@ export class TelemetryHandler {
   private _updateDeviceFromTelemetry(telemetry: ProcessedTelemetryData): void {
     // Delegate to capability updater
     // Note: This will be integrated with the CapabilityUpdater
-    console.log("TELEMETRY DATA:", JSON.stringify(telemetry, null, 2));
     this.device.emit("telemetry:data", telemetry);
   }
 

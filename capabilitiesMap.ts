@@ -1,6 +1,7 @@
 import { start } from "repl";
 import tessie from "./.api/apis/tessie";
 import { RealtimeData, Value } from "./realtime";
+import { retryWithBackoff, globalThrottleManager } from "./apiUtils";
 
 type UiComponent =
   | "toggle"
@@ -886,21 +887,39 @@ export const capabilitiesMap: CapabilityConfig = {
       step: 1,
     },
     set: (async (access_token, vin, value) => {
-      tessie.auth(access_token);
+      // Use throttling to prevent rapid successive calls
+      // This helps avoid Tesla/Tessie API rate limiting
+      const throttleKey = `setChargingAmps:${vin}`;
+      
+      return await globalThrottleManager.throttle(
+        throttleKey,
+        async () => {
+          // Wrap the API call with retry logic
+          return await retryWithBackoff(
+            async () => {
+              tessie.auth(access_token);
 
-      const { data } = await tessie.setChargingAmps({
-        vin,
-        amps: value,
-        wait_for_completion: true,
-      });
+              const { data } = await tessie.setChargingAmps({
+                vin,
+                amps: value,
+                wait_for_completion: true,
+              });
 
-      if (!data.result) {
-        throw new Error(
-          data.error ? (data.error as string) : "Could not set charge current"
-        );
-      }
+              if (!data.result) {
+                throw new Error(
+                  data.error ? (data.error as string) : "Could not set charge current"
+                );
+              }
 
-      return true;
+              return true;
+            },
+            3,  // Max 3 retries
+            2000,  // Initial delay 2 seconds
+            10000  // Max delay 10 seconds
+          );
+        },
+        5000  // Minimum 5 seconds between calls to same vehicle
+      );
     }) as SetFunction<number, boolean>,
   },
 

@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.capabilitiesMap = void 0;
 const tessie_1 = __importDefault(require("./.api/apis/tessie"));
+const apiUtils_1 = require("./apiUtils");
 exports.capabilitiesMap = {
     climate_state_inside_temp: {
         capability_id: "measure_temperature",
@@ -714,16 +715,28 @@ exports.capabilitiesMap = {
             step: 1,
         },
         set: (async (access_token, vin, value) => {
-            tessie_1.default.auth(access_token);
-            const { data } = await tessie_1.default.setChargingAmps({
-                vin,
-                amps: value,
-                wait_for_completion: true,
-            });
-            if (!data.result) {
-                throw new Error(data.error ? data.error : "Could not set charge current");
-            }
-            return true;
+            // Use throttling to prevent rapid successive calls
+            // This helps avoid Tesla/Tessie API rate limiting
+            const throttleKey = `setChargingAmps:${vin}`;
+            return await apiUtils_1.globalThrottleManager.throttle(throttleKey, async () => {
+                // Wrap the API call with retry logic
+                return await (0, apiUtils_1.retryWithBackoff)(async () => {
+                    tessie_1.default.auth(access_token);
+                    const { data } = await tessie_1.default.setChargingAmps({
+                        vin,
+                        amps: value,
+                        wait_for_completion: true,
+                    });
+                    if (!data.result) {
+                        throw new Error(data.error ? data.error : "Could not set charge current");
+                    }
+                    return true;
+                }, 3, // Max 3 retries
+                2000, // Initial delay 2 seconds
+                10000 // Max delay 10 seconds
+                );
+            }, 5000 // Minimum 5 seconds between calls to same vehicle
+            );
         }),
     },
     // Open/close charge port

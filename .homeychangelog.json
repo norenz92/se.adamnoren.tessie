@@ -25,5 +25,8 @@
   },
   "1.4.0": {
     "en": "Added widgets"
+  },
+  "1.4.1": {
+    "en": "Fixed issues related to telemetry, lock/unlock car and charge phases shown when not charging."
   }
 }

@@ -144,8 +144,7 @@ export class TelemetryHandler {
       } else {
         this.logger("Disabling Fleet Telemetry...");
         await this.stopTelemetryStream();
-        await getTessieSDK().deleteFleetTelemetryConfig(vin);
-        this.logger("Fleet Telemetry disabled successfully");
+        this.logger("Fleet Telemetry stream stopped");
       }
     } catch (error: any) {
       this.logger.error("Error configuring Fleet Telemetry:", error);

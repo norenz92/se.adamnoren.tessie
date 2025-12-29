@@ -105,9 +105,11 @@ export class CapabilityUpdater {
 
       // Charge phases
       if (this.device.hasCapability("measure_charge_phases")) {
+        // Default to 0 if charger_phases is null or undefined (disconnected)
+        const phases = data.charge_state.charger_phases ?? 0;
         await this.device.setCapabilityValue(
           "measure_charge_phases",
-          data.charge_state.charger_phases
+          phases
         );
       }
 
@@ -377,6 +379,19 @@ export class CapabilityUpdater {
         await this.device.setCapabilityValue(
           "measure_charge_current_max",
           telemetry.chargeAmps
+        );
+      }
+
+      // Charge phases
+      if (
+        telemetry.chargerPhases !== undefined &&
+        this.device.hasCapability("measure_charge_phases")
+      ) {
+        // Default to 0 if chargerPhases is null or undefined (disconnected)
+        const phases = telemetry.chargerPhases ?? 0;
+        await this.device.setCapabilityValue(
+          "measure_charge_phases",
+          phases
         );
       }
 

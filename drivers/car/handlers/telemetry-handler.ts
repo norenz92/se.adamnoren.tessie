@@ -31,15 +31,15 @@ const FLEET_TELEMETRY_CONFIG = {
   FastChargerPresent: { interval_seconds: 60 },
 
   // Vehicle State & Location
-  Gear: { interval_seconds: 60 },
-  Location: { interval_seconds: 60 },
-  GpsHeading: { interval_seconds: 60 },
-  Odometer: { interval_seconds: 60 },
-  VehicleSpeed: { interval_seconds: 60 },
+  Gear: { interval_seconds: 2 },
+  Location: { interval_seconds: 2 },
+  GpsHeading: { interval_seconds: 2 },
+  Odometer: { interval_seconds: 2 },
+  VehicleSpeed: { interval_seconds: 2 },
 
   // Climate
-  InsideTemp: { interval_seconds: 60 },
-  OutsideTemp: { interval_seconds: 60 },
+  InsideTemp: { interval_seconds: 10 },
+  OutsideTemp: { interval_seconds: 10 },
   HvacPower: { interval_seconds: 60 },
   HvacACEnabled: { interval_seconds: 60 },
   HvacAutoMode: { interval_seconds: 60 },
@@ -84,8 +84,8 @@ const FLEET_TELEMETRY_CONFIG = {
   LifetimeEnergyGainedRegen: { interval_seconds: 3600 },
 
   // Acceleration
-  LateralAcceleration: { interval_seconds: 60 },
-  LongitudinalAcceleration: { interval_seconds: 60 },
+  LateralAcceleration: { interval_seconds: 2 },
+  LongitudinalAcceleration: { interval_seconds: 2 },
 };
 
 /**
@@ -127,14 +127,14 @@ export class TelemetryHandler {
   async configureFleetTelemetry(enabled: boolean): Promise<void> {
     try {
       this._auth();
-      const vin = this.device.getData().id;
+      const vin: string = this.device.getData().id;
 
       if (enabled) {
         this.logger("Configuring Fleet Telemetry with default fields...");
 
         await getTessieSDK().setFleetTelemetryConfig({
           vin,
-          fields: FLEET_TELEMETRY_CONFIG,
+          //fields: FLEET_TELEMETRY_CONFIG,
         });
 
         this.logger("Fleet Telemetry configured successfully");

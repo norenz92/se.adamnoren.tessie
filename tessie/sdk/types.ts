@@ -266,7 +266,7 @@ export interface FleetTelemetryConfigResponse {
 
 export interface SetFleetTelemetryConfigParams {
   vin: string;
-  fields: {
+  fields?: {
     [key: string]: FleetTelemetryField;
   };
 }

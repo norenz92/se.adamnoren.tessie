@@ -22,6 +22,28 @@ export class DeviceFlowsHandler {
    * Initialize device actions
    */
   async initializeActions(): Promise<void> {
+    // Register capability listeners for lock/unlock
+    this.device.registerCapabilityListener(
+      "car_doors_locked",
+      async (value) => {
+        this.sendCommand(async () => {
+          if (value) {
+            this.logger("Locking doors");
+            await getTessieSDK().lock(this.device.getData().id, {
+              wait_for_completion: true,
+            });
+          } else {
+            this.logger("Unlocking doors");
+            await getTessieSDK().unlock(this.device.getData().id, {
+              wait_for_completion: true,
+            });
+          }
+          await this.device.setCapabilityValue("car_doors_locked", value);
+        });
+      }
+    );
+
+    // Register flow action cards
     this.device.homey.flow
       .getActionCard("charge_current")
       .registerRunListener(async (args, state) => {

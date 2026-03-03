@@ -9,8 +9,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Authentication & Pairing
 
-- [ ] **AUTH-01**: User can enter Tessie API token during vehicle pairing flow
-- [ ] **AUTH-02**: App discovers all vehicles from the user's Tessie account after token entry
+- [x] **AUTH-01**: User can enter Tessie API token during vehicle pairing flow
+- [x] **AUTH-02**: App discovers all vehicles from the user's Tessie account after token entry
 - [ ] **AUTH-03**: User can pair multiple vehicles, each appearing as a separate Homey device
 - [ ] **AUTH-04**: User can repair/re-authenticate a device without deleting it (token rotation)
 
@@ -73,7 +73,7 @@ Requirements for initial release. Each maps to roadmap phases.
 ### App Store
 
 - [ ] **STOR-01**: App meets Homey App Store guidelines (icons, images, translations, metadata)
-- [ ] **STOR-02**: App targets Homey Pro only with compatibility >= 12.9.0
+- [x] **STOR-02**: App targets Homey Pro only with compatibility >= 12.9.0
 
 ## v2 Requirements
 
@@ -112,8 +112,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | Phase 1 | Pending |
-| AUTH-02 | Phase 1 | Pending |
+| AUTH-01 | Phase 1 | Complete |
+| AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Pending |
 | AUTH-04 | Phase 1 | Pending |
 | CHRG-01 | Phase 2 | Pending |
@@ -155,7 +155,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | FLOW-06 | Phase 6 | Pending |
 | FLOW-07 | Phase 6 | Pending |
 | STOR-01 | Phase 6 | Pending |
-| STOR-02 | Phase 1 | Pending |
+| STOR-02 | Phase 1 | Complete |
 
 **Coverage:**
 - v1 requirements: 44 total

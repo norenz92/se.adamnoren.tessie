@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-03)
 Phase: 1 of 6 (Foundation & Pairing)
 Plan: 1 of 2 in current phase
 Status: Executing
-Last activity: 2026-03-03 — Completed 01-01 (App Scaffold & TessieClient)
+Last activity: 2026-03-03 - Completed quick task 1: Project should be typescript
 
 Progress: [█████░░░░░] 50%
 
@@ -74,6 +74,12 @@ None yet.
 
 - Tessie API rate limits are undocumented. Implement defensive rate limiting in TessieClient from day one.
 - App Store category ("cars" may not be valid). Verify correct category before Phase 6.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Commit | Directory |
+|---|-------------|------|--------|-----------|
+| 1 | Project should be typescript | 2026-03-03 | 73a40ba | [1-project-should-be-typescript](./quick/1-project-should-be-typescript/) |
 
 ## Session Continuity
 

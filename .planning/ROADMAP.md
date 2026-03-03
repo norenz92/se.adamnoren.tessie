@@ -30,11 +30,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. User can pair multiple vehicles from the same or different Tessie accounts, each appearing as a separate device in Homey
   3. User can re-authenticate a previously paired device with a new API token without losing the device or its Flows
   4. App targets Homey Pro with compatibility >= 12.9.0 and runs without errors on Node.js 22
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [ ] 01-01-PLAN.md — App scaffold, TessieClient library, and test infrastructure
+- [ ] 01-02-PLAN.md — Vehicle driver with pairing flow, repair flow, device class, and model icons
 
 ### Phase 2: Vehicle Data & Polling
 **Goal**: Users can see live vehicle state on their Homey device cards, updated via sleep-aware REST polling
@@ -120,7 +120,7 @@ Note: Phase 4 and Phase 5 can potentially execute in parallel (both depend on Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Pairing | 0/? | Not started | - |
+| 1. Foundation & Pairing | 0/2 | Planning complete | - |
 | 2. Vehicle Data & Polling | 0/? | Not started | - |
 | 3. Core Controls | 0/? | Not started | - |
 | 4. Real-time Streaming | 0/? | Not started | - |

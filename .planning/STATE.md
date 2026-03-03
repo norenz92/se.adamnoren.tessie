@@ -3,8 +3,8 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-03-03T21:09:47.829Z"
+stopped_at: Completed quick task 1 (TypeScript conversion)
+last_updated: "2026-03-03T21:18:06.649Z"
 last_activity: 2026-03-03 — Completed 01-01 (App Scaffold & TessieClient)
 progress:
   total_phases: 6
@@ -63,6 +63,8 @@ Recent decisions affecting current work:
 - [Roadmap]: WebSocket streaming (STRM-01) gets its own phase despite being 1 requirement — architecturally the most complex piece and the primary differentiator.
 - [Phase 01]: Used node:https built-in instead of fetch/axios for minimal dependencies
 - [Phase 01]: Test glob pattern 'tests/*.test.js' for Node.js test runner compatibility
+- [Phase quick-1]: Used export = instead of export default for Homey CommonJS runtime compatibility
+- [Phase quick-1]: Added tsconfig.json paths mapping to resolve 'homey' import to homey-apps-sdk-v3-types package
 
 ### Pending Todos
 
@@ -75,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-03T21:09:37.309Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-03-03T21:18:01.822Z
+Stopped at: Completed quick task 1 (TypeScript conversion)
 Resume file: None

@@ -11,8 +11,8 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [x] **AUTH-01**: User can enter Tessie API token during vehicle pairing flow
 - [x] **AUTH-02**: App discovers all vehicles from the user's Tessie account after token entry
-- [ ] **AUTH-03**: User can pair multiple vehicles, each appearing as a separate Homey device
-- [ ] **AUTH-04**: User can repair/re-authenticate a device without deleting it (token rotation)
+- [x] **AUTH-03**: User can pair multiple vehicles, each appearing as a separate Homey device
+- [x] **AUTH-04**: User can repair/re-authenticate a device without deleting it (token rotation)
 
 ### Battery & Charging
 
@@ -114,8 +114,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | AUTH-01 | Phase 1 | Complete |
 | AUTH-02 | Phase 1 | Complete |
-| AUTH-03 | Phase 1 | Pending |
-| AUTH-04 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Complete |
+| AUTH-04 | Phase 1 | Complete |
 | CHRG-01 | Phase 2 | Pending |
 | CHRG-02 | Phase 2 | Pending |
 | CHRG-03 | Phase 2 | Pending |

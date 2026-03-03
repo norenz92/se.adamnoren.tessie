@@ -1,14 +1,13 @@
-'use strict';
+import { describe, it } from 'node:test';
+import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
-const { describe, it } = require('node:test');
-const assert = require('node:assert/strict');
-const { readFileSync } = require('node:fs');
-const { join } = require('node:path');
-
-const manifestPath = join(__dirname, '..', '.homeycompose', 'app.json');
+// Use process.cwd() since tests run from project root but compiled output is in dist-test/
+const manifestPath = join(process.cwd(), '.homeycompose', 'app.json');
 
 describe('App manifest (.homeycompose/app.json)', () => {
-  let manifest;
+  let manifest: any;
 
   it('should exist and be valid JSON', () => {
     const raw = readFileSync(manifestPath, 'utf-8');
@@ -50,7 +49,7 @@ describe('App manifest (.homeycompose/app.json)', () => {
 
 describe('package.json', () => {
   it('should have a "test" script', () => {
-    const pkgPath = join(__dirname, '..', 'package.json');
+    const pkgPath = join(process.cwd(), 'package.json');
     const raw = readFileSync(pkgPath, 'utf-8');
     const pkg = JSON.parse(raw);
     assert.ok(pkg.scripts && pkg.scripts.test, 'package.json should have a test script');

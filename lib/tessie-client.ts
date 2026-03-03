@@ -1,17 +1,19 @@
-'use strict';
-
-const https = require('node:https');
+import https from 'node:https';
+import type { IncomingMessage } from 'node:http';
 
 class TessieClient {
 
-  constructor(token) {
+  token: string;
+  baseUrl: string;
+
+  constructor(token: string) {
     this.token = token;
     this.baseUrl = 'api.tessie.com';
   }
 
-  async request(path, method = 'GET') {
+  async request(path: string, method: string = 'GET'): Promise<any> {
     return new Promise((resolve, reject) => {
-      const options = {
+      const options: https.RequestOptions = {
         hostname: this.baseUrl,
         path,
         method,
@@ -21,9 +23,9 @@ class TessieClient {
         },
       };
 
-      const req = https.request(options, (res) => {
+      const req = https.request(options, (res: IncomingMessage) => {
         let data = '';
-        res.on('data', (chunk) => {
+        res.on('data', (chunk: string) => {
           data += chunk;
         });
         res.on('end', () => {
@@ -31,7 +33,7 @@ class TessieClient {
             reject(new Error('Invalid or expired API token'));
             return;
           }
-          if (res.statusCode >= 400) {
+          if (res.statusCode! >= 400) {
             reject(new Error(`Tessie API error: ${res.statusCode}`));
             return;
           }
@@ -48,19 +50,19 @@ class TessieClient {
     });
   }
 
-  async getVehicles() {
+  async getVehicles(): Promise<any[]> {
     const response = await this.request('/vehicles?only_active=true');
     return response.results;
   }
 
-  async getVehicle(vin) {
+  async getVehicle(vin: string): Promise<any> {
     return this.request(`/${vin}/state`);
   }
 
-  async getStatus(vin) {
+  async getStatus(vin: string): Promise<any> {
     return this.request(`/${vin}/status`);
   }
 
 }
 
-module.exports = TessieClient;
+export = TessieClient;

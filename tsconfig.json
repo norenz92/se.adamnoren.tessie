@@ -9,6 +9,10 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
+    "baseUrl": ".",
+    "paths": {
+      "homey": ["node_modules/homey-apps-sdk-v3-types"]
+    },
     "resolveJsonModule": true,
     "declaration": true,
     "declarationMap": true,

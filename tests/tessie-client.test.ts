@@ -1,13 +1,12 @@
-'use strict';
-
-const { describe, it, beforeEach, afterEach, mock } = require('node:test');
-const assert = require('node:assert/strict');
-const https = require('node:https');
-const { EventEmitter } = require('node:events');
+import { describe, it, beforeEach, afterEach } from 'node:test';
+import assert from 'node:assert/strict';
+import https from 'node:https';
+import { EventEmitter } from 'node:events';
+import TessieClient from '../lib/tessie-client';
 
 // Helper: create a mock HTTP response
-function createMockResponse(statusCode, body) {
-  const res = new EventEmitter();
+function createMockResponse(statusCode: number, body: string | object): EventEmitter & { statusCode: number } {
+  const res = new EventEmitter() as EventEmitter & { statusCode: number };
   res.statusCode = statusCode;
   process.nextTick(() => {
     if (typeof body === 'string') {
@@ -21,27 +20,23 @@ function createMockResponse(statusCode, body) {
 }
 
 // Helper: create a mock request object
-function createMockRequest() {
-  const req = new EventEmitter();
+function createMockRequest(): EventEmitter & { end: () => void } {
+  const req = new EventEmitter() as EventEmitter & { end: () => void };
   req.end = () => {};
   return req;
 }
 
 describe('TessieClient', () => {
-  let TessieClient;
-  let originalRequest;
+  let originalRequest: typeof https.request;
 
   beforeEach(() => {
-    // Store original and mock https.request
+    // Store original https.request
     originalRequest = https.request;
-    // Clear require cache for fresh import
-    delete require.cache[require.resolve('../lib/tessie-client')];
-    TessieClient = require('../lib/tessie-client');
   });
 
   afterEach(() => {
     // Restore original https.request
-    https.request = originalRequest;
+    (https as any).request = originalRequest;
   });
 
   describe('constructor', () => {
@@ -53,9 +48,9 @@ describe('TessieClient', () => {
 
   describe('getVehicles()', () => {
     it('should call GET /vehicles?only_active=true with correct Authorization header', async () => {
-      let capturedOptions = null;
+      let capturedOptions: https.RequestOptions | null = null;
 
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         capturedOptions = options;
         const res = createMockResponse(200, { results: [] });
         callback(res);
@@ -65,9 +60,9 @@ describe('TessieClient', () => {
       const client = new TessieClient('my-token');
       await client.getVehicles();
 
-      assert.strictEqual(capturedOptions.path, '/vehicles?only_active=true');
-      assert.strictEqual(capturedOptions.method, 'GET');
-      assert.strictEqual(capturedOptions.headers['Authorization'], 'Bearer my-token');
+      assert.strictEqual(capturedOptions!.path, '/vehicles?only_active=true');
+      assert.strictEqual(capturedOptions!.method, 'GET');
+      assert.strictEqual((capturedOptions!.headers as Record<string, string>)['Authorization'], 'Bearer my-token');
     });
 
     it('should return parsed results array from response', async () => {
@@ -78,7 +73,7 @@ describe('TessieClient', () => {
         ],
       };
 
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         const res = createMockResponse(200, vehicleData);
         callback(res);
         return createMockRequest();
@@ -94,7 +89,7 @@ describe('TessieClient', () => {
     });
 
     it('should throw on 401 response (invalid token)', async () => {
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         const res = createMockResponse(401, { error: 'unauthorized' });
         callback(res);
         return createMockRequest();
@@ -103,7 +98,7 @@ describe('TessieClient', () => {
       const client = new TessieClient('bad-token');
       await assert.rejects(
         () => client.getVehicles(),
-        (err) => {
+        (err: any) => {
           assert.ok(err.message.includes('Invalid or expired API token'), `Expected token error, got: ${err.message}`);
           return true;
         }
@@ -111,7 +106,7 @@ describe('TessieClient', () => {
     });
 
     it('should throw on non-JSON response', async () => {
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         const res = createMockResponse(200, '<html>not json</html>');
         // Override to send raw string
         callback(res);
@@ -121,7 +116,7 @@ describe('TessieClient', () => {
       const client = new TessieClient('valid-token');
       await assert.rejects(
         () => client.getVehicles(),
-        (err) => {
+        (err: any) => {
           assert.ok(err.message.includes('Invalid response from Tessie API'), `Expected parse error, got: ${err.message}`);
           return true;
         }
@@ -131,9 +126,9 @@ describe('TessieClient', () => {
 
   describe('getVehicle(vin)', () => {
     it('should call GET /{vin}/state with authorization', async () => {
-      let capturedOptions = null;
+      let capturedOptions: https.RequestOptions | null = null;
 
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         capturedOptions = options;
         const res = createMockResponse(200, { vin: 'ABC123', state: 'online' });
         callback(res);
@@ -143,8 +138,8 @@ describe('TessieClient', () => {
       const client = new TessieClient('my-token');
       await client.getVehicle('ABC123');
 
-      assert.strictEqual(capturedOptions.path, '/ABC123/state');
-      assert.strictEqual(capturedOptions.headers['Authorization'], 'Bearer my-token');
+      assert.strictEqual(capturedOptions!.path, '/ABC123/state');
+      assert.strictEqual((capturedOptions!.headers as Record<string, string>)['Authorization'], 'Bearer my-token');
     });
 
     it('should return parsed vehicle state', async () => {
@@ -155,7 +150,7 @@ describe('TessieClient', () => {
         vehicle_state: { locked: true },
       };
 
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         const res = createMockResponse(200, vehicleState);
         callback(res);
         return createMockRequest();
@@ -172,9 +167,9 @@ describe('TessieClient', () => {
 
   describe('getStatus(vin)', () => {
     it('should call GET /{vin}/status with authorization', async () => {
-      let capturedOptions = null;
+      let capturedOptions: https.RequestOptions | null = null;
 
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         capturedOptions = options;
         const res = createMockResponse(200, { status: 'asleep' });
         callback(res);
@@ -184,16 +179,16 @@ describe('TessieClient', () => {
       const client = new TessieClient('my-token');
       await client.getStatus('XYZ789');
 
-      assert.strictEqual(capturedOptions.path, '/XYZ789/status');
-      assert.strictEqual(capturedOptions.headers['Authorization'], 'Bearer my-token');
+      assert.strictEqual(capturedOptions!.path, '/XYZ789/status');
+      assert.strictEqual((capturedOptions!.headers as Record<string, string>)['Authorization'], 'Bearer my-token');
     });
   });
 
   describe('request method', () => {
     it('should include Authorization Bearer header', async () => {
-      let capturedOptions = null;
+      let capturedOptions: https.RequestOptions | null = null;
 
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         capturedOptions = options;
         const res = createMockResponse(200, { ok: true });
         callback(res);
@@ -203,13 +198,13 @@ describe('TessieClient', () => {
       const client = new TessieClient('secret-token-xyz');
       await client.getVehicles();
 
-      assert.ok(capturedOptions.headers['Authorization'].startsWith('Bearer '), 'Should use Bearer auth');
-      assert.strictEqual(capturedOptions.headers['Authorization'], 'Bearer secret-token-xyz');
-      assert.strictEqual(capturedOptions.headers['Accept'], 'application/json');
+      assert.ok((capturedOptions!.headers as Record<string, string>)['Authorization'].startsWith('Bearer '), 'Should use Bearer auth');
+      assert.strictEqual((capturedOptions!.headers as Record<string, string>)['Authorization'], 'Bearer secret-token-xyz');
+      assert.strictEqual((capturedOptions!.headers as Record<string, string>)['Accept'], 'application/json');
     });
 
     it('should reject on HTTP 4xx/5xx with descriptive error', async () => {
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         const res = createMockResponse(500, { error: 'internal server error' });
         callback(res);
         return createMockRequest();
@@ -218,7 +213,7 @@ describe('TessieClient', () => {
       const client = new TessieClient('valid-token');
       await assert.rejects(
         () => client.getVehicles(),
-        (err) => {
+        (err: any) => {
           assert.ok(err.message.includes('Tessie API error'), `Expected API error, got: ${err.message}`);
           assert.ok(err.message.includes('500'), `Should include status code, got: ${err.message}`);
           return true;
@@ -226,7 +221,7 @@ describe('TessieClient', () => {
       );
 
       // Also test 403
-      https.request = (options, callback) => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
         const res = createMockResponse(403, { error: 'forbidden' });
         callback(res);
         return createMockRequest();
@@ -234,7 +229,7 @@ describe('TessieClient', () => {
 
       await assert.rejects(
         () => client.getVehicles(),
-        (err) => {
+        (err: any) => {
           assert.ok(err.message.includes('Tessie API error'), `Expected API error for 403, got: ${err.message}`);
           assert.ok(err.message.includes('403'), `Should include 403 status code, got: ${err.message}`);
           return true;

@@ -1,11 +1,41 @@
 'use strict';
 
-const { describe, it, beforeEach, mock } = require('node:test');
+const { describe, it, mock } = require('node:test');
 const assert = require('node:assert/strict');
+const path = require('node:path');
+const Module = require('node:module');
 
-// Mock Homey module before requiring device.js
-// We create a mock that provides Homey.Device base class
-const mockHomey = {
+// ---- Module mocking setup ----
+// We need to mock 'homey' (not available outside Homey runtime)
+// and '../../lib/tessie-client' (to control API responses in tests).
+
+// Store original _resolveFilename
+const originalResolve = Module._resolveFilename;
+
+// Resolve the absolute path for tessie-client so we can intercept it
+const tessieClientAbsPath = path.resolve(__dirname, '..', 'lib', 'tessie-client.js');
+
+// Mock TessieClient constructor - captures args and returns mock instances
+let lastConstructedToken = null;
+function MockTessieClient(token) {
+  lastConstructedToken = token;
+  // Return an instance with mock methods (overridden per test via device.client = ...)
+  this.getVehicles = async () => [];
+  this.getVehicle = async () => ({});
+  this.getStatus = async () => ({});
+}
+
+Module._resolveFilename = function (request, parent, isMain, options) {
+  if (request === 'homey') return '__mock_homey__';
+  if (parent && parent.filename && parent.filename.includes('drivers/vehicle/device.js')) {
+    if (request === '../../lib/tessie-client') return '__mock_tessie_client__';
+  }
+  return originalResolve.call(this, request, parent, isMain, options);
+};
+
+// Mock Homey module
+const mockHomeyModule = new Module('__mock_homey__');
+mockHomeyModule.exports = {
   Device: class MockDevice {
     constructor() {
       this._data = {};
@@ -14,18 +44,12 @@ const mockHomey = {
       this._capabilityListeners = {};
       this._available = true;
       this._unavailableMessage = null;
-      this._intervals = [];
       this.homey = {
         setInterval: (fn, ms) => {
-          const id = setInterval(fn, ms);
-          this._intervals.push(id);
-          return id;
+          // Don't actually set interval in tests to avoid hanging
+          return 99999;
         },
-        clearInterval: (id) => {
-          clearInterval(id);
-          const idx = this._intervals.indexOf(id);
-          if (idx !== -1) this._intervals.splice(idx, 1);
-        },
+        clearInterval: () => {},
       };
     }
 
@@ -41,26 +65,16 @@ const mockHomey = {
     error() {}
   },
 };
+mockHomeyModule.loaded = true;
+require.cache['__mock_homey__'] = mockHomeyModule;
 
-// Override require to intercept 'homey' module
-const Module = require('node:module');
-const originalResolve = Module._resolveFilename;
-Module._resolveFilename = function (request, parent, isMain, options) {
-  if (request === 'homey') {
-    // Return a special marker so we can intercept the load
-    return '__mock_homey__';
-  }
-  return originalResolve.call(this, request, parent, isMain, options);
-};
+// Mock TessieClient module
+const mockTessieModule = new Module('__mock_tessie_client__');
+mockTessieModule.exports = MockTessieClient;
+mockTessieModule.loaded = true;
+require.cache['__mock_tessie_client__'] = mockTessieModule;
 
-const originalLoad = Module._cache;
-// Pre-cache the mock homey module
-const homeyModule = new Module('__mock_homey__');
-homeyModule.exports = mockHomey;
-homeyModule.loaded = true;
-require.cache['__mock_homey__'] = homeyModule;
-
-// Now require the device module - it will get our mock
+// Now require the device module - it will get our mocks
 const VehicleDevice = require('../drivers/vehicle/device');
 
 // Helper to create a device instance with controlled state
@@ -71,7 +85,7 @@ function createDevice({ vin = '5YJXCAE43LF123456', token = 'test-token-abc' } = 
   return device;
 }
 
-// Mock TessieClient factory
+// Mock TessieClient factory for per-test control
 function createMockClient({ getVehicleResult, getVehicleError } = {}) {
   return {
     getVehicles: mock.fn(async () => []),
@@ -88,34 +102,20 @@ describe('VehicleDevice', () => {
   describe('onInit', () => {
     it('reads VIN from data.id and token from store', async () => {
       const device = createDevice({ vin: '5YJ3E1EA1LF000111', token: 'my-token-xyz' });
-      const mockClient = createMockClient({
-        getVehicleResult: { charge_state: { battery_level: 50 }, vehicle_state: { locked: false } },
-      });
-      device.client = mockClient;
 
-      // Patch onInit to skip the TessieClient constructor (we set client manually)
-      const originalOnInit = VehicleDevice.prototype.onInit;
-      // We need to call onInit but intercept the TessieClient creation
-      // Since onInit creates a TessieClient internally, we override after init
-      // But first, let's verify data access works
       assert.equal(device.getData().id, '5YJ3E1EA1LF000111');
       assert.equal(device.getStoreValue('token'), 'my-token-xyz');
     });
 
-    it('creates TessieClient with stored token', async () => {
+    it('creates TessieClient with stored token during onInit', async () => {
+      lastConstructedToken = null;
       const device = createDevice({ token: 'specific-token-123' });
 
-      // We can't fully test constructor call without more complex mocking,
-      // but we verify that after onInit the client exists and is used.
-      // The actual TessieClient import is tested via integration.
-      const mockClient = createMockClient({
-        getVehicleResult: { charge_state: { battery_level: 80 }, vehicle_state: { locked: true } },
-      });
-      device.client = mockClient;
-      await device.refreshState();
+      // Call onInit -- it will use the MockTessieClient constructor
+      await device.onInit();
 
-      assert.equal(mockClient.getVehicle.mock.calls.length, 1);
-      assert.equal(mockClient.getVehicle.mock.calls[0].arguments[0], device.getData().id);
+      assert.equal(lastConstructedToken, 'specific-token-123');
+      assert.ok(device.client, 'client should be created');
     });
   });
 
@@ -162,7 +162,7 @@ describe('VehicleDevice', () => {
 
     it('sets device available on successful fetch', async () => {
       const device = createDevice();
-      device._available = false; // Start as unavailable
+      device._available = false;
       device._unavailableMessage = 'Previously unavailable';
       device.client = createMockClient({
         getVehicleResult: {
@@ -182,14 +182,11 @@ describe('VehicleDevice', () => {
       device.client = createMockClient({
         getVehicleResult: {
           vehicle_state: { locked: true },
-          // charge_state is missing
         },
       });
 
-      // Should not throw
       await device.refreshState();
 
-      // measure_battery should not be set (undefined)
       assert.equal(device._capabilities['measure_battery'], undefined);
       assert.equal(device._capabilities['locked'], true);
     });
@@ -199,7 +196,6 @@ describe('VehicleDevice', () => {
       device.client = createMockClient({
         getVehicleResult: {
           charge_state: { battery_level: 42 },
-          // vehicle_state is missing
         },
       });
 
@@ -220,7 +216,6 @@ describe('VehicleDevice', () => {
 
       await device.refreshState();
 
-      // null values should not be set
       assert.equal(device._capabilities['measure_battery'], undefined);
       assert.equal(device._capabilities['locked'], undefined);
     });
@@ -231,7 +226,6 @@ describe('VehicleDevice', () => {
         getVehicleResult: {},
       });
 
-      // Should not throw
       await device.refreshState();
       assert.equal(device._available, true);
     });
@@ -240,7 +234,6 @@ describe('VehicleDevice', () => {
   describe('onDeleted', () => {
     it('clears the poll interval', async () => {
       const device = createDevice();
-      // Simulate a poll interval being set
       let cleared = false;
       const fakeIntervalId = 12345;
       device.pollInterval = fakeIntervalId;
@@ -274,25 +267,16 @@ describe('VehicleDevice', () => {
   describe('locked capability listener', () => {
     it('throws "Control not yet available" (Phase 1 read-only)', async () => {
       const device = createDevice();
-      // Simulate what onInit does for the capability listener
       let listenerFn = null;
       device.registerCapabilityListener = (name, fn) => {
         if (name === 'locked') listenerFn = fn;
       };
 
-      // We need to trigger the registration. Since onInit calls registerCapabilityListener,
-      // we create a minimal onInit simulation:
-      device.client = createMockClient({
-        getVehicleResult: { charge_state: { battery_level: 50 }, vehicle_state: { locked: true } },
-      });
-
-      // Call the real onInit
+      // onInit registers the capability listener and calls refreshState
       await VehicleDevice.prototype.onInit.call(device);
 
-      // Now listenerFn should be set
       assert.ok(listenerFn, 'locked capability listener should be registered');
 
-      // It should throw when called
       await assert.rejects(
         async () => listenerFn(true),
         { message: 'Control not yet available' }

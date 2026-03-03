@@ -1,0 +1,6 @@
+tests/
+.planning/
+.vscode/
+.git/
+*.test.js
+.gitignore

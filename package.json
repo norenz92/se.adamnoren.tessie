@@ -4,5 +4,8 @@
   "main": "app.js",
   "scripts": {
     "test": "node --test tests/"
+  },
+  "devDependencies": {
+    "homey-apps-sdk-v3-types": "^0.3.0"
   }
 }

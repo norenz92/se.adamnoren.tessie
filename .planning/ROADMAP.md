@@ -46,11 +46,11 @@ Plans:
   3. Device data refreshes automatically via periodic REST polling without user intervention
   4. Polling does not wake a sleeping vehicle or prevent a vehicle from entering sleep (sleep-aware)
   5. Device shows as unavailable in Homey when the Tessie API is unreachable or the vehicle cannot be contacted
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 02-01: TBD
-- [ ] 02-02: TBD
+- [ ] 02-01-PLAN.md — Custom capability definitions, driver manifest update, and TessieClient battery health method
+- [ ] 02-02-PLAN.md — Full capability mapping, sleep-aware adaptive polling, retry logic, and tests
 
 ### Phase 3: Core Controls
 **Goal**: Users can control essential vehicle functions from Homey device cards and capability listeners
@@ -120,8 +120,8 @@ Note: Phase 4 and Phase 5 can potentially execute in parallel (both depend on Ph
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation & Pairing | 0/2 | Planning complete | - |
-| 2. Vehicle Data & Polling | 0/? | Not started | - |
+| 1. Foundation & Pairing | 2/2 | Complete | 2026-03-03 |
+| 2. Vehicle Data & Polling | 0/2 | Planning complete | - |
 | 3. Core Controls | 0/? | Not started | - |
 | 4. Real-time Streaming | 0/? | Not started | - |
 | 5. Extended Controls | 0/? | Not started | - |

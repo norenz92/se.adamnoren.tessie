@@ -1,8 +1,0 @@
-{
-  "title": "Rear Trunk",
-  "getable": true,
-  "setable": true,
-  "uiComponent": "toggle",
-  "icon": "/assets/icon.svg",
-  "type": "boolean"
-}

@@ -1,8 +1,0 @@
-{
-  "title": "Steering Wheel Heater",
-  "getable": true,
-  "setable": true,
-  "uiComponent": "toggle",
-  "icon": "/assets/icon.svg",
-  "type": "boolean"
-}

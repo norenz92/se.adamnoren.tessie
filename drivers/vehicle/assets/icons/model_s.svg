@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
+  <!-- Model S: full-size sedan silhouette - longer, sleeker -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Body - longer proportions -->
+    <path d="M120 560 L180 410 L320 330 L640 330 L780 410 L840 560" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Roof - long sweeping roofline -->
+    <path d="M320 330 L370 250 L590 250 L640 330" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Undercarriage -->
+    <path d="M90 560 L90 600 L250 600 L250 560" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <path d="M710 560 L710 600 L870 600 L870 560" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Bottom line -->
+    <line x1="250" y1="600" x2="710" y2="600" stroke="#FFFFFF"/>
+    <!-- Front wheel -->
+    <circle cx="230" cy="600" r="60" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <circle cx="230" cy="600" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Rear wheel -->
+    <circle cx="730" cy="600" r="60" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <circle cx="730" cy="600" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Window - elegant sweep -->
+    <path d="M340 330 L385 262 L575 262 L620 330" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+    <line x1="480" y1="262" x2="480" y2="330" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Front fascia accent -->
+    <line x1="150" y1="490" x2="195" y2="465" stroke="#FFFFFF" stroke-width="8"/>
+    <!-- Rear accent -->
+    <line x1="810" y1="490" x2="765" y2="465" stroke="#FFFFFF" stroke-width="8"/>
+  </g>
+</svg>

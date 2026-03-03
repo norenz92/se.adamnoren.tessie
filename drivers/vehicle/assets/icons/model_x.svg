@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
+  <!-- Model X: SUV with falcon wing door hint -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Body - SUV height -->
+    <path d="M130 540 L190 390 L320 300 L640 300 L770 390 L830 540" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Roof - tall, SUV proportions -->
+    <path d="M320 300 L370 220 L590 220 L640 300" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Falcon wing hint - subtle upward lines -->
+    <line x1="420" y1="220" x2="400" y2="190" stroke="#FFFFFF" stroke-width="8"/>
+    <line x1="540" y1="220" x2="560" y2="190" stroke="#FFFFFF" stroke-width="8"/>
+    <!-- Undercarriage -->
+    <path d="M100 540 L100 590 L260 590 L260 540" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <path d="M700 540 L700 590 L860 590 L860 540" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Bottom line -->
+    <line x1="260" y1="590" x2="700" y2="590" stroke="#FFFFFF"/>
+    <!-- Front wheel -->
+    <circle cx="240" cy="590" r="62" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <circle cx="240" cy="590" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Rear wheel -->
+    <circle cx="720" cy="590" r="62" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <circle cx="720" cy="590" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Window -->
+    <path d="M340 300 L385 234 L575 234 L620 300" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+    <line x1="480" y1="234" x2="480" y2="300" stroke="#FFFFFF" stroke-width="6"/>
+  </g>
+</svg>

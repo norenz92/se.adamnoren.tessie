@@ -3,4 +3,8 @@ tests/
 .vscode/
 .git/
 *.test.js
+*.ts
+tsconfig.json
+tsconfig.test.json
+dist-test/
 .gitignore

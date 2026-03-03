@@ -1,2 +1,4 @@
 node_modules/
 /app.json
+dist/
+dist-test/

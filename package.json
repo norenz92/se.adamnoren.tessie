@@ -1,11 +1,15 @@
 {
   "name": "se.adamnoren.tessie",
   "version": "0.1.0",
-  "main": "app.js",
+  "main": "dist/app.js",
   "scripts": {
-    "test": "node --test 'tests/*.test.js'"
+    "build": "tsc",
+    "pretest": "npm run build",
+    "test": "tsc -p tsconfig.test.json && node --test 'dist-test/tests/*.test.js'"
   },
   "devDependencies": {
-    "homey-apps-sdk-v3-types": "^0.3.0"
+    "@types/node": "^25.3.3",
+    "homey-apps-sdk-v3-types": "^0.3.0",
+    "typescript": "^5.9.3"
   }
 }

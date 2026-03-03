@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
+  <!-- Default vehicle icon: generic sedan silhouette -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Body -->
+    <path d="M160 560 L220 400 L360 320 L600 320 L740 400 L800 560" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Roof line -->
+    <path d="M320 320 L380 240 L580 240 L640 320" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Undercarriage -->
+    <path d="M120 560 L120 600 L280 600 L280 560" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <path d="M680 560 L680 600 L840 600 L840 560" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Bottom line -->
+    <line x1="280" y1="600" x2="680" y2="600" stroke="#FFFFFF"/>
+    <!-- Front wheel -->
+    <circle cx="260" cy="600" r="60" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <circle cx="260" cy="600" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Rear wheel -->
+    <circle cx="700" cy="600" r="60" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <circle cx="700" cy="600" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Window -->
+    <path d="M350 320 L390 252 L560 252 L620 320" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+    <line x1="480" y1="252" x2="480" y2="320" stroke="#FFFFFF" stroke-width="6"/>
+  </g>
+</svg>

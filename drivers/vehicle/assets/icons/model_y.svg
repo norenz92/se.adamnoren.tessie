@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
+  <!-- Model Y: compact SUV/crossover silhouette - taller than Model 3 -->
+  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+    <!-- Body - higher ride height -->
+    <path d="M140 540 L200 400 L330 310 L630 310 L760 400 L820 540" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Roof - taller, crossover proportions -->
+    <path d="M330 310 L380 230 L580 230 L630 310" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Undercarriage -->
+    <path d="M110 540 L110 590 L260 590 L260 540" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <path d="M700 540 L700 590 L850 590 L850 540" fill="#FFFFFF" stroke="#FFFFFF"/>
+    <!-- Bottom line -->
+    <line x1="260" y1="590" x2="700" y2="590" stroke="#FFFFFF"/>
+    <!-- Front wheel -->
+    <circle cx="240" cy="590" r="62" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <circle cx="240" cy="590" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Rear wheel -->
+    <circle cx="720" cy="590" r="62" fill="none" stroke="#FFFFFF" stroke-width="14"/>
+    <circle cx="720" cy="590" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Window -->
+    <path d="M350 310 L395 244 L565 244 L610 310" fill="none" stroke="#FFFFFF" stroke-width="8"/>
+    <!-- B-pillar hint -->
+    <line x1="480" y1="244" x2="480" y2="310" stroke="#FFFFFF" stroke-width="6"/>
+    <!-- Headlight accent -->
+    <line x1="170" y1="460" x2="210" y2="440" stroke="#FFFFFF" stroke-width="8"/>
+  </g>
+</svg>

@@ -112,56 +112,56 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| AUTH-01 | — | Pending |
-| AUTH-02 | — | Pending |
-| AUTH-03 | — | Pending |
-| AUTH-04 | — | Pending |
-| CHRG-01 | — | Pending |
-| CHRG-02 | — | Pending |
-| CHRG-03 | — | Pending |
-| CHRG-04 | — | Pending |
-| CHRG-05 | — | Pending |
-| CHRG-06 | — | Pending |
-| CHRG-07 | — | Pending |
-| CHRG-08 | — | Pending |
-| CLIM-01 | — | Pending |
-| CLIM-02 | — | Pending |
-| CLIM-03 | — | Pending |
-| CLIM-04 | — | Pending |
-| CLIM-05 | — | Pending |
-| CLIM-06 | — | Pending |
-| CLIM-07 | — | Pending |
-| CLIM-08 | — | Pending |
-| ACCS-01 | — | Pending |
-| ACCS-02 | — | Pending |
-| ACCS-03 | — | Pending |
-| ACCS-04 | — | Pending |
-| ACCS-05 | — | Pending |
-| ACCS-06 | — | Pending |
-| ACCS-07 | — | Pending |
-| DATA-01 | — | Pending |
-| DATA-02 | — | Pending |
-| DATA-03 | — | Pending |
-| DATA-04 | — | Pending |
-| DATA-05 | — | Pending |
-| STRM-01 | — | Pending |
-| STRM-02 | — | Pending |
-| STRM-03 | — | Pending |
-| FLOW-01 | — | Pending |
-| FLOW-02 | — | Pending |
-| FLOW-03 | — | Pending |
-| FLOW-04 | — | Pending |
-| FLOW-05 | — | Pending |
-| FLOW-06 | — | Pending |
-| FLOW-07 | — | Pending |
-| STOR-01 | — | Pending |
-| STOR-02 | — | Pending |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Pending |
+| CHRG-01 | Phase 2 | Pending |
+| CHRG-02 | Phase 2 | Pending |
+| CHRG-03 | Phase 2 | Pending |
+| CHRG-04 | Phase 3 | Pending |
+| CHRG-05 | Phase 3 | Pending |
+| CHRG-06 | Phase 3 | Pending |
+| CHRG-07 | Phase 3 | Pending |
+| CHRG-08 | Phase 5 | Pending |
+| CLIM-01 | Phase 3 | Pending |
+| CLIM-02 | Phase 3 | Pending |
+| CLIM-03 | Phase 2 | Pending |
+| CLIM-04 | Phase 5 | Pending |
+| CLIM-05 | Phase 5 | Pending |
+| CLIM-06 | Phase 5 | Pending |
+| CLIM-07 | Phase 5 | Pending |
+| CLIM-08 | Phase 5 | Pending |
+| ACCS-01 | Phase 3 | Pending |
+| ACCS-02 | Phase 3 | Pending |
+| ACCS-03 | Phase 3 | Pending |
+| ACCS-04 | Phase 3 | Pending |
+| ACCS-05 | Phase 5 | Pending |
+| ACCS-06 | Phase 5 | Pending |
+| ACCS-07 | Phase 5 | Pending |
+| DATA-01 | Phase 2 | Pending |
+| DATA-02 | Phase 2 | Pending |
+| DATA-03 | Phase 2 | Pending |
+| DATA-04 | Phase 2 | Pending |
+| DATA-05 | Phase 2 | Pending |
+| STRM-01 | Phase 4 | Pending |
+| STRM-02 | Phase 2 | Pending |
+| STRM-03 | Phase 2 | Pending |
+| FLOW-01 | Phase 6 | Pending |
+| FLOW-02 | Phase 6 | Pending |
+| FLOW-03 | Phase 6 | Pending |
+| FLOW-04 | Phase 6 | Pending |
+| FLOW-05 | Phase 6 | Pending |
+| FLOW-06 | Phase 6 | Pending |
+| FLOW-07 | Phase 6 | Pending |
+| STOR-01 | Phase 6 | Pending |
+| STOR-02 | Phase 1 | Pending |
 
 **Coverage:**
 - v1 requirements: 44 total
-- Mapped to phases: 0
-- Unmapped: 44 ⚠️
+- Mapped to phases: 44
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-03*
-*Last updated: 2026-03-03 after initial definition*
+*Last updated: 2026-03-03 after roadmap creation*

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "main": "app.js",
   "scripts": {
-    "test": "node --test tests/"
+    "test": "node --test 'tests/*.test.js'"
   },
   "devDependencies": {
     "homey-apps-sdk-v3-types": "^0.3.0"

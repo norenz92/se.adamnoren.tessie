@@ -28,7 +28,7 @@ See: .planning/PROJECT.md (updated 2026-03-03)
 Phase: 5 of 6 (Extended Controls)
 Plan: 2 of 2 in current phase
 Status: Phase Complete
-Last activity: 2026-03-04 -- Completed 05-02 (Access Controls & Charging History)
+Last activity: 2026-03-04 - Completed quick task 2: Add missing flow action/trigger/condition cards
 
 Progress: [██████████] 96%
 
@@ -111,7 +111,7 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | Project should be typescript | 2026-03-03 | 73a40ba | [1-project-should-be-typescript](./quick/1-project-should-be-typescript/) |
-| 2 | Add missing flow action/trigger/condition cards | 2026-03-04 | 9ab976f | [2-there-is-alot-of-action-cards-missing](./quick/2-there-is-alot-of-action-cards-missing/) |
+| 2 | Add missing flow action/trigger/condition cards | 2026-03-04 | 71fb311 | [2-there-is-alot-of-action-cards-missing](./quick/2-there-is-alot-of-action-cards-missing/) |
 
 ## Session Continuity
 

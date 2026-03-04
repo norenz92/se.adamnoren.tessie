@@ -30,11 +30,11 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CLIM-01**: User can turn climate on and off via the device or Flow action
 - [x] **CLIM-02**: User can set the target cabin temperature
 - [x] **CLIM-03**: User can see inside and outside temperature on the device
-- [ ] **CLIM-04**: User can control per-seat heater level (0-3) for each seat
-- [ ] **CLIM-05**: User can toggle the steering wheel heater
-- [ ] **CLIM-06**: User can activate and deactivate max defrost mode
-- [ ] **CLIM-07**: User can set climate keeper mode (Off/Keep/Dog/Camp)
-- [ ] **CLIM-08**: User can configure cabin overheat protection mode and temperature
+- [x] **CLIM-04**: User can control per-seat heater level (0-3) for each seat
+- [x] **CLIM-05**: User can toggle the steering wheel heater
+- [x] **CLIM-06**: User can activate and deactivate max defrost mode
+- [x] **CLIM-07**: User can set climate keeper mode (Off/Keep/Dog/Camp)
+- [x] **CLIM-08**: User can configure cabin overheat protection mode and temperature
 
 ### Access & Security
 
@@ -127,11 +127,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CLIM-01 | Phase 3 | Complete |
 | CLIM-02 | Phase 3 | Complete |
 | CLIM-03 | Phase 2 | Complete |
-| CLIM-04 | Phase 5 | Pending |
-| CLIM-05 | Phase 5 | Pending |
-| CLIM-06 | Phase 5 | Pending |
-| CLIM-07 | Phase 5 | Pending |
-| CLIM-08 | Phase 5 | Pending |
+| CLIM-04 | Phase 5 | Complete |
+| CLIM-05 | Phase 5 | Complete |
+| CLIM-06 | Phase 5 | Complete |
+| CLIM-07 | Phase 5 | Complete |
+| CLIM-08 | Phase 5 | Complete |
 | ACCS-01 | Phase 3 | Complete |
 | ACCS-02 | Phase 3 | Complete |
 | ACCS-03 | Phase 3 | Complete |

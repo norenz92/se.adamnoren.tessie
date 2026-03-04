@@ -10,8 +10,8 @@ progress:
   total_phases: 6
   completed_phases: 4
   total_plans: 8
-  completed_plans: 8
-  percent: 88
+  completed_plans: 9
+  percent: 92
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-03)
 
 **Core value:** Tesla owners can monitor and control their vehicles directly from their Homey smart home hub, with real-time data and full Flow integration.
-**Current focus:** Phase 4: Real-Time Streaming
+**Current focus:** Phase 5: Extended Controls
 
 ## Current Position
 
-Phase: 4 of 6 (Real-Time Streaming)
+Phase: 5 of 6 (Extended Controls)
 Plan: 1 of 2 in current phase
 Status: In Progress
-Last activity: 2026-03-04 -- Completed 04-01 (Streaming Foundation)
+Last activity: 2026-03-04 -- Completed 05-01 (Climate Controls)
 
-Progress: [█████████░] 88%
+Progress: [█████████░] 92%
 
 ## Performance Metrics
 
@@ -58,6 +58,7 @@ Progress: [█████████░] 88%
 | Phase 03 P02 | 300 | 1 tasks | 3 files |
 | Phase 04 P01 | 158s | 2 tasks | 4 files |
 | Phase 04 P02 | 214s | 1 tasks | 2 files |
+| Phase 05 P01 | 756s | 2 tasks | 12 files |
 
 ## Accumulated Context
 
@@ -86,6 +87,8 @@ Recent decisions affecting current work:
 - [Phase 04]: TessieStreamer emits raw data events; mapper applied by VehicleDevice in Plan 02
 - [Phase 04]: Mock WebSocket and setTimeout globally in tests for deterministic backoff verification
 - [Phase 04]: Streaming fallback check is first in pollCycle interval logic (highest priority over vehicle state)
+- [Phase 05]: Constant lookup maps for enum-to-API translation (SEAT_MAP, CLIMATE_KEEPER_TO_API, COP_TO_API)
+- [Phase 05]: Seat heater rear center uses Tesla seat number 4 (not 3) per Tesla API specification
 
 ### Pending Todos
 
@@ -104,6 +107,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-04T14:49:23.022Z
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-extended-controls/05-CONTEXT.md
+Last session: 2026-03-04T15:30:26Z
+Stopped at: Completed 05-01-PLAN.md
+Resume file: .planning/phases/05-extended-controls/05-01-SUMMARY.md

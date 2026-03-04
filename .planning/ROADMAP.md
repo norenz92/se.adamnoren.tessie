@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 2: Vehicle Data & Polling** - Read-only sensor capabilities for all vehicle state, sleep-aware REST polling
 - [ ] **Phase 3: Core Controls** - Essential vehicle commands: charging, climate basics, locks, trunk/frunk
 - [ ] **Phase 4: Real-time Streaming** - WebSocket telemetry from streaming.tessie.com with automatic reconnection
-- [ ] **Phase 5: Extended Controls** - Winter controls, advanced climate modes, windows, valet, speed limit, charging history
+- [x] **Phase 5: Extended Controls** - Winter controls, advanced climate modes, windows, valet, speed limit, charging history (completed 2026-03-04)
 - [ ] **Phase 6: Flow Integration & App Store** - Complete Flow card coverage for all capabilities, App Store assets and submission
 
 ## Phase Details
@@ -91,7 +91,7 @@ Plans:
   2. User can set climate keeper mode (Off/Keep/Dog/Camp) and configure cabin overheat protection
   3. User can vent/close windows, enable/disable valet mode, and set/toggle speed limit mode from Homey
   4. User can view past charging sessions with energy added and location on the device
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 05-01-PLAN.md — Climate extended controls: seat heaters, steering wheel heater, defrost, climate keeper, cabin overheat protection
@@ -125,5 +125,5 @@ Note: Phase 4 and Phase 5 can potentially execute in parallel (both depend on Ph
 | 2. Vehicle Data & Polling | 1/2 | In Progress|  |
 | 3. Core Controls | 1/2 | In Progress|  |
 | 4. Real-time Streaming | 0/2 | Not started | - |
-| 5. Extended Controls | 0/2 | Not started | - |
+| 5. Extended Controls | 2/2 | Complete   | 2026-03-04 |
 | 6. Flow Integration & App Store | 0/? | Not started | - |

@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-03)
 ## Current Position
 
 Phase: 5 of 6 (Extended Controls)
-Plan: 1 of 2 in current phase
-Status: In Progress
-Last activity: 2026-03-04 -- Completed 05-01 (Climate Controls)
+Plan: 2 of 2 in current phase
+Status: Phase Complete
+Last activity: 2026-03-04 -- Completed 05-02 (Access Controls & Charging History)
 
-Progress: [█████████░] 92%
+Progress: [██████████] 96%
 
 ## Performance Metrics
 
@@ -59,6 +59,7 @@ Progress: [█████████░] 92%
 | Phase 04 P01 | 158s | 2 tasks | 4 files |
 | Phase 04 P02 | 214s | 1 tasks | 2 files |
 | Phase 05 P01 | 756s | 2 tasks | 12 files |
+| Phase 05 P02 | 555s | 2 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -89,6 +90,9 @@ Recent decisions affecting current work:
 - [Phase 04]: Streaming fallback check is first in pollCycle interval logic (highest priority over vehicle state)
 - [Phase 05]: Constant lookup maps for enum-to-API translation (SEAT_MAP, CLIMATE_KEEPER_TO_API, COP_TO_API)
 - [Phase 05]: Seat heater rear center uses Tesla seat number 4 (not 3) per Tesla API specification
+- [Phase 05]: Window state aggregates 4 individual window fields into single boolean (all closed = true)
+- [Phase 05]: Speed limit PIN stored in driver settings as password type, validated before command dispatch
+- [Phase 05]: Charging history piggybacked on existing hourly batteryHealthTimer for efficiency
 
 ### Pending Todos
 
@@ -107,6 +111,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-04T15:30:26Z
-Stopped at: Completed 05-01-PLAN.md
-Resume file: .planning/phases/05-extended-controls/05-01-SUMMARY.md
+Last session: 2026-03-04T15:42:03Z
+Stopped at: Completed 05-02-PLAN.md
+Resume file: .planning/phases/05-extended-controls/05-02-SUMMARY.md

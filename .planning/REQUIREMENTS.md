@@ -23,7 +23,7 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CHRG-05**: User can view and adjust the charge limit percentage
 - [x] **CHRG-06**: User can view and adjust the charging amps
 - [x] **CHRG-07**: User can open and close the charge port via the device or Flow action
-- [ ] **CHRG-08**: User can view past charging sessions with energy added and location
+- [x] **CHRG-08**: User can view past charging sessions with energy added and location
 
 ### Climate
 
@@ -42,9 +42,9 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **ACCS-02**: User can toggle sentry mode on/off via the device or Flow action
 - [x] **ACCS-03**: User can open the trunk via the device or Flow action
 - [x] **ACCS-04**: User can open the frunk via the device or Flow action
-- [ ] **ACCS-05**: User can vent and close windows via Flow action
-- [ ] **ACCS-06**: User can enable and disable valet mode via Flow action
-- [ ] **ACCS-07**: User can set and toggle speed limit mode via Flow action
+- [x] **ACCS-05**: User can vent and close windows via Flow action
+- [x] **ACCS-06**: User can enable and disable valet mode via Flow action
+- [x] **ACCS-07**: User can set and toggle speed limit mode via Flow action
 
 ### Vehicle Data
 
@@ -123,7 +123,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHRG-05 | Phase 3 | Complete |
 | CHRG-06 | Phase 3 | Complete |
 | CHRG-07 | Phase 3 | Complete |
-| CHRG-08 | Phase 5 | Pending |
+| CHRG-08 | Phase 5 | Complete |
 | CLIM-01 | Phase 3 | Complete |
 | CLIM-02 | Phase 3 | Complete |
 | CLIM-03 | Phase 2 | Complete |
@@ -136,9 +136,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACCS-02 | Phase 3 | Complete |
 | ACCS-03 | Phase 3 | Complete |
 | ACCS-04 | Phase 3 | Complete |
-| ACCS-05 | Phase 5 | Pending |
-| ACCS-06 | Phase 5 | Pending |
-| ACCS-07 | Phase 5 | Pending |
+| ACCS-05 | Phase 5 | Complete |
+| ACCS-06 | Phase 5 | Complete |
+| ACCS-07 | Phase 5 | Complete |
 | DATA-01 | Phase 2 | Complete |
 | DATA-02 | Phase 2 | Complete |
 | DATA-03 | Phase 2 | Complete |

@@ -1,0 +1,9 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Speed Limit"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle"
+}

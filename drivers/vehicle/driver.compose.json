@@ -39,7 +39,14 @@
     "climate_keeper_mode",
     "cabin_overheat_protection",
     "defrost_mode",
-    "steering_wheel_heater"
+    "steering_wheel_heater",
+    "windows",
+    "valet_mode",
+    "speed_limit_mode",
+    "speed_limit_speed",
+    "last_charge_energy",
+    "last_charge_location",
+    "last_charge_cost"
   ],
   "capabilitiesOptions": {
     "measure_battery": {

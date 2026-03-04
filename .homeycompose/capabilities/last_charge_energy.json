@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Last Charge Energy"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "units": {
+    "en": "kWh"
+  },
+  "decimals": 1
+}

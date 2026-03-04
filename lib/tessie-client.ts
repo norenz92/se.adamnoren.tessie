@@ -80,6 +80,11 @@ class TessieClient {
     return response.result === true;
   }
 
+  async getCharges(vin: string): Promise<any[]> {
+    const response = await this.request(`/${vin}/charges`);
+    return Array.isArray(response?.results) ? response.results : [];
+  }
+
   async getBatteryHealth(vin: string): Promise<any> {
     const response = await this.request('/battery_health');
     const results = response.results;

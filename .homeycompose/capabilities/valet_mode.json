@@ -1,0 +1,9 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Valet Mode"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle"
+}

@@ -1,0 +1,15 @@
+[
+  {
+    "type": "group",
+    "label": { "en": "Security PINs" },
+    "children": [
+      {
+        "id": "speed_limit_pin",
+        "type": "password",
+        "label": { "en": "Speed Limit PIN" },
+        "hint": { "en": "4-digit PIN required to activate/deactivate speed limit mode. Set this before using the speed limit toggle." },
+        "value": ""
+      }
+    ]
+  }
+]

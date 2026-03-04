@@ -55,7 +55,7 @@ class VehicleDevice extends Homey.Device {
       await this.executeCommand('set_temperatures', { temperature: value });
     });
     this.registerCapabilityListener('charge_limit', async (value: number) => {
-      await this.executeCommand('set_charge_limit', { percent: value });
+      await this.executeCommand('set_charge_limit', { percent: Math.round(value * 100) });
     });
     this.registerCapabilityListener('charging_amps', async (value: number) => {
       await this.executeCommand('set_charging_amps', { amps: value });
@@ -319,7 +319,7 @@ class VehicleDevice extends Homey.Device {
 
     // Charge limit
     if (state.charge_state?.charge_limit_soc != null) {
-      await this.setCapabilityValue('charge_limit', state.charge_state.charge_limit_soc);
+      await this.setCapabilityValue('charge_limit', state.charge_state.charge_limit_soc / 100);
     }
 
     // Charging amps

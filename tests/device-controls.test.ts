@@ -399,7 +399,7 @@ describe('VehicleDevice Controls', () => {
 
     it('charge_limit listener calls command("set_charge_limit", { percent: value })', async () => {
       const { device, client } = await setupDeviceWithListeners();
-      await device._capabilityListeners['charge_limit'](80);
+      await device._capabilityListeners['charge_limit'](0.8);
       assert.equal(client.calls.command[0].args[1], 'set_charge_limit');
       assert.deepEqual(client.calls.command[0].args[2], { percent: 80 });
     });
@@ -454,7 +454,7 @@ describe('VehicleDevice Controls', () => {
       device.isMetric = true;
       device.usesPsi = false;
       await device.updateCapabilities(fullTessieState({ charge_state: { charge_limit_soc: 90 } }));
-      assert.equal(device._capabilities['charge_limit'], 90);
+      assert.equal(device._capabilities['charge_limit'], 0.9);
     });
 
     it('maps charge_current_request to charging_amps', async () => {

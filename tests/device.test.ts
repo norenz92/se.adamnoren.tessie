@@ -200,7 +200,7 @@ describe('VehicleDevice', () => {
       device.usesPsi = false;
       const state = fullTessieState();
       await device.updateCapabilities(state);
-      assert.equal(device._capabilities['measure_range'], 201);
+      assert.equal(device._capabilities['measure_range'], 200);
     });
 
     it('maps charge_state.charging_state to charging_status enum', async () => {

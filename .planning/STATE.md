@@ -2,15 +2,15 @@
 gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
-status: completed
-stopped_at: Phase 2 context gathered
-last_updated: "2026-03-03T21:39:45.713Z"
-last_activity: 2026-03-03 -- Completed 01-02 (Vehicle Driver, Pairing & Device)
+status: in-progress
+stopped_at: Completed 02-01 (Capability Definitions)
+last_updated: "2026-03-04T10:22:24.599Z"
+last_activity: 2026-03-04 -- Completed 02-01 (Capability Definitions)
 progress:
   total_phases: 6
   completed_phases: 1
-  total_plans: 2
-  completed_plans: 2
+  total_plans: 4
+  completed_plans: 3
   percent: 100
 ---
 
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-03)
 
 **Core value:** Tesla owners can monitor and control their vehicles directly from their Homey smart home hub, with real-time data and full Flow integration.
-**Current focus:** Phase 1: Foundation & Pairing
+**Current focus:** Phase 2: Vehicle Data Polling
 
 ## Current Position
 
-Phase: 1 of 6 (Foundation & Pairing) -- COMPLETE
-Plan: 2 of 2 in current phase
-Status: Phase Complete
-Last activity: 2026-03-03 -- Completed 01-02 (Vehicle Driver, Pairing & Device)
+Phase: 2 of 6 (Vehicle Data Polling)
+Plan: 1 of 2 in current phase
+Status: In Progress
+Last activity: 2026-03-04 -- Completed 02-01 (Capability Definitions)
 
-Progress: [██████████] 100%
+Progress: [████████░░] 75%
 
 ## Performance Metrics
 
@@ -52,6 +52,7 @@ Progress: [██████████] 100%
 *Updated after each plan completion*
 | Phase 01 P01 | 3min | 2 tasks | 9 files |
 | Phase 01 P02 | 6min | 2 tasks | 13 files |
+| Phase 02 P01 | 1min | 2 tasks | 14 files |
 
 ## Accumulated Context
 
@@ -69,6 +70,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Restored lib/tessie-client.js alongside .ts for driver JS require paths
 - [Phase 01]: Module._resolveFilename override for Homey.Device and TessieClient test mocking
 - [Phase 01]: 5-minute poll interval for Phase 1 vehicle state refresh
+- [Phase 02]: Omit icon fields from capability JSON since no custom SVG icons exist yet
+- [Phase 02]: Use bar as default tire pressure unit (dynamically switchable to psi by device)
 
 ### Pending Todos
 
@@ -87,6 +90,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-03T21:39:45.710Z
-Stopped at: Phase 2 context gathered
-Resume file: .planning/phases/02-vehicle-data-polling/02-CONTEXT.md
+Last session: 2026-03-04T10:21:38Z
+Stopped at: Completed 02-01 (Capability Definitions)
+Resume file: .planning/phases/02-vehicle-data-polling/02-01-SUMMARY.md

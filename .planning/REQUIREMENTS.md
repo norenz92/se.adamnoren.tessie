@@ -16,9 +16,9 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Battery & Charging
 
-- [ ] **CHRG-01**: User can see battery level percentage on the device
-- [ ] **CHRG-02**: User can see estimated range on the device
-- [ ] **CHRG-03**: User can see current charging status (charging, not charging, complete, etc.)
+- [x] **CHRG-01**: User can see battery level percentage on the device
+- [x] **CHRG-02**: User can see estimated range on the device
+- [x] **CHRG-03**: User can see current charging status (charging, not charging, complete, etc.)
 - [ ] **CHRG-04**: User can start and stop charging via the device or Flow action
 - [ ] **CHRG-05**: User can view and adjust the charge limit percentage
 - [ ] **CHRG-06**: User can view and adjust the charging amps
@@ -29,7 +29,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **CLIM-01**: User can turn climate on and off via the device or Flow action
 - [ ] **CLIM-02**: User can set the target cabin temperature
-- [ ] **CLIM-03**: User can see inside and outside temperature on the device
+- [x] **CLIM-03**: User can see inside and outside temperature on the device
 - [ ] **CLIM-04**: User can control per-seat heater level (0-3) for each seat
 - [ ] **CLIM-05**: User can toggle the steering wheel heater
 - [ ] **CLIM-06**: User can activate and deactivate max defrost mode
@@ -48,11 +48,11 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Vehicle Data
 
-- [ ] **DATA-01**: User can see GPS location (latitude/longitude) on the device
-- [ ] **DATA-02**: User can see tire pressure for all four tires on the device
-- [ ] **DATA-03**: User can see odometer reading on the device
-- [ ] **DATA-04**: User can see software update status and pending version on the device
-- [ ] **DATA-05**: User can see battery health/degradation data on the device
+- [x] **DATA-01**: User can see GPS location (latitude/longitude) on the device
+- [x] **DATA-02**: User can see tire pressure for all four tires on the device
+- [x] **DATA-03**: User can see odometer reading on the device
+- [x] **DATA-04**: User can see software update status and pending version on the device
+- [x] **DATA-05**: User can see battery health/degradation data on the device
 
 ### Real-time Streaming
 
@@ -116,9 +116,9 @@ Which phases cover which requirements. Updated during roadmap creation.
 | AUTH-02 | Phase 1 | Complete |
 | AUTH-03 | Phase 1 | Complete |
 | AUTH-04 | Phase 1 | Complete |
-| CHRG-01 | Phase 2 | Pending |
-| CHRG-02 | Phase 2 | Pending |
-| CHRG-03 | Phase 2 | Pending |
+| CHRG-01 | Phase 2 | Complete |
+| CHRG-02 | Phase 2 | Complete |
+| CHRG-03 | Phase 2 | Complete |
 | CHRG-04 | Phase 3 | Pending |
 | CHRG-05 | Phase 3 | Pending |
 | CHRG-06 | Phase 3 | Pending |
@@ -126,7 +126,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHRG-08 | Phase 5 | Pending |
 | CLIM-01 | Phase 3 | Pending |
 | CLIM-02 | Phase 3 | Pending |
-| CLIM-03 | Phase 2 | Pending |
+| CLIM-03 | Phase 2 | Complete |
 | CLIM-04 | Phase 5 | Pending |
 | CLIM-05 | Phase 5 | Pending |
 | CLIM-06 | Phase 5 | Pending |
@@ -139,11 +139,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | ACCS-05 | Phase 5 | Pending |
 | ACCS-06 | Phase 5 | Pending |
 | ACCS-07 | Phase 5 | Pending |
-| DATA-01 | Phase 2 | Pending |
-| DATA-02 | Phase 2 | Pending |
-| DATA-03 | Phase 2 | Pending |
-| DATA-04 | Phase 2 | Pending |
-| DATA-05 | Phase 2 | Pending |
+| DATA-01 | Phase 2 | Complete |
+| DATA-02 | Phase 2 | Complete |
+| DATA-03 | Phase 2 | Complete |
+| DATA-04 | Phase 2 | Complete |
+| DATA-05 | Phase 2 | Complete |
 | STRM-01 | Phase 4 | Pending |
 | STRM-02 | Phase 2 | Pending |
 | STRM-03 | Phase 2 | Pending |

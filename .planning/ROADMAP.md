@@ -62,11 +62,11 @@ Plans:
   3. User can lock/unlock the vehicle, toggle sentry mode, and open the trunk and frunk from Homey
   4. Commands sent to a sleeping vehicle wake it automatically before executing
   5. Lock state, sentry mode state, and charging state reflect the actual vehicle state after a command completes
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md — TessieClient command/wake methods, capability definitions, driver manifest update
+- [ ] 03-02-PLAN.md — VehicleDevice control wiring: ensureAwake, executeCommand, capability listeners, state refresh
 
 ### Phase 4: Real-time Streaming
 **Goal**: Vehicle data updates in near-real-time via WebSocket, replacing polling as the primary data source
@@ -122,7 +122,7 @@ Note: Phase 4 and Phase 5 can potentially execute in parallel (both depend on Ph
 |-------|----------------|--------|-----------|
 | 1. Foundation & Pairing | 2/2 | Complete | 2026-03-03 |
 | 2. Vehicle Data & Polling | 1/2 | In Progress|  |
-| 3. Core Controls | 0/? | Not started | - |
+| 3. Core Controls | 0/2 | Not started | - |
 | 4. Real-time Streaming | 0/? | Not started | - |
 | 5. Extended Controls | 0/? | Not started | - |
 | 6. Flow Integration & App Store | 0/? | Not started | - |

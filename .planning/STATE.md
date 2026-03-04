@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Completed 03-01-PLAN.md
-last_updated: "2026-03-04T11:12:45.891Z"
+stopped_at: Completed 03-02-PLAN.md
+last_updated: "2026-03-04T11:19:30.185Z"
 last_activity: 2026-03-04 -- Completed 03-01 (Command Infrastructure & Capability Definitions)
 progress:
   total_phases: 6
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 6
-  completed_plans: 5
+  completed_plans: 6
   percent: 75
 ---
 
@@ -55,6 +55,7 @@ Progress: [████████░░] 75%
 | Phase 02 P01 | 1min | 2 tasks | 14 files |
 | Phase 02 P02 | 255s | 1 tasks | 2 files |
 | Phase 03 P01 | 107s | 1 tasks | 13 files |
+| Phase 03 P02 | 300 | 1 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -77,6 +78,8 @@ Recent decisions affecting current work:
 - [Phase 02]: Use this.homey.setTimeout for adaptive poll scheduling since interval changes based on vehicle state
 - [Phase 03]: Used URLSearchParams for query string building in command() for proper encoding
 - [Phase 03]: Frunk capability is getable:false (button) since trunk cannot be closed remotely
+- [Phase 03]: Used Promise-wrapped homey.setTimeout for wake polling and refresh delay to stay compatible with Homey SDK
+- [Phase 03]: refreshState is public (not private) because VehicleDriver.onRepair also calls it
 
 ### Pending Todos
 
@@ -95,6 +98,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-04T11:12:45.888Z
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-03-04T11:19:30.182Z
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None

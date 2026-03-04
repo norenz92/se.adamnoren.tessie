@@ -184,6 +184,47 @@ describe('TessieClient', () => {
     });
   });
 
+  describe('getCharges(vin)', () => {
+    it('should call GET /{vin}/charges and return results array', async () => {
+      let capturedOptions: https.RequestOptions | null = null;
+      const chargesData = {
+        results: [
+          { charge_energy_added: 42.3, location: 'Home', total_cost: 4.32 },
+          { charge_energy_added: 30.1, location: 'Supercharger', total_cost: 8.15 },
+        ],
+      };
+
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
+        capturedOptions = options;
+        const res = createMockResponse(200, chargesData);
+        callback(res);
+        return createMockRequest();
+      };
+
+      const client = new TessieClient('my-token');
+      const results = await client.getCharges('VIN123');
+
+      assert.strictEqual(capturedOptions!.path, '/VIN123/charges');
+      assert.ok(Array.isArray(results), 'Should return an array');
+      assert.strictEqual(results.length, 2);
+      assert.strictEqual(results[0].charge_energy_added, 42.3);
+    });
+
+    it('should return empty array when response has no results', async () => {
+      (https as any).request = (options: https.RequestOptions, callback: (res: any) => void) => {
+        const res = createMockResponse(200, { other: 'data' });
+        callback(res);
+        return createMockRequest();
+      };
+
+      const client = new TessieClient('my-token');
+      const results = await client.getCharges('VIN123');
+
+      assert.ok(Array.isArray(results), 'Should return an array');
+      assert.strictEqual(results.length, 0);
+    });
+  });
+
   describe('request method', () => {
     it('should include Authorization Bearer header', async () => {
       let capturedOptions: https.RequestOptions | null = null;

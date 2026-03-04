@@ -11,6 +11,7 @@ function MockTessieClient(this: any, token: string) {
   this.getVehicle = async () => ({});
   this.getStatus = async () => ({ status: 'awake' });
   this.getBatteryHealth = async () => null;
+  this.getCharges = async () => [];
   this.command = async () => true;
   this.wake = async () => true;
 }
@@ -48,6 +49,8 @@ const mockHomeyModule = new Module('__mock_homey_controls__');
       'seat_heater_rear_left', 'seat_heater_rear_center', 'seat_heater_rear_right',
       'climate_keeper_mode', 'cabin_overheat_protection',
       'defrost_mode', 'steering_wheel_heater',
+      'windows', 'valet_mode', 'speed_limit_mode', 'speed_limit_speed',
+      'last_charge_energy', 'last_charge_location', 'last_charge_cost',
     ]);
     _available = true;
     _unavailableMessage: string | null = null;
@@ -82,8 +85,10 @@ const mockHomeyModule = new Module('__mock_homey_controls__');
     getCapabilityValue(name: string) { return this._capabilities[name]; }
     hasCapability(name: string) { return this._declaredCapabilities.has(name); }
     async addCapability(name: string) { this._declaredCapabilities.add(name); }
+    _settings: Record<string, any> = {};
     async setCapabilityOptions(name: string, opts: any) { this._capabilityOptions[name] = opts; }
     registerCapabilityListener(name: string, fn: Function) { this._capabilityListeners[name] = fn; }
+    getSetting(key: string) { return this._settings[key]; }
     async setAvailable() { this._available = true; this._unavailableMessage = null; }
     async setUnavailable(msg: string) { this._available = false; this._unavailableMessage = msg; }
     log(..._args: any[]) {}
@@ -151,6 +156,12 @@ function fullTessieState(overrides: any = {}): any {
       sentry_mode: false,
       rt: 0,
       ft: 0,
+      fd_window: 0,
+      fp_window: 0,
+      rd_window: 0,
+      rp_window: 0,
+      valet_mode: false,
+      speed_limit_mode: { active: false, current_limit_mph: 70 },
       ...overrides.vehicle_state,
     },
     gui_settings: {
@@ -181,17 +192,20 @@ function createTrackedClient(overrides: {
   commandResult?: boolean;
   commandError?: Error;
   wakeResult?: boolean;
+  getChargesResult?: any[];
 } = {}) {
   const calls: {
     command: TrackedCall[];
     wake: TrackedCall[];
     getVehicle: TrackedCall[];
     getStatus: TrackedCall[];
+    getCharges: TrackedCall[];
   } = {
     command: [],
     wake: [],
     getVehicle: [],
     getStatus: [],
+    getCharges: [],
   };
 
   const client = {
@@ -206,6 +220,10 @@ function createTrackedClient(overrides: {
       return overrides.getStatusResult || { status: 'awake' };
     },
     getBatteryHealth: async () => null,
+    getCharges: async (...args: any[]) => {
+      calls.getCharges.push({ args });
+      return overrides.getChargesResult !== undefined ? overrides.getChargesResult : [];
+    },
     command: async (...args: any[]) => {
       calls.command.push({ args });
       if (overrides.commandError) throw overrides.commandError;
@@ -849,6 +867,235 @@ describe('VehicleDevice Controls', () => {
       device.usesPsi = false;
       await device.updateCapabilities(fullTessieState({ climate_state: { cabin_overheat_protection: 'Unknown' } }));
       assert.equal(device._capabilities['cabin_overheat_protection'], 'Off');
+    });
+  });
+
+  describe('windows listener', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('calls close_windows when true', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['windows'](true);
+      assert.equal(client.calls.command[0].args[1], 'close_windows');
+    });
+
+    it('calls vent_windows when false', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['windows'](false);
+      assert.equal(client.calls.command[0].args[1], 'vent_windows');
+    });
+  });
+
+  describe('valet mode listener', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('calls enable_valet when true', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['valet_mode'](true);
+      assert.equal(client.calls.command[0].args[1], 'enable_valet');
+    });
+
+    it('calls disable_valet when false', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['valet_mode'](false);
+      assert.equal(client.calls.command[0].args[1], 'disable_valet');
+    });
+  });
+
+  describe('speed limit mode listener', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('calls enable_speed_limit with pin when true and PIN is set', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      device._settings = { speed_limit_pin: '1234' };
+      await device._capabilityListeners['speed_limit_mode'](true);
+      assert.equal(client.calls.command[0].args[1], 'enable_speed_limit');
+      assert.deepEqual(client.calls.command[0].args[2], { pin: '1234' });
+    });
+
+    it('calls disable_speed_limit with pin when false and PIN is set', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      device._settings = { speed_limit_pin: '5678' };
+      await device._capabilityListeners['speed_limit_mode'](false);
+      assert.equal(client.calls.command[0].args[1], 'disable_speed_limit');
+      assert.deepEqual(client.calls.command[0].args[2], { pin: '5678' });
+    });
+
+    it('throws error when PIN is not configured', async () => {
+      const { device } = await setupDeviceWithListeners();
+      device._settings = {};
+      await assert.rejects(
+        async () => device._capabilityListeners['speed_limit_mode'](true),
+        { message: 'Speed limit PIN not configured. Set it in device settings.' },
+      );
+    });
+  });
+
+  describe('speed limit speed listener', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('calls set_speed_limit with limit_mph', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['speed_limit_speed'](75);
+      assert.equal(client.calls.command[0].args[1], 'set_speed_limit');
+      assert.deepEqual(client.calls.command[0].args[2], { limit_mph: 75 });
+    });
+  });
+
+  describe('updateCapabilities - access controls', () => {
+    it('maps all windows closed (all 0) to windows=true', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({
+        vehicle_state: { fd_window: 0, fp_window: 0, rd_window: 0, rp_window: 0 },
+      }));
+      assert.equal(device._capabilities['windows'], true);
+    });
+
+    it('maps any window vented (non-zero) to windows=false', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({
+        vehicle_state: { fd_window: 0, fp_window: 1, rd_window: 0, rp_window: 0 },
+      }));
+      assert.equal(device._capabilities['windows'], false);
+    });
+
+    it('maps vehicle_state.valet_mode to valet_mode', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({
+        vehicle_state: { valet_mode: true },
+      }));
+      assert.equal(device._capabilities['valet_mode'], true);
+    });
+
+    it('maps vehicle_state.speed_limit_mode.active to speed_limit_mode', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({
+        vehicle_state: { speed_limit_mode: { active: true, current_limit_mph: 70 } },
+      }));
+      assert.equal(device._capabilities['speed_limit_mode'], true);
+    });
+
+    it('maps vehicle_state.speed_limit_mode.current_limit_mph to speed_limit_speed', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({
+        vehicle_state: { speed_limit_mode: { active: false, current_limit_mph: 85 } },
+      }));
+      assert.equal(device._capabilities['speed_limit_speed'], 85);
+    });
+  });
+
+  describe('updateChargingHistory', () => {
+    it('sets last_charge_energy, last_charge_location, last_charge_cost from getCharges', async () => {
+      const device = createDevice();
+      const client = createTrackedClient({
+        getChargesResult: [
+          {
+            charge_energy_added: 42.3,
+            location: 'Home',
+            total_cost: 4.32,
+            currency: '$',
+          },
+        ],
+      });
+      device.client = client;
+      await device.updateChargingHistory();
+
+      assert.equal(device._capabilities['last_charge_energy'], 42.3);
+      assert.equal(device._capabilities['last_charge_location'], 'Home');
+      assert.equal(device._capabilities['last_charge_cost'], '$4.32');
+    });
+
+    it('handles empty charges array gracefully', async () => {
+      const device = createDevice();
+      const client = createTrackedClient({ getChargesResult: [] });
+      device.client = client;
+      await device.updateChargingHistory();
+      // Should not throw, capabilities unchanged
+      assert.equal(device._capabilities['last_charge_energy'], undefined);
+    });
+
+    it('handles getCharges error gracefully', async () => {
+      const device = createDevice();
+      const client = createTrackedClient();
+      client.getCharges = async () => { throw new Error('Network error'); };
+      device.client = client;
+      await device.updateChargingHistory();
+      // Should not throw
+      assert.equal(device._capabilities['last_charge_energy'], undefined);
     });
   });
 

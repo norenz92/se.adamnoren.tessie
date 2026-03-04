@@ -63,6 +63,23 @@ class TessieClient {
     return this.request(`/${vin}/status`);
   }
 
+  async command(vin: string, command: string, params?: Record<string, string | number | boolean>): Promise<boolean> {
+    const searchParams = new URLSearchParams({ wait_for_completion: 'true' });
+    if (params) {
+      for (const [key, value] of Object.entries(params)) {
+        searchParams.set(key, String(value));
+      }
+    }
+    const path = `/${vin}/command/${command}?${searchParams.toString()}`;
+    const response = await this.request(path, 'POST');
+    return response.result === true;
+  }
+
+  async wake(vin: string): Promise<boolean> {
+    const response = await this.request(`/${vin}/wake`, 'POST');
+    return response.result === true;
+  }
+
   async getBatteryHealth(vin: string): Promise<any> {
     const response = await this.request('/battery_health');
     const results = response.results;

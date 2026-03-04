@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Charge Limit"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "slider",
+  "min": 50,
+  "max": 100,
+  "step": 1,
+  "units": "%"
+}

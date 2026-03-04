@@ -21,7 +21,16 @@
     "measure_latitude",
     "measure_longitude",
     "software_update",
-    "measure_battery_health"
+    "measure_battery_health",
+    "charge_limit",
+    "charging_amps",
+    "target_temperature",
+    "climate_onoff",
+    "sentry_mode",
+    "charge_port",
+    "trunk",
+    "frunk",
+    "charging_control"
   ],
   "capabilitiesOptions": {
     "measure_battery": {

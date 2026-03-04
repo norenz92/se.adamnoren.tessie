@@ -1,0 +1,9 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Climate"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle"
+}

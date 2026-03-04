@@ -1,0 +1,9 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Frunk"
+  },
+  "getable": false,
+  "setable": true,
+  "uiComponent": "button"
+}

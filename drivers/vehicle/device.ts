@@ -24,7 +24,37 @@ const ALL_CAPABILITIES = [
   'charge_limit', 'charging_amps', 'target_temperature',
   'climate_onoff', 'sentry_mode', 'charge_port',
   'trunk', 'frunk', 'charging_control',
+  'seat_heater_driver', 'seat_heater_passenger',
+  'seat_heater_rear_left', 'seat_heater_rear_center', 'seat_heater_rear_right',
+  'climate_keeper_mode', 'cabin_overheat_protection',
+  'defrost_mode', 'steering_wheel_heater',
 ];
+
+const SEAT_MAP: Record<string, number> = {
+  seat_heater_driver: 0,
+  seat_heater_passenger: 1,
+  seat_heater_rear_left: 2,
+  seat_heater_rear_center: 4,
+  seat_heater_rear_right: 5,
+};
+
+const SEAT_STATE_MAP: Array<[string, string]> = [
+  ['seat_heater_left', 'seat_heater_driver'],
+  ['seat_heater_right', 'seat_heater_passenger'],
+  ['seat_heater_rear_left', 'seat_heater_rear_left'],
+  ['seat_heater_rear_center', 'seat_heater_rear_center'],
+  ['seat_heater_rear_right', 'seat_heater_rear_right'],
+];
+
+const CLIMATE_KEEPER_TO_API: Record<string, number> = { 'Off': 0, 'Keep': 1, 'Dog': 2, 'Camp': 3 };
+const CLIMATE_KEEPER_FROM_STATE: Record<string, string> = { 'off': 'Off', 'keep': 'Keep', 'dog': 'Dog', 'camp': 'Camp' };
+
+const COP_TO_API: Record<string, { on: boolean; fan_only: boolean }> = {
+  'Off': { on: false, fan_only: false },
+  'FanOnly': { on: true, fan_only: true },
+  'AC': { on: true, fan_only: false },
+};
+const COP_FROM_STATE: Record<string, string> = { 'Off': 'Off', 'FanOnly': 'FanOnly', 'On': 'AC' };
 
 const WAKE_POLL_INTERVAL_MS = 2000;
 const WAKE_TIMEOUT_MS = 30000;
@@ -75,6 +105,33 @@ class VehicleDevice extends Homey.Device {
     });
     this.registerCapabilityListener('frunk', async (_value: boolean) => {
       await this.executeCommand('activate_front_trunk');
+    });
+
+    // Seat heater listeners
+    for (const [capId, seatNum] of Object.entries(SEAT_MAP)) {
+      this.registerCapabilityListener(capId, async (value: string) => {
+        await this.executeCommand('set_seat_heating', { seat: seatNum, level: Number(value) });
+      });
+    }
+
+    // Steering wheel heater
+    this.registerCapabilityListener('steering_wheel_heater', async (value: boolean) => {
+      await this.executeCommand(value ? 'start_steering_wheel_heater' : 'stop_steering_wheel_heater');
+    });
+
+    // Defrost mode
+    this.registerCapabilityListener('defrost_mode', async (value: boolean) => {
+      await this.executeCommand(value ? 'start_max_defrost' : 'stop_max_defrost');
+    });
+
+    // Climate keeper mode
+    this.registerCapabilityListener('climate_keeper_mode', async (value: string) => {
+      await this.executeCommand('set_climate_keeper_mode', { mode: CLIMATE_KEEPER_TO_API[value] });
+    });
+
+    // Cabin overheat protection
+    this.registerCapabilityListener('cabin_overheat_protection', async (value: string) => {
+      await this.executeCommand('set_cabin_overheat_protection', COP_TO_API[value]);
     });
 
     // Migrate capabilities for already-paired devices
@@ -398,6 +455,36 @@ class VehicleDevice extends Homey.Device {
     // Trunk (rt: 0=closed, non-zero=open)
     if (state.vehicle_state?.rt != null) {
       await this.setCapabilityValue('trunk', state.vehicle_state.rt !== 0);
+    }
+
+    // Seat heaters (integer level -> string enum id)
+    for (const [stateField, capId] of SEAT_STATE_MAP) {
+      const val = state.climate_state?.[stateField];
+      if (val != null) {
+        await this.setCapabilityValue(capId, String(val));
+      }
+    }
+
+    // Steering wheel heater
+    if (state.climate_state?.steering_wheel_heater != null) {
+      await this.setCapabilityValue('steering_wheel_heater', state.climate_state.steering_wheel_heater);
+    }
+
+    // Defrost mode (integer: 0=off, non-zero=on)
+    if (state.climate_state?.defrost_mode != null) {
+      await this.setCapabilityValue('defrost_mode', state.climate_state.defrost_mode !== 0);
+    }
+
+    // Climate keeper mode (lowercase state string -> capitalized enum id)
+    if (state.climate_state?.climate_keeper_mode != null) {
+      const mapped = CLIMATE_KEEPER_FROM_STATE[state.climate_state.climate_keeper_mode] || 'Off';
+      await this.setCapabilityValue('climate_keeper_mode', mapped);
+    }
+
+    // Cabin overheat protection (state string -> enum id)
+    if (state.climate_state?.cabin_overheat_protection != null) {
+      const mapped = COP_FROM_STATE[state.climate_state.cabin_overheat_protection] || 'Off';
+      await this.setCapabilityValue('cabin_overheat_protection', mapped);
     }
   }
 

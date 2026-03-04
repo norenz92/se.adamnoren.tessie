@@ -44,6 +44,10 @@ const mockHomeyModule = new Module('__mock_homey_controls__');
       'charge_limit', 'charging_amps', 'target_temperature',
       'climate_onoff', 'sentry_mode', 'charge_port',
       'trunk', 'frunk', 'charging_control',
+      'seat_heater_driver', 'seat_heater_passenger',
+      'seat_heater_rear_left', 'seat_heater_rear_center', 'seat_heater_rear_right',
+      'climate_keeper_mode', 'cabin_overheat_protection',
+      'defrost_mode', 'steering_wheel_heater',
     ]);
     _available = true;
     _unavailableMessage: string | null = null;
@@ -117,6 +121,15 @@ function fullTessieState(overrides: any = {}): any {
       outside_temp: 15.3,
       is_climate_on: false,
       driver_temp_setting: 21.0,
+      seat_heater_left: 0,
+      seat_heater_right: 0,
+      seat_heater_rear_left: 0,
+      seat_heater_rear_center: 0,
+      seat_heater_rear_right: 0,
+      steering_wheel_heater: false,
+      defrost_mode: 0,
+      climate_keeper_mode: 'off',
+      cabin_overheat_protection: 'Off',
       ...overrides.climate_state,
     },
     drive_state: {
@@ -525,6 +538,317 @@ describe('VehicleDevice Controls', () => {
 
       await device.updateCapabilities(fullTessieState({ charge_state: { charging_state: 'Disconnected' } }));
       assert.equal(device._capabilities['charging_control'], false);
+    });
+  });
+
+  describe('seat heater listeners', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('seat_heater_driver sends set_seat_heating with seat=0', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['seat_heater_driver']('2');
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 0, level: 2 });
+    });
+
+    it('seat_heater_passenger sends set_seat_heating with seat=1', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['seat_heater_passenger']('3');
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 1, level: 3 });
+    });
+
+    it('seat_heater_rear_left sends set_seat_heating with seat=2', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['seat_heater_rear_left']('1');
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 2, level: 1 });
+    });
+
+    it('seat_heater_rear_center sends set_seat_heating with seat=4 (not 3)', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['seat_heater_rear_center']('1');
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 4, level: 1 });
+    });
+
+    it('seat_heater_rear_right sends set_seat_heating with seat=5', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['seat_heater_rear_right']('0');
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 5, level: 0 });
+    });
+  });
+
+  describe('steering wheel heater listener', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('calls start_steering_wheel_heater when true', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['steering_wheel_heater'](true);
+      assert.equal(client.calls.command[0].args[1], 'start_steering_wheel_heater');
+    });
+
+    it('calls stop_steering_wheel_heater when false', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['steering_wheel_heater'](false);
+      assert.equal(client.calls.command[0].args[1], 'stop_steering_wheel_heater');
+    });
+  });
+
+  describe('defrost mode listener', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('calls start_max_defrost when true', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['defrost_mode'](true);
+      assert.equal(client.calls.command[0].args[1], 'start_max_defrost');
+    });
+
+    it('calls stop_max_defrost when false', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['defrost_mode'](false);
+      assert.equal(client.calls.command[0].args[1], 'stop_max_defrost');
+    });
+  });
+
+  describe('climate keeper mode listener', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('sends mode=0 for Off', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['climate_keeper_mode']('Off');
+      assert.equal(client.calls.command[0].args[1], 'set_climate_keeper_mode');
+      assert.deepEqual(client.calls.command[0].args[2], { mode: 0 });
+    });
+
+    it('sends mode=1 for Keep', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['climate_keeper_mode']('Keep');
+      assert.deepEqual(client.calls.command[0].args[2], { mode: 1 });
+    });
+
+    it('sends mode=2 for Dog', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['climate_keeper_mode']('Dog');
+      assert.deepEqual(client.calls.command[0].args[2], { mode: 2 });
+    });
+
+    it('sends mode=3 for Camp', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['climate_keeper_mode']('Camp');
+      assert.deepEqual(client.calls.command[0].args[2], { mode: 3 });
+    });
+  });
+
+  describe('cabin overheat protection listener', () => {
+    async function setupDeviceWithListeners() {
+      const device = createDevice();
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.isMetric = true;
+      device.usesPsi = false;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+      return { device, client };
+    }
+
+    it('sends on=false, fan_only=false for Off', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['cabin_overheat_protection']('Off');
+      assert.equal(client.calls.command[0].args[1], 'set_cabin_overheat_protection');
+      assert.deepEqual(client.calls.command[0].args[2], { on: false, fan_only: false });
+    });
+
+    it('sends on=true, fan_only=true for FanOnly', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['cabin_overheat_protection']('FanOnly');
+      assert.deepEqual(client.calls.command[0].args[2], { on: true, fan_only: true });
+    });
+
+    it('sends on=true, fan_only=false for AC', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device._capabilityListeners['cabin_overheat_protection']('AC');
+      assert.deepEqual(client.calls.command[0].args[2], { on: true, fan_only: false });
+    });
+  });
+
+  describe('updateCapabilities - climate controls', () => {
+    it('maps seat_heater_left to seat_heater_driver as String', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { seat_heater_left: 2 } }));
+      assert.equal(device._capabilities['seat_heater_driver'], '2');
+    });
+
+    it('maps seat_heater_right to seat_heater_passenger as String', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { seat_heater_right: 3 } }));
+      assert.equal(device._capabilities['seat_heater_passenger'], '3');
+    });
+
+    it('maps seat_heater_rear_left to seat_heater_rear_left as String', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { seat_heater_rear_left: 1 } }));
+      assert.equal(device._capabilities['seat_heater_rear_left'], '1');
+    });
+
+    it('maps seat_heater_rear_center to seat_heater_rear_center as String', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { seat_heater_rear_center: 0 } }));
+      assert.equal(device._capabilities['seat_heater_rear_center'], '0');
+    });
+
+    it('maps seat_heater_rear_right to seat_heater_rear_right as String', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { seat_heater_rear_right: 3 } }));
+      assert.equal(device._capabilities['seat_heater_rear_right'], '3');
+    });
+
+    it('maps steering_wheel_heater boolean', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { steering_wheel_heater: true } }));
+      assert.equal(device._capabilities['steering_wheel_heater'], true);
+    });
+
+    it('maps defrost_mode integer to boolean (0=false, non-zero=true)', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { defrost_mode: 0 } }));
+      assert.equal(device._capabilities['defrost_mode'], false);
+
+      await device.updateCapabilities(fullTessieState({ climate_state: { defrost_mode: 2 } }));
+      assert.equal(device._capabilities['defrost_mode'], true);
+    });
+
+    it('maps climate_keeper_mode string to capitalized enum id', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { climate_keeper_mode: 'dog' } }));
+      assert.equal(device._capabilities['climate_keeper_mode'], 'Dog');
+
+      await device.updateCapabilities(fullTessieState({ climate_state: { climate_keeper_mode: 'camp' } }));
+      assert.equal(device._capabilities['climate_keeper_mode'], 'Camp');
+
+      await device.updateCapabilities(fullTessieState({ climate_state: { climate_keeper_mode: 'keep' } }));
+      assert.equal(device._capabilities['climate_keeper_mode'], 'Keep');
+
+      await device.updateCapabilities(fullTessieState({ climate_state: { climate_keeper_mode: 'off' } }));
+      assert.equal(device._capabilities['climate_keeper_mode'], 'Off');
+    });
+
+    it('maps cabin_overheat_protection state to enum id', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { cabin_overheat_protection: 'Off' } }));
+      assert.equal(device._capabilities['cabin_overheat_protection'], 'Off');
+
+      await device.updateCapabilities(fullTessieState({ climate_state: { cabin_overheat_protection: 'FanOnly' } }));
+      assert.equal(device._capabilities['cabin_overheat_protection'], 'FanOnly');
+
+      await device.updateCapabilities(fullTessieState({ climate_state: { cabin_overheat_protection: 'On' } }));
+      assert.equal(device._capabilities['cabin_overheat_protection'], 'AC');
+    });
+
+    it('defaults climate_keeper_mode to Off for unknown values', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { climate_keeper_mode: 'unknown' } }));
+      assert.equal(device._capabilities['climate_keeper_mode'], 'Off');
+    });
+
+    it('defaults cabin_overheat_protection to Off for unknown values', async () => {
+      const device = createDevice();
+      device.isMetric = true;
+      device.usesPsi = false;
+      await device.updateCapabilities(fullTessieState({ climate_state: { cabin_overheat_protection: 'Unknown' } }));
+      assert.equal(device._capabilities['cabin_overheat_protection'], 'Off');
     });
   });
 

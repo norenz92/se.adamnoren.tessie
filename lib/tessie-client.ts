@@ -63,6 +63,16 @@ class TessieClient {
     return this.request(`/${vin}/status`);
   }
 
+  async getBatteryHealth(vin: string): Promise<any> {
+    const response = await this.request('/battery_health');
+    const results = response.results;
+    if (!Array.isArray(results)) {
+      return null;
+    }
+    const entry = results.find((r: any) => r.vin === vin);
+    return entry || null;
+  }
+
 }
 
 export = TessieClient;

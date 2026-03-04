@@ -1,0 +1,31 @@
+{
+  "title": {
+    "en": "Set cabin overheat protection"
+  },
+  "titleFormatted": {
+    "en": "Set cabin overheat protection to [[mode]]"
+  },
+  "hint": {
+    "en": "Set the cabin overheat protection mode"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "dropdown",
+      "name": "mode",
+      "title": {
+        "en": "Mode"
+      },
+      "values": [
+        { "id": "Off", "title": { "en": "Off" } },
+        { "id": "FanOnly", "title": { "en": "Fan only" } },
+        { "id": "AC", "title": { "en": "A/C" } }
+      ]
+    }
+  ]
+}

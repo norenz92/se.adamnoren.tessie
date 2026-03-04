@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Climate started"
+  },
+  "hint": {
+    "en": "When the climate system is turned on"
+  },
+  "platforms": ["local"],
+  "tokens": [],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

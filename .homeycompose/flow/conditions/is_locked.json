@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Vehicle is locked"
+  },
+  "hint": {
+    "en": "Check if the vehicle is currently locked"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

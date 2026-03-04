@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Charging started"
+  },
+  "hint": {
+    "en": "When the vehicle starts charging"
+  },
+  "platforms": ["local"],
+  "tokens": [],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

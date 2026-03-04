@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Stop climate control"
+  },
+  "hint": {
+    "en": "Turn off the vehicle's climate system"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

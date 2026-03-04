@@ -1,0 +1,29 @@
+{
+  "title": {
+    "en": "Set the temperature"
+  },
+  "titleFormatted": {
+    "en": "Set temperature to [[temperature]]"
+  },
+  "hint": {
+    "en": "Set the target cabin temperature"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "number",
+      "name": "temperature",
+      "title": {
+        "en": "Temperature"
+      },
+      "min": 15,
+      "max": 28,
+      "step": 0.5
+    }
+  ]
+}

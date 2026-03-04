@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Stop charging"
+  },
+  "hint": {
+    "en": "Stop charging the vehicle"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "title": {
+    "en": "Set speed limit"
+  },
+  "titleFormatted": {
+    "en": "Set speed limit to [[speed]] mph"
+  },
+  "hint": {
+    "en": "Set the speed limit in mph"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "number",
+      "name": "speed",
+      "title": {
+        "en": "Speed (mph)"
+      },
+      "min": 50,
+      "max": 90,
+      "step": 1
+    }
+  ]
+}

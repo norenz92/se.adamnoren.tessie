@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Sentry mode is on"
+  },
+  "hint": {
+    "en": "Check if sentry mode is currently active"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

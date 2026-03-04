@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Enable valet mode"
+  },
+  "hint": {
+    "en": "Turn on valet mode to limit vehicle access"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

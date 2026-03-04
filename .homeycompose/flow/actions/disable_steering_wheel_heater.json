@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Disable steering wheel heater"
+  },
+  "hint": {
+    "en": "Turn off the steering wheel heater"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

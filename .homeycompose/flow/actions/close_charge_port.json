@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Close the charge port"
+  },
+  "hint": {
+    "en": "Close the vehicle's charge port door"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

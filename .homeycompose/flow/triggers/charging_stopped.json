@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Charging stopped"
+  },
+  "hint": {
+    "en": "When the vehicle stops charging"
+  },
+  "platforms": ["local"],
+  "tokens": [],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Honk the horn"
+  },
+  "hint": {
+    "en": "Sound the vehicle's horn"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

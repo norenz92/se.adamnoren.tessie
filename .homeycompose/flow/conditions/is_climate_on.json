@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Climate is on"
+  },
+  "hint": {
+    "en": "Check if the climate system is currently active"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Activate the trunk"
+  },
+  "hint": {
+    "en": "Open or close the rear trunk"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

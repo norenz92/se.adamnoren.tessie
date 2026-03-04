@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Vehicle was locked"
+  },
+  "hint": {
+    "en": "When the vehicle is locked"
+  },
+  "platforms": ["local"],
+  "tokens": [],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Enable speed limit"
+  },
+  "hint": {
+    "en": "Turn on speed limit mode (requires PIN in device settings)"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

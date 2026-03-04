@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Trigger HomeLink"
+  },
+  "hint": {
+    "en": "Trigger the HomeLink garage door opener"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

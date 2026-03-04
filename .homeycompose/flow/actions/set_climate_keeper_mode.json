@@ -1,0 +1,32 @@
+{
+  "title": {
+    "en": "Set climate keeper mode"
+  },
+  "titleFormatted": {
+    "en": "Set climate keeper mode to [[mode]]"
+  },
+  "hint": {
+    "en": "Set the climate keeper mode (Keep, Dog, or Camp)"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "dropdown",
+      "name": "mode",
+      "title": {
+        "en": "Mode"
+      },
+      "values": [
+        { "id": "Off", "title": { "en": "Off" } },
+        { "id": "Keep", "title": { "en": "Keep" } },
+        { "id": "Dog", "title": { "en": "Dog" } },
+        { "id": "Camp", "title": { "en": "Camp" } }
+      ]
+    }
+  ]
+}

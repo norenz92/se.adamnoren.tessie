@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Vehicle is home"
+  },
+  "hint": {
+    "en": "Check if the vehicle is at the home location (placeholder)"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

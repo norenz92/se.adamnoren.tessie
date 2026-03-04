@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Vent the windows"
+  },
+  "hint": {
+    "en": "Vent all vehicle windows slightly open"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

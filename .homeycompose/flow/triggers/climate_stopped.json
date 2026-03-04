@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Climate stopped"
+  },
+  "hint": {
+    "en": "When the climate system is turned off"
+  },
+  "platforms": ["local"],
+  "tokens": [],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Wake up the vehicle"
+  },
+  "hint": {
+    "en": "Wake the vehicle from sleep mode"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

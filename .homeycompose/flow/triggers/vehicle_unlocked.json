@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Vehicle was unlocked"
+  },
+  "hint": {
+    "en": "When the vehicle is unlocked"
+  },
+  "platforms": ["local"],
+  "tokens": [],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

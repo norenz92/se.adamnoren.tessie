@@ -1,0 +1,29 @@
+{
+  "title": {
+    "en": "Set charging amps"
+  },
+  "titleFormatted": {
+    "en": "Set charging amps to [[amps]]"
+  },
+  "hint": {
+    "en": "Set the charging current in amps"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "number",
+      "name": "amps",
+      "title": {
+        "en": "Amps"
+      },
+      "min": 1,
+      "max": 48,
+      "step": 1
+    }
+  ]
+}

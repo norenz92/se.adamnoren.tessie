@@ -1,0 +1,17 @@
+{
+  "title": {
+    "en": "Sentry mode disabled"
+  },
+  "hint": {
+    "en": "When sentry mode is turned off"
+  },
+  "platforms": ["local"],
+  "tokens": [],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

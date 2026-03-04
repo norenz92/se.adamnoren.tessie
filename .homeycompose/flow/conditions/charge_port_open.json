@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Charge port is open"
+  },
+  "hint": {
+    "en": "Check if the charge port door is currently open"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,29 @@
+{
+  "title": {
+    "en": "Set charge limit"
+  },
+  "titleFormatted": {
+    "en": "Set charge limit to [[percent]]%"
+  },
+  "hint": {
+    "en": "Set the maximum charge level"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "number",
+      "name": "percent",
+      "title": {
+        "en": "Charge limit (%)"
+      },
+      "min": 50,
+      "max": 100,
+      "step": 1
+    }
+  ]
+}

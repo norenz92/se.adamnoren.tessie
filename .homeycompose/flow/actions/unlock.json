@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Unlock the vehicle"
+  },
+  "hint": {
+    "en": "Unlock all doors on the vehicle"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

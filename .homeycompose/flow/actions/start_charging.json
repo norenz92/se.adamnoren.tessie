@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Start charging"
+  },
+  "hint": {
+    "en": "Begin charging the vehicle"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Close the windows"
+  },
+  "hint": {
+    "en": "Close all vehicle windows"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "title": {
+    "en": "Open the frunk"
+  },
+  "hint": {
+    "en": "Open the front trunk (frunk)"
+  },
+  "platforms": ["local"],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

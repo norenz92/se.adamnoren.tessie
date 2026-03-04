@@ -14,6 +14,8 @@ function MockTessieClient(this: any, token: string) {
   this.getVehicle = async () => ({});
   this.getStatus = async () => ({ status: 'awake' });
   this.getBatteryHealth = async () => null;
+  this.command = async () => true;
+  this.wake = async () => true;
 }
 
 (Module as any)._resolveFilename = function (request: string, parent: any, isMain: boolean, options: any) {
@@ -42,6 +44,9 @@ const mockHomeyModule = new Module('__mock_homey__');
       'measure_odometer', 'vehicle_state_status',
       'measure_latitude', 'measure_longitude',
       'software_update', 'measure_battery_health',
+      'charge_limit', 'charging_amps', 'target_temperature',
+      'climate_onoff', 'sentry_mode', 'charge_port',
+      'trunk', 'frunk', 'charging_control',
     ]);
     _available = true;
     _unavailableMessage: string | null = null;
@@ -169,6 +174,8 @@ function createMockClient(overrides: {
       if (overrides.getBatteryHealthError) throw overrides.getBatteryHealthError;
       return overrides.getBatteryHealthResult || null;
     }),
+    command: mock.fn(async () => true),
+    wake: mock.fn(async () => true),
   };
 }
 
@@ -648,20 +655,10 @@ describe('VehicleDevice', () => {
   });
 
   describe('locked capability listener', () => {
-    it('throws "Control not yet available"', async () => {
+    it('registers locked capability listener during onInit', async () => {
       const device = createDevice();
-      let listenerFn: Function | null = null;
-      device.registerCapabilityListener = (name: string, fn: Function) => {
-        if (name === 'locked') listenerFn = fn;
-      };
-
-      await VehicleDevice.prototype.onInit.call(device);
-
-      assert.ok(listenerFn, 'locked capability listener should be registered');
-      await assert.rejects(
-        async () => listenerFn!(true),
-        { message: 'Control not yet available' }
-      );
+      await device.onInit();
+      assert.ok(device._capabilityListeners['locked'], 'locked capability listener should be registered');
     });
   });
 

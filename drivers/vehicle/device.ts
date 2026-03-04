@@ -18,7 +18,14 @@ const ALL_CAPABILITIES = [
   'measure_odometer', 'vehicle_state_status',
   'measure_latitude', 'measure_longitude',
   'software_update', 'measure_battery_health',
+  'charge_limit', 'charging_amps', 'target_temperature',
+  'climate_onoff', 'sentry_mode', 'charge_port',
+  'trunk', 'frunk', 'charging_control',
 ];
+
+const WAKE_POLL_INTERVAL_MS = 2000;
+const WAKE_TIMEOUT_MS = 30000;
+const REFRESH_DELAY_MS = 1500;
 
 class VehicleDevice extends Homey.Device {
 
@@ -34,9 +41,36 @@ class VehicleDevice extends Homey.Device {
     const token = this.getStoreValue('token') as string;
     this.client = new TessieClient(token);
 
-    // Register locked capability listener (Phase 3 will implement control)
-    this.registerCapabilityListener('locked', async (_value: boolean) => {
-      throw new Error('Control not yet available');
+    // Register capability listeners for vehicle controls
+    this.registerCapabilityListener('locked', async (value: boolean) => {
+      await this.executeCommand(value ? 'lock' : 'unlock');
+    });
+    this.registerCapabilityListener('sentry_mode', async (value: boolean) => {
+      await this.executeCommand(value ? 'enable_sentry' : 'disable_sentry');
+    });
+    this.registerCapabilityListener('climate_onoff', async (value: boolean) => {
+      await this.executeCommand(value ? 'start_climate' : 'stop_climate');
+    });
+    this.registerCapabilityListener('target_temperature', async (value: number) => {
+      await this.executeCommand('set_temperatures', { temperature: value });
+    });
+    this.registerCapabilityListener('charge_limit', async (value: number) => {
+      await this.executeCommand('set_charge_limit', { percent: value });
+    });
+    this.registerCapabilityListener('charging_amps', async (value: number) => {
+      await this.executeCommand('set_charging_amps', { amps: value });
+    });
+    this.registerCapabilityListener('charge_port', async (value: boolean) => {
+      await this.executeCommand(value ? 'open_charge_port' : 'close_charge_port');
+    });
+    this.registerCapabilityListener('charging_control', async (value: boolean) => {
+      await this.executeCommand(value ? 'start_charging' : 'stop_charging');
+    });
+    this.registerCapabilityListener('trunk', async (_value: boolean) => {
+      await this.executeCommand('activate_rear_trunk');
+    });
+    this.registerCapabilityListener('frunk', async (_value: boolean) => {
+      await this.executeCommand('activate_front_trunk');
     });
 
     // Migrate capabilities for already-paired devices
@@ -106,6 +140,49 @@ class VehicleDevice extends Homey.Device {
     }, BATTERY_HEALTH_INTERVAL_MS);
 
     this.log('Vehicle device initialized:', vin);
+  }
+
+  async ensureAwake(): Promise<void> {
+    const status = this.getCapabilityValue('vehicle_state_status');
+    if (status !== 'Asleep') return;
+
+    const vin = this.getData().id;
+    await this.client.wake(vin);
+
+    const startTime = Date.now();
+    while (Date.now() - startTime < WAKE_TIMEOUT_MS) {
+      // Wait before polling
+      await new Promise<void>((resolve) => {
+        this.homey.setTimeout(() => resolve(), WAKE_POLL_INTERVAL_MS);
+      });
+      const statusResponse = await this.client.getStatus(vin);
+      if (statusResponse?.status === 'awake') {
+        await this.setCapabilityValue('vehicle_state_status', 'Awake');
+        return;
+      }
+    }
+
+    throw new Error('Vehicle did not wake up in time');
+  }
+
+  async executeCommand(command: string, params?: Record<string, string | number | boolean>): Promise<void> {
+    await this.ensureAwake();
+    const vin = this.getData().id;
+    const success = await this.client.command(vin, command, params);
+    if (!success) {
+      throw new Error(`Command ${command} failed`);
+    }
+    await this.refreshState();
+  }
+
+  async refreshState(): Promise<void> {
+    const vin = this.getData().id;
+    // Small delay before fetching - vehicle state may not reflect change immediately
+    await new Promise<void>((resolve) => {
+      this.homey.setTimeout(() => resolve(), REFRESH_DELAY_MS);
+    });
+    const state = await this.client.getVehicle(vin);
+    await this.updateCapabilities(state);
   }
 
   async pollCycle(): Promise<void> {
@@ -238,6 +315,51 @@ class VehicleDevice extends Homey.Device {
     // Locked state
     if (state.vehicle_state?.locked != null) {
       await this.setCapabilityValue('locked', state.vehicle_state.locked);
+    }
+
+    // Charge limit
+    if (state.charge_state?.charge_limit_soc != null) {
+      await this.setCapabilityValue('charge_limit', state.charge_state.charge_limit_soc);
+    }
+
+    // Charging amps
+    if (state.charge_state?.charge_current_request != null) {
+      await this.setCapabilityValue('charging_amps', state.charge_state.charge_current_request);
+    }
+
+    // Dynamic charging amps max
+    if (state.charge_state?.charge_current_request_max != null) {
+      await this.setCapabilityOptions('charging_amps', { max: state.charge_state.charge_current_request_max });
+    }
+
+    // Charge port
+    if (state.charge_state?.charge_port_door_open != null) {
+      await this.setCapabilityValue('charge_port', state.charge_state.charge_port_door_open);
+    }
+
+    // Charging control (Charging = true, else false)
+    if (state.charge_state?.charging_state != null) {
+      await this.setCapabilityValue('charging_control', state.charge_state.charging_state === 'Charging');
+    }
+
+    // Climate on/off
+    if (state.climate_state?.is_climate_on != null) {
+      await this.setCapabilityValue('climate_onoff', state.climate_state.is_climate_on);
+    }
+
+    // Target temperature
+    if (state.climate_state?.driver_temp_setting != null) {
+      await this.setCapabilityValue('target_temperature', state.climate_state.driver_temp_setting);
+    }
+
+    // Sentry mode
+    if (state.vehicle_state?.sentry_mode != null) {
+      await this.setCapabilityValue('sentry_mode', state.vehicle_state.sentry_mode);
+    }
+
+    // Trunk (rt: 0=closed, non-zero=open)
+    if (state.vehicle_state?.rt != null) {
+      await this.setCapabilityValue('trunk', state.vehicle_state.rt !== 0);
     }
   }
 

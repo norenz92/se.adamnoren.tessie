@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v1.0
 milestone_name: milestone
 status: executing
-stopped_at: Phase 3 context gathered
-last_updated: "2026-03-04T10:44:13.324Z"
-last_activity: 2026-03-04 -- Completed 02-01 (Capability Definitions)
+stopped_at: Completed 03-01-PLAN.md
+last_updated: "2026-03-04T11:12:45.891Z"
+last_activity: 2026-03-04 -- Completed 03-01 (Command Infrastructure & Capability Definitions)
 progress:
   total_phases: 6
   completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
+  total_plans: 6
+  completed_plans: 5
   percent: 75
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-03)
 
 **Core value:** Tesla owners can monitor and control their vehicles directly from their Homey smart home hub, with real-time data and full Flow integration.
-**Current focus:** Phase 2: Vehicle Data Polling
+**Current focus:** Phase 3: Core Controls
 
 ## Current Position
 
-Phase: 2 of 6 (Vehicle Data Polling)
+Phase: 3 of 6 (Core Controls)
 Plan: 1 of 2 in current phase
 Status: In Progress
-Last activity: 2026-03-04 -- Completed 02-01 (Capability Definitions)
+Last activity: 2026-03-04 -- Completed 03-01 (Command Infrastructure & Capability Definitions)
 
 Progress: [████████░░] 75%
 
@@ -54,6 +54,7 @@ Progress: [████████░░] 75%
 | Phase 01 P02 | 6min | 2 tasks | 13 files |
 | Phase 02 P01 | 1min | 2 tasks | 14 files |
 | Phase 02 P02 | 255s | 1 tasks | 2 files |
+| Phase 03 P01 | 107s | 1 tasks | 13 files |
 
 ## Accumulated Context
 
@@ -74,6 +75,8 @@ Recent decisions affecting current work:
 - [Phase 02]: Omit icon fields from capability JSON since no custom SVG icons exist yet
 - [Phase 02]: Use bar as default tire pressure unit (dynamically switchable to psi by device)
 - [Phase 02]: Use this.homey.setTimeout for adaptive poll scheduling since interval changes based on vehicle state
+- [Phase 03]: Used URLSearchParams for query string building in command() for proper encoding
+- [Phase 03]: Frunk capability is getable:false (button) since trunk cannot be closed remotely
 
 ### Pending Todos
 
@@ -92,6 +95,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-03-04T10:44:13.314Z
-Stopped at: Phase 3 context gathered
-Resume file: .planning/phases/03-core-controls/03-CONTEXT.md
+Last session: 2026-03-04T11:12:45.888Z
+Stopped at: Completed 03-01-PLAN.md
+Resume file: None

@@ -19,16 +19,16 @@ Requirements for initial release. Each maps to roadmap phases.
 - [x] **CHRG-01**: User can see battery level percentage on the device
 - [x] **CHRG-02**: User can see estimated range on the device
 - [x] **CHRG-03**: User can see current charging status (charging, not charging, complete, etc.)
-- [ ] **CHRG-04**: User can start and stop charging via the device or Flow action
-- [ ] **CHRG-05**: User can view and adjust the charge limit percentage
-- [ ] **CHRG-06**: User can view and adjust the charging amps
-- [ ] **CHRG-07**: User can open and close the charge port via the device or Flow action
+- [x] **CHRG-04**: User can start and stop charging via the device or Flow action
+- [x] **CHRG-05**: User can view and adjust the charge limit percentage
+- [x] **CHRG-06**: User can view and adjust the charging amps
+- [x] **CHRG-07**: User can open and close the charge port via the device or Flow action
 - [ ] **CHRG-08**: User can view past charging sessions with energy added and location
 
 ### Climate
 
-- [ ] **CLIM-01**: User can turn climate on and off via the device or Flow action
-- [ ] **CLIM-02**: User can set the target cabin temperature
+- [x] **CLIM-01**: User can turn climate on and off via the device or Flow action
+- [x] **CLIM-02**: User can set the target cabin temperature
 - [x] **CLIM-03**: User can see inside and outside temperature on the device
 - [ ] **CLIM-04**: User can control per-seat heater level (0-3) for each seat
 - [ ] **CLIM-05**: User can toggle the steering wheel heater
@@ -38,10 +38,10 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Access & Security
 
-- [ ] **ACCS-01**: User can see lock state and lock/unlock the vehicle via the device or Flow action
-- [ ] **ACCS-02**: User can toggle sentry mode on/off via the device or Flow action
-- [ ] **ACCS-03**: User can open the trunk via the device or Flow action
-- [ ] **ACCS-04**: User can open the frunk via the device or Flow action
+- [x] **ACCS-01**: User can see lock state and lock/unlock the vehicle via the device or Flow action
+- [x] **ACCS-02**: User can toggle sentry mode on/off via the device or Flow action
+- [x] **ACCS-03**: User can open the trunk via the device or Flow action
+- [x] **ACCS-04**: User can open the frunk via the device or Flow action
 - [ ] **ACCS-05**: User can vent and close windows via Flow action
 - [ ] **ACCS-06**: User can enable and disable valet mode via Flow action
 - [ ] **ACCS-07**: User can set and toggle speed limit mode via Flow action
@@ -119,23 +119,23 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CHRG-01 | Phase 2 | Complete |
 | CHRG-02 | Phase 2 | Complete |
 | CHRG-03 | Phase 2 | Complete |
-| CHRG-04 | Phase 3 | Pending |
-| CHRG-05 | Phase 3 | Pending |
-| CHRG-06 | Phase 3 | Pending |
-| CHRG-07 | Phase 3 | Pending |
+| CHRG-04 | Phase 3 | Complete |
+| CHRG-05 | Phase 3 | Complete |
+| CHRG-06 | Phase 3 | Complete |
+| CHRG-07 | Phase 3 | Complete |
 | CHRG-08 | Phase 5 | Pending |
-| CLIM-01 | Phase 3 | Pending |
-| CLIM-02 | Phase 3 | Pending |
+| CLIM-01 | Phase 3 | Complete |
+| CLIM-02 | Phase 3 | Complete |
 | CLIM-03 | Phase 2 | Complete |
 | CLIM-04 | Phase 5 | Pending |
 | CLIM-05 | Phase 5 | Pending |
 | CLIM-06 | Phase 5 | Pending |
 | CLIM-07 | Phase 5 | Pending |
 | CLIM-08 | Phase 5 | Pending |
-| ACCS-01 | Phase 3 | Pending |
-| ACCS-02 | Phase 3 | Pending |
-| ACCS-03 | Phase 3 | Pending |
-| ACCS-04 | Phase 3 | Pending |
+| ACCS-01 | Phase 3 | Complete |
+| ACCS-02 | Phase 3 | Complete |
+| ACCS-03 | Phase 3 | Complete |
+| ACCS-04 | Phase 3 | Complete |
 | ACCS-05 | Phase 5 | Pending |
 | ACCS-06 | Phase 5 | Pending |
 | ACCS-07 | Phase 5 | Pending |

@@ -122,7 +122,7 @@ Note: Phase 4 and Phase 5 can potentially execute in parallel (both depend on Ph
 |-------|----------------|--------|-----------|
 | 1. Foundation & Pairing | 2/2 | Complete | 2026-03-03 |
 | 2. Vehicle Data & Polling | 1/2 | In Progress|  |
-| 3. Core Controls | 0/2 | Not started | - |
+| 3. Core Controls | 1/2 | In Progress|  |
 | 4. Real-time Streaming | 0/? | Not started | - |
 | 5. Extended Controls | 0/? | Not started | - |
 | 6. Flow Integration & App Store | 0/? | Not started | - |

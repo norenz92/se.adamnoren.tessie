@@ -1,10 +1,13 @@
 import Homey from 'homey';
 import TessieClient = require('../../lib/tessie-client');
+import TessieStreamer = require('../../lib/tessie-streamer');
+import mapStreamData = require('../../lib/stream-mapper');
 
 const AWAKE_INTERVAL_MS = 60 * 1000;
 const CHARGING_INTERVAL_MS = 2 * 60 * 1000;
 const ASLEEP_INTERVAL_MS = 30 * 60 * 1000;
 const BATTERY_HEALTH_INTERVAL_MS = 60 * 60 * 1000;
+const STREAMING_FALLBACK_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 const MAX_CONSECUTIVE_FAILURES = 3;
 const MILES_TO_KM = 1.60934;
 const BAR_TO_PSI = 14.5038;
@@ -30,6 +33,7 @@ const REFRESH_DELAY_MS = 1500;
 class VehicleDevice extends Homey.Device {
 
   client!: TessieClient;
+  streamer: TessieStreamer | null = null;
   pollTimer: ReturnType<typeof setTimeout> | null = null;
   batteryHealthTimer: ReturnType<typeof setInterval> | null = null;
   consecutiveFailures: number = 0;
@@ -129,6 +133,38 @@ class VehicleDevice extends Homey.Device {
     // Schedule first poll cycle
     this.scheduleNextPoll(AWAKE_INTERVAL_MS);
 
+    // Initialize WebSocket streaming
+    this.streamer = new TessieStreamer(vin, token);
+
+    this.streamer.on('data', async (dataPoints: any[]) => {
+      const updates = mapStreamData(dataPoints, this.isMetric, this.usesPsi);
+      for (const update of updates) {
+        await this.setCapabilityValue(update.id, update.value).catch((err: any) => {
+          this.error('Stream capability update failed:', update.id, err.message);
+        });
+      }
+    });
+
+    this.streamer.on('connected', async () => {
+      this.log('Stream connected');
+      this.consecutiveFailures = 0;
+      await this.setAvailable();
+      // Full REST poll on reconnect to sync any missed state
+      try {
+        await this.refreshState();
+      } catch (err: any) {
+        this.error('Stream reconnect state sync failed:', err.message);
+      }
+    });
+
+    this.streamer.on('disconnected', () => {
+      this.log('Stream disconnected');
+      // Do NOT mark unavailable -- vehicle may just be sleeping
+      // Normal polling will resume at adaptive rate on next poll cycle
+    });
+
+    this.streamer.connect();
+
     // Schedule battery health refresh on fixed cadence
     this.batteryHealthTimer = this.homey.setInterval(async () => {
       try {
@@ -206,8 +242,10 @@ class VehicleDevice extends Homey.Device {
       this.consecutiveFailures = 0;
       await this.setAvailable();
 
-      // Determine next interval based on vehicle state
-      if (isAsleep) {
+      // Determine next interval based on vehicle state and streaming
+      if (this.streamer?.isConnected) {
+        nextInterval = STREAMING_FALLBACK_INTERVAL_MS;
+      } else if (isAsleep) {
         nextInterval = ASLEEP_INTERVAL_MS;
       } else if (state.charge_state?.charging_state === 'Charging') {
         nextInterval = CHARGING_INTERVAL_MS;
@@ -370,6 +408,10 @@ class VehicleDevice extends Homey.Device {
   }
 
   async onDeleted(): Promise<void> {
+    if (this.streamer) {
+      this.streamer.destroy();
+      this.streamer = null;
+    }
     if (this.pollTimer != null) {
       this.homey.clearTimeout(this.pollTimer);
       this.pollTimer = null;

@@ -91,11 +91,11 @@ Plans:
   2. User can set climate keeper mode (Off/Keep/Dog/Camp) and configure cabin overheat protection
   3. User can vent/close windows, enable/disable valet mode, and set/toggle speed limit mode from Homey
   4. User can view past charging sessions with energy added and location on the device
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] 05-01: TBD
-- [ ] 05-02: TBD
+- [ ] 05-01-PLAN.md — Climate extended controls: seat heaters, steering wheel heater, defrost, climate keeper, cabin overheat protection
+- [ ] 05-02-PLAN.md — Access controls and charging history: windows, valet mode, speed limit, charging session display
 
 ### Phase 6: Flow Integration & App Store
 **Goal**: Every capability has proper Flow cards and the app meets all App Store requirements for submission
@@ -125,5 +125,5 @@ Note: Phase 4 and Phase 5 can potentially execute in parallel (both depend on Ph
 | 2. Vehicle Data & Polling | 1/2 | In Progress|  |
 | 3. Core Controls | 1/2 | In Progress|  |
 | 4. Real-time Streaming | 0/2 | Not started | - |
-| 5. Extended Controls | 0/? | Not started | - |
+| 5. Extended Controls | 0/2 | Not started | - |
 | 6. Flow Integration & App Store | 0/? | Not started | - |

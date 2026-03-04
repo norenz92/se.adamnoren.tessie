@@ -11,6 +11,11 @@ const STREAMING_FALLBACK_INTERVAL_MS = 10 * 60 * 1000; // 10 minutes
 const MAX_CONSECUTIVE_FAILURES = 3;
 const MILES_TO_KM = 1.60934;
 const BAR_TO_PSI = 14.5038;
+const KMH_TO_MPH = 0.621371;
+
+const CURRENCY_SYMBOLS: Record<string, string> = {
+  USD: '$', EUR: '€', GBP: '£', SEK: 'kr', NOK: 'kr', DKK: 'kr', CHF: 'CHF',
+};
 
 const ALL_CAPABILITIES = [
   'measure_battery', 'locked',
@@ -72,6 +77,16 @@ class VehicleDevice extends Homey.Device {
   isMetric: boolean = true;
   usesPsi: boolean = false;
 
+  // Flow trigger card references
+  private _chargingStartedTrigger!: any;
+  private _chargingStoppedTrigger!: any;
+  private _vehicleLockedTrigger!: any;
+  private _vehicleUnlockedTrigger!: any;
+  private _sentryEnabledTrigger!: any;
+  private _sentryDisabledTrigger!: any;
+  private _climateStartedTrigger!: any;
+  private _climateStoppedTrigger!: any;
+
   async onInit(): Promise<void> {
     const vin = this.getData().id;
     const token = this.getStoreValue('token') as string;
@@ -88,7 +103,10 @@ class VehicleDevice extends Homey.Device {
       await this.executeCommand(value ? 'start_climate' : 'stop_climate');
     });
     this.registerCapabilityListener('target_temperature', async (value: number) => {
-      await this.executeCommand('set_temperatures', { temperature: value });
+      const tempC = this.getSetting('unit_temperature') === 'F'
+        ? (value - 32) * 5 / 9
+        : value;
+      await this.executeCommand('set_temperatures', { temperature: tempC });
     });
     this.registerCapabilityListener('charge_limit', async (value: number) => {
       await this.executeCommand('set_charge_limit', { percent: Math.round(value * 100) });
@@ -155,9 +173,12 @@ class VehicleDevice extends Homey.Device {
       await this.executeCommand(value ? 'enable_speed_limit' : 'disable_speed_limit', { pin });
     });
 
-    // Speed limit speed
+    // Speed limit speed (API expects mph; convert if user uses km/h)
     this.registerCapabilityListener('speed_limit_speed', async (value: number) => {
-      await this.executeCommand('set_speed_limit', { limit_mph: value });
+      const mph = this.getSetting('unit_speed') === 'kmh'
+        ? Math.round(value * KMH_TO_MPH)
+        : value;
+      await this.executeCommand('set_speed_limit', { limit_mph: mph });
     });
 
     // Migrate capabilities for already-paired devices
@@ -175,23 +196,24 @@ class VehicleDevice extends Homey.Device {
         this.client.getBatteryHealth(vin),
       ]);
 
-      // Read gui_settings and configure units
+      // Populate unit settings from Tesla gui_settings on fresh devices
       if (state.gui_settings) {
         const gs = state.gui_settings;
-        this.isMetric = gs.gui_distance_units === 'km/hr';
-        this.usesPsi = gs.gui_tirepressure_units === 'Psi';
-
-        // Set capability options only when units differ from defaults
-        if (!this.isMetric) {
-          await this.setCapabilityOptions('measure_range', { units: 'mi' });
-          await this.setCapabilityOptions('measure_odometer', { units: 'mi' });
-        }
-        if (this.usesPsi) {
-          for (const pos of ['fl', 'fr', 'rl', 'rr']) {
-            await this.setCapabilityOptions(`measure_tire_pressure_${pos}`, { units: 'psi' });
-          }
+        const needsDefaults = !this.getSetting('unit_distance');
+        if (needsDefaults) {
+          const settingsFromTesla: Record<string, string> = {
+            unit_distance: gs.gui_distance_units === 'km/hr' ? 'km' : 'mi',
+            unit_pressure: gs.gui_tirepressure_units === 'Psi' ? 'psi' : 'bar',
+            unit_temperature: gs.gui_temperature_units === 'F' ? 'F' : 'C',
+            unit_speed: gs.gui_distance_units === 'km/hr' ? 'kmh' : 'mph',
+            currency: 'USD',
+          };
+          await this.setSettings(settingsFromTesla);
         }
       }
+
+      // Apply unit settings to capability options and instance state
+      await this.applyUnitSettings();
 
       // Map vehicle status
       if (statusResponse?.status) {
@@ -261,6 +283,156 @@ class VehicleDevice extends Homey.Device {
       }
       await this.updateChargingHistory();
     }, BATTERY_HEALTH_INTERVAL_MS);
+
+    // --- Flow card registrations ---
+
+    // Action card run listeners
+    // Capability-based toggle actions: delegate to setCapabilityValue which triggers existing listeners
+    this.homey.flow.getActionCard('lock').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('locked', true);
+    });
+    this.homey.flow.getActionCard('unlock').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('locked', false);
+    });
+    this.homey.flow.getActionCard('enable_sentry').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('sentry_mode', true);
+    });
+    this.homey.flow.getActionCard('disable_sentry').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('sentry_mode', false);
+    });
+    this.homey.flow.getActionCard('start_climate').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('climate_onoff', true);
+    });
+    this.homey.flow.getActionCard('stop_climate').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('climate_onoff', false);
+    });
+    this.homey.flow.getActionCard('open_charge_port').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('charge_port', true);
+    });
+    this.homey.flow.getActionCard('close_charge_port').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('charge_port', false);
+    });
+    this.homey.flow.getActionCard('start_charging').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('charging_control', true);
+    });
+    this.homey.flow.getActionCard('stop_charging').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('charging_control', false);
+    });
+    this.homey.flow.getActionCard('activate_trunk').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('trunk', true);
+    });
+    this.homey.flow.getActionCard('activate_frunk').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('frunk', true);
+    });
+    this.homey.flow.getActionCard('enable_steering_wheel_heater').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('steering_wheel_heater', true);
+    });
+    this.homey.flow.getActionCard('disable_steering_wheel_heater').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('steering_wheel_heater', false);
+    });
+    this.homey.flow.getActionCard('enable_defrost').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('defrost_mode', true);
+    });
+    this.homey.flow.getActionCard('disable_defrost').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('defrost_mode', false);
+    });
+    this.homey.flow.getActionCard('close_windows').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('windows', true);
+    });
+    this.homey.flow.getActionCard('vent_windows').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('windows', false);
+    });
+    this.homey.flow.getActionCard('enable_valet_mode').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('valet_mode', true);
+    });
+    this.homey.flow.getActionCard('disable_valet_mode').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('valet_mode', false);
+    });
+    this.homey.flow.getActionCard('enable_speed_limit').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('speed_limit_mode', true);
+    });
+    this.homey.flow.getActionCard('disable_speed_limit').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('speed_limit_mode', false);
+    });
+
+    // Non-capability actions (custom commands)
+    this.homey.flow.getActionCard('wake').registerRunListener(async (args: any) => {
+      await (args.device as VehicleDevice).client.wake((args.device as VehicleDevice).getData().id);
+    });
+    this.homey.flow.getActionCard('honk').registerRunListener(async (args: any) => {
+      await (args.device as VehicleDevice).executeCommand('honk');
+    });
+    this.homey.flow.getActionCard('flash_lights').registerRunListener(async (args: any) => {
+      await (args.device as VehicleDevice).executeCommand('flash_lights');
+    });
+    this.homey.flow.getActionCard('trigger_homelink').registerRunListener(async (args: any) => {
+      await (args.device as VehicleDevice).executeCommand('trigger_homelink');
+    });
+
+    // Actions with args
+    this.homey.flow.getActionCard('set_temperature').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('target_temperature', args.temperature);
+    });
+    this.homey.flow.getActionCard('set_charge_limit').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('charge_limit', args.percent / 100);
+    });
+    this.homey.flow.getActionCard('set_charging_amps').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('charging_amps', args.amps);
+    });
+    this.homey.flow.getActionCard('set_climate_keeper_mode').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('climate_keeper_mode', args.mode);
+    });
+    this.homey.flow.getActionCard('set_cabin_overheat_protection').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('cabin_overheat_protection', args.mode);
+    });
+    this.homey.flow.getActionCard('set_speed_limit').registerRunListener(async (args: any) => {
+      await args.device.setCapabilityValue('speed_limit_speed', args.speed);
+    });
+    this.homey.flow.getActionCard('set_seat_heater').registerRunListener(async (args: any) => {
+      const seatCapMap: Record<string, string> = {
+        driver: 'seat_heater_driver',
+        passenger: 'seat_heater_passenger',
+        rear_left: 'seat_heater_rear_left',
+        rear_center: 'seat_heater_rear_center',
+        rear_right: 'seat_heater_rear_right',
+      };
+      const capId = seatCapMap[args.seat];
+      if (!capId) throw new Error(`Unknown seat: ${args.seat}`);
+      const seatNum = SEAT_MAP[capId];
+      const device = args.device as VehicleDevice;
+      await device.executeCommand('set_seat_heating', { seat: seatNum, level: Number(args.level) });
+    });
+
+    // Trigger card registrations
+    this._chargingStartedTrigger = this.homey.flow.getDeviceTriggerCard('charging_started');
+    this._chargingStoppedTrigger = this.homey.flow.getDeviceTriggerCard('charging_stopped');
+    this._vehicleLockedTrigger = this.homey.flow.getDeviceTriggerCard('vehicle_locked');
+    this._vehicleUnlockedTrigger = this.homey.flow.getDeviceTriggerCard('vehicle_unlocked');
+    this._sentryEnabledTrigger = this.homey.flow.getDeviceTriggerCard('sentry_enabled');
+    this._sentryDisabledTrigger = this.homey.flow.getDeviceTriggerCard('sentry_disabled');
+    this._climateStartedTrigger = this.homey.flow.getDeviceTriggerCard('climate_started');
+    this._climateStoppedTrigger = this.homey.flow.getDeviceTriggerCard('climate_stopped');
+
+    // Condition card run listeners
+    this.homey.flow.getConditionCard('is_locked').registerRunListener(async (args: any) => {
+      return args.device.getCapabilityValue('locked') === true;
+    });
+    this.homey.flow.getConditionCard('is_charging').registerRunListener(async (args: any) => {
+      return args.device.getCapabilityValue('charging_control') === true;
+    });
+    this.homey.flow.getConditionCard('is_climate_on').registerRunListener(async (args: any) => {
+      return args.device.getCapabilityValue('climate_onoff') === true;
+    });
+    this.homey.flow.getConditionCard('is_sentry_on').registerRunListener(async (args: any) => {
+      return args.device.getCapabilityValue('sentry_mode') === true;
+    });
+    this.homey.flow.getConditionCard('charge_port_open').registerRunListener(async (args: any) => {
+      return args.device.getCapabilityValue('charge_port') === true;
+    });
+    this.homey.flow.getConditionCard('is_home').registerRunListener(async (_args: any) => {
+      this.log('is_home condition: placeholder, always returns false');
+      return false;
+    });
 
     this.log('Vehicle device initialized:', vin);
   }
@@ -437,9 +609,18 @@ class VehicleDevice extends Homey.Device {
       }
     }
 
-    // Locked state
+    // Locked state (with trigger detection)
     if (state.vehicle_state?.locked != null) {
-      await this.setCapabilityValue('locked', state.vehicle_state.locked);
+      const prevLocked = this.getCapabilityValue('locked');
+      const newLocked = state.vehicle_state.locked;
+      await this.setCapabilityValue('locked', newLocked);
+      if (prevLocked != null && prevLocked !== newLocked) {
+        if (newLocked) {
+          this._vehicleLockedTrigger?.trigger(this, {}, {}).catch(this.error);
+        } else {
+          this._vehicleUnlockedTrigger?.trigger(this, {}, {}).catch(this.error);
+        }
+      }
     }
 
     // Charge limit
@@ -462,24 +643,55 @@ class VehicleDevice extends Homey.Device {
       await this.setCapabilityValue('charge_port', state.charge_state.charge_port_door_open);
     }
 
-    // Charging control (Charging = true, else false)
+    // Charging control (Charging = true, else false) (with trigger detection)
     if (state.charge_state?.charging_state != null) {
-      await this.setCapabilityValue('charging_control', state.charge_state.charging_state === 'Charging');
+      const prevCharging = this.getCapabilityValue('charging_control');
+      const newCharging = state.charge_state.charging_state === 'Charging';
+      await this.setCapabilityValue('charging_control', newCharging);
+      if (prevCharging != null && prevCharging !== newCharging) {
+        if (newCharging) {
+          this._chargingStartedTrigger?.trigger(this, {}, {}).catch(this.error);
+        } else {
+          this._chargingStoppedTrigger?.trigger(this, {}, {}).catch(this.error);
+        }
+      }
     }
 
-    // Climate on/off
+    // Climate on/off (with trigger detection)
     if (state.climate_state?.is_climate_on != null) {
-      await this.setCapabilityValue('climate_onoff', state.climate_state.is_climate_on);
+      const prevClimate = this.getCapabilityValue('climate_onoff');
+      const newClimate = state.climate_state.is_climate_on;
+      await this.setCapabilityValue('climate_onoff', newClimate);
+      if (prevClimate != null && prevClimate !== newClimate) {
+        if (newClimate) {
+          this._climateStartedTrigger?.trigger(this, {}, {}).catch(this.error);
+        } else {
+          this._climateStoppedTrigger?.trigger(this, {}, {}).catch(this.error);
+        }
+      }
     }
 
-    // Target temperature
+    // Target temperature (API returns °C; convert to °F if needed)
     if (state.climate_state?.driver_temp_setting != null) {
-      await this.setCapabilityValue('target_temperature', state.climate_state.driver_temp_setting);
+      const tempC = state.climate_state.driver_temp_setting;
+      const temp = this.getSetting('unit_temperature') === 'F'
+        ? Math.round((tempC * 9 / 5 + 32) * 10) / 10
+        : tempC;
+      await this.setCapabilityValue('target_temperature', temp);
     }
 
-    // Sentry mode
+    // Sentry mode (with trigger detection)
     if (state.vehicle_state?.sentry_mode != null) {
-      await this.setCapabilityValue('sentry_mode', state.vehicle_state.sentry_mode);
+      const prevSentry = this.getCapabilityValue('sentry_mode');
+      const newSentry = state.vehicle_state.sentry_mode;
+      await this.setCapabilityValue('sentry_mode', newSentry);
+      if (prevSentry != null && prevSentry !== newSentry) {
+        if (newSentry) {
+          this._sentryEnabledTrigger?.trigger(this, {}, {}).catch(this.error);
+        } else {
+          this._sentryDisabledTrigger?.trigger(this, {}, {}).catch(this.error);
+        }
+      }
     }
 
     // Trunk (rt: 0=closed, non-zero=open)
@@ -536,9 +748,13 @@ class VehicleDevice extends Homey.Device {
         await this.setCapabilityValue('speed_limit_mode', vs.speed_limit_mode.active);
       }
 
-      // Speed limit speed
+      // Speed limit speed (API returns mph; convert to km/h if needed)
       if (vs.speed_limit_mode?.current_limit_mph != null) {
-        await this.setCapabilityValue('speed_limit_speed', vs.speed_limit_mode.current_limit_mph);
+        const mph = vs.speed_limit_mode.current_limit_mph;
+        const speed = this.getSetting('unit_speed') === 'kmh'
+          ? Math.round(mph / KMH_TO_MPH)
+          : mph;
+        await this.setCapabilityValue('speed_limit_speed', speed);
       }
     }
   }
@@ -564,12 +780,71 @@ class VehicleDevice extends Homey.Device {
         }
         const cost = last.total_cost ?? last.cost;
         if (cost != null) {
-          const currency = last.currency || '$';
-          await this.setCapabilityValue('last_charge_cost', `${currency}${Number(cost).toFixed(2)}`);
+          await this.setCapabilityValue('last_charge_cost', Math.round(Number(cost) * 100) / 100);
         }
       }
     } catch (err: any) {
       this.error('Failed to fetch charging history:', err.message);
+    }
+  }
+
+  async applyUnitSettings(): Promise<void> {
+    const distUnit = this.getSetting('unit_distance') || 'km';
+    const pressUnit = this.getSetting('unit_pressure') || 'bar';
+    const tempUnit = this.getSetting('unit_temperature') || 'C';
+    const speedUnit = this.getSetting('unit_speed') || 'kmh';
+    const currencyCode = this.getSetting('currency') || 'USD';
+
+    this.isMetric = distUnit === 'km';
+    this.usesPsi = pressUnit === 'psi';
+
+    // Distance capabilities
+    await this.setCapabilityOptions('measure_range', { units: distUnit });
+    await this.setCapabilityOptions('measure_odometer', { units: distUnit });
+
+    // Tire pressure
+    for (const pos of ['fl', 'fr', 'rl', 'rr']) {
+      await this.setCapabilityOptions(`measure_tire_pressure_${pos}`, { units: pressUnit });
+    }
+
+    // Temperature
+    if (tempUnit === 'F') {
+      await this.setCapabilityOptions('target_temperature', { units: '°F', min: 59, max: 82, step: 1 });
+    } else {
+      await this.setCapabilityOptions('target_temperature', { units: '°C', min: 15, max: 28, step: 0.5 });
+    }
+
+    // Speed limit
+    if (speedUnit === 'kmh') {
+      await this.setCapabilityOptions('speed_limit_speed', { units: 'km/h', min: 80, max: 145 });
+    } else {
+      await this.setCapabilityOptions('speed_limit_speed', { units: 'mph', min: 50, max: 90 });
+    }
+
+    // Charging cost currency
+    const symbol = CURRENCY_SYMBOLS[currencyCode] || currencyCode;
+    await this.setCapabilityOptions('last_charge_cost', { units: symbol });
+
+    // Energy (static)
+    await this.setCapabilityOptions('last_charge_energy', { units: 'kWh' });
+  }
+
+  async onSettings({ oldSettings, newSettings, changedKeys }: {
+    oldSettings: Record<string, any>;
+    newSettings: Record<string, any>;
+    changedKeys: string[];
+  }): Promise<string | void> {
+    await this.applyUnitSettings();
+
+    // If any unit affecting displayed values changed, refresh to reconvert
+    const unitKeys = ['unit_distance', 'unit_pressure', 'unit_speed', 'unit_temperature', 'currency'];
+    if (changedKeys.some((k) => unitKeys.includes(k))) {
+      try {
+        await this.refreshState();
+        await this.updateChargingHistory();
+      } catch (err: any) {
+        this.error('Failed to refresh after settings change:', err.message);
+      }
     }
   }
 

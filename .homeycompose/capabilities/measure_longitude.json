@@ -1,0 +1,13 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Longitude"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "min": -180,
+  "max": 180,
+  "step": 0.000001,
+  "decimals": 6
+}

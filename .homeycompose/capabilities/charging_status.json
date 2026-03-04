@@ -1,0 +1,41 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Charging"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "values": [
+    {
+      "id": "Disconnected",
+      "title": {
+        "en": "Disconnected"
+      }
+    },
+    {
+      "id": "Charging",
+      "title": {
+        "en": "Charging"
+      }
+    },
+    {
+      "id": "Stopped",
+      "title": {
+        "en": "Stopped"
+      }
+    },
+    {
+      "id": "Complete",
+      "title": {
+        "en": "Complete"
+      }
+    },
+    {
+      "id": "NoPower",
+      "title": {
+        "en": "No Power"
+      }
+    }
+  ]
+}

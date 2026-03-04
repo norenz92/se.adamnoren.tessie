@@ -7,12 +7,36 @@
   "connectivity": ["cloud"],
   "capabilities": [
     "measure_battery",
-    "locked"
+    "locked",
+    "measure_temperature.inside",
+    "measure_temperature.outside",
+    "measure_range",
+    "charging_status",
+    "measure_tire_pressure_fl",
+    "measure_tire_pressure_fr",
+    "measure_tire_pressure_rl",
+    "measure_tire_pressure_rr",
+    "measure_odometer",
+    "vehicle_state_status",
+    "measure_latitude",
+    "measure_longitude",
+    "software_update",
+    "measure_battery_health"
   ],
   "capabilitiesOptions": {
     "measure_battery": {
       "title": {
         "en": "Battery"
+      }
+    },
+    "measure_temperature.inside": {
+      "title": {
+        "en": "Inside"
+      }
+    },
+    "measure_temperature.outside": {
+      "title": {
+        "en": "Outside"
       }
     }
   },

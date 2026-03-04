@@ -1,0 +1,35 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Climate Keeper"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "values": [
+    {
+      "id": "Off",
+      "title": {
+        "en": "Off"
+      }
+    },
+    {
+      "id": "Keep",
+      "title": {
+        "en": "Keep"
+      }
+    },
+    {
+      "id": "Dog",
+      "title": {
+        "en": "Dog"
+      }
+    },
+    {
+      "id": "Camp",
+      "title": {
+        "en": "Camp"
+      }
+    }
+  ]
+}

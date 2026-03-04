@@ -1,0 +1,9 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Steering Wheel Heater"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle"
+}

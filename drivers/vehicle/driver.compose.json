@@ -30,7 +30,16 @@
     "charge_port",
     "trunk",
     "frunk",
-    "charging_control"
+    "charging_control",
+    "seat_heater_driver",
+    "seat_heater_passenger",
+    "seat_heater_rear_left",
+    "seat_heater_rear_center",
+    "seat_heater_rear_right",
+    "climate_keeper_mode",
+    "cabin_overheat_protection",
+    "defrost_mode",
+    "steering_wheel_heater"
   ],
   "capabilitiesOptions": {
     "measure_battery": {

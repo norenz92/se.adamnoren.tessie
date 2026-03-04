@@ -1,0 +1,29 @@
+{
+  "type": "enum",
+  "title": {
+    "en": "Cabin Overheat Protection"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "picker",
+  "values": [
+    {
+      "id": "Off",
+      "title": {
+        "en": "Off"
+      }
+    },
+    {
+      "id": "FanOnly",
+      "title": {
+        "en": "Fan Only"
+      }
+    },
+    {
+      "id": "AC",
+      "title": {
+        "en": "AC"
+      }
+    }
+  ]
+}

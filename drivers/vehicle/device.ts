@@ -28,6 +28,8 @@ const ALL_CAPABILITIES = [
   'seat_heater_rear_left', 'seat_heater_rear_center', 'seat_heater_rear_right',
   'climate_keeper_mode', 'cabin_overheat_protection',
   'defrost_mode', 'steering_wheel_heater',
+  'windows', 'valet_mode', 'speed_limit_mode', 'speed_limit_speed',
+  'last_charge_energy', 'last_charge_location', 'last_charge_cost',
 ];
 
 const SEAT_MAP: Record<string, number> = {
@@ -134,6 +136,30 @@ class VehicleDevice extends Homey.Device {
       await this.executeCommand('set_cabin_overheat_protection', COP_TO_API[value]);
     });
 
+    // Windows (true=closed, false=vented)
+    this.registerCapabilityListener('windows', async (value: boolean) => {
+      await this.executeCommand(value ? 'close_windows' : 'vent_windows');
+    });
+
+    // Valet mode
+    this.registerCapabilityListener('valet_mode', async (value: boolean) => {
+      await this.executeCommand(value ? 'enable_valet' : 'disable_valet');
+    });
+
+    // Speed limit mode (requires PIN)
+    this.registerCapabilityListener('speed_limit_mode', async (value: boolean) => {
+      const pin = this.getSetting('speed_limit_pin');
+      if (!pin) {
+        throw new Error('Speed limit PIN not configured. Set it in device settings.');
+      }
+      await this.executeCommand(value ? 'enable_speed_limit' : 'disable_speed_limit', { pin });
+    });
+
+    // Speed limit speed
+    this.registerCapabilityListener('speed_limit_speed', async (value: number) => {
+      await this.executeCommand('set_speed_limit', { limit_mph: value });
+    });
+
     // Migrate capabilities for already-paired devices
     for (const cap of ALL_CAPABILITIES) {
       if (!this.hasCapability(cap)) {
@@ -183,6 +209,9 @@ class VehicleDevice extends Homey.Device {
 
       // Update battery health
       await this.updateBatteryHealth(healthData);
+
+      // Fetch charging history
+      await this.updateChargingHistory();
     } catch (err: any) {
       this.error('Failed initial data fetch:', err.message);
     }
@@ -230,6 +259,7 @@ class VehicleDevice extends Homey.Device {
       } catch (err: any) {
         this.error('Failed to fetch battery health:', err.message);
       }
+      await this.updateChargingHistory();
     }, BATTERY_HEALTH_INTERVAL_MS);
 
     this.log('Vehicle device initialized:', vin);
@@ -486,11 +516,60 @@ class VehicleDevice extends Homey.Device {
       const mapped = COP_FROM_STATE[state.climate_state.cabin_overheat_protection] || 'Off';
       await this.setCapabilityValue('cabin_overheat_protection', mapped);
     }
+
+    // Windows (aggregate 4 window fields: all 0 = closed/true, any non-zero = vented/false)
+    const vs = state.vehicle_state;
+    if (vs) {
+      const windowFields = [vs.fd_window, vs.fp_window, vs.rd_window, vs.rp_window];
+      if (windowFields.some((w: any) => w != null)) {
+        const allClosed = windowFields.every((w: any) => w === 0);
+        await this.setCapabilityValue('windows', allClosed);
+      }
+
+      // Valet mode
+      if (vs.valet_mode != null) {
+        await this.setCapabilityValue('valet_mode', vs.valet_mode);
+      }
+
+      // Speed limit mode
+      if (vs.speed_limit_mode?.active != null) {
+        await this.setCapabilityValue('speed_limit_mode', vs.speed_limit_mode.active);
+      }
+
+      // Speed limit speed
+      if (vs.speed_limit_mode?.current_limit_mph != null) {
+        await this.setCapabilityValue('speed_limit_speed', vs.speed_limit_mode.current_limit_mph);
+      }
+    }
   }
 
   async updateBatteryHealth(healthData: any): Promise<void> {
     if (healthData?.health_percent != null) {
       await this.setCapabilityValue('measure_battery_health', healthData.health_percent);
+    }
+  }
+
+  async updateChargingHistory(): Promise<void> {
+    const vin = this.getData().id;
+    try {
+      const charges = await this.client.getCharges(vin);
+      if (charges.length > 0) {
+        const last = charges[0];
+        const energy = last.charge_energy_added ?? last.energy_added ?? last.energy_used;
+        if (energy != null) {
+          await this.setCapabilityValue('last_charge_energy', Math.round(energy * 10) / 10);
+        }
+        if (last.location) {
+          await this.setCapabilityValue('last_charge_location', String(last.location));
+        }
+        const cost = last.total_cost ?? last.cost;
+        if (cost != null) {
+          const currency = last.currency || '$';
+          await this.setCapabilityValue('last_charge_cost', `${currency}${Number(cost).toFixed(2)}`);
+        }
+      }
+    } catch (err: any) {
+      this.error('Failed to fetch charging history:', err.message);
     }
   }
 

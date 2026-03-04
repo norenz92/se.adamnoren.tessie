@@ -93,6 +93,9 @@ Recent decisions affecting current work:
 - [Phase 05]: Window state aggregates 4 individual window fields into single boolean (all closed = true)
 - [Phase 05]: Speed limit PIN stored in driver settings as password type, validated before command dispatch
 - [Phase 05]: Charging history piggybacked on existing hourly batteryHealthTimer for efficiency
+- [Phase quick-2]: Capability-based flow actions delegate to setCapabilityValue to reuse existing capability listeners
+- [Phase quick-2]: Trigger cards fire only on actual state changes (previous != new) to prevent false triggers on init
+- [Phase quick-2]: is_home condition registered as placeholder (always returns false) for future enhancement
 
 ### Pending Todos
 
@@ -108,9 +111,10 @@ None yet.
 | # | Description | Date | Commit | Directory |
 |---|-------------|------|--------|-----------|
 | 1 | Project should be typescript | 2026-03-03 | 73a40ba | [1-project-should-be-typescript](./quick/1-project-should-be-typescript/) |
+| 2 | Add missing flow action/trigger/condition cards | 2026-03-04 | 9ab976f | [2-there-is-alot-of-action-cards-missing](./quick/2-there-is-alot-of-action-cards-missing/) |
 
 ## Session Continuity
 
-Last session: 2026-03-04T15:42:03Z
-Stopped at: Completed 05-02-PLAN.md
-Resume file: .planning/phases/05-extended-controls/05-02-SUMMARY.md
+Last session: 2026-03-04T17:46:55Z
+Stopped at: Completed quick-2 (Add Missing Flow Cards)
+Resume file: .planning/quick/2-there-is-alot-of-action-cards-missing/2-SUMMARY.md

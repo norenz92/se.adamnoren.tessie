@@ -56,7 +56,7 @@ Requirements for initial release. Each maps to roadmap phases.
 
 ### Real-time Streaming
 
-- [ ] **STRM-01**: Vehicle data updates in near-real-time via WebSocket streaming from streaming.tessie.com/{VIN}
+- [x] **STRM-01**: Vehicle data updates in near-real-time via WebSocket streaming from streaming.tessie.com/{VIN}
 - [x] **STRM-02**: App falls back to periodic REST polling when WebSocket is disconnected
 - [x] **STRM-03**: Polling is sleep-aware (does not poll when vehicle is asleep or waiting for sleep)
 
@@ -144,7 +144,7 @@ Which phases cover which requirements. Updated during roadmap creation.
 | DATA-03 | Phase 2 | Complete |
 | DATA-04 | Phase 2 | Complete |
 | DATA-05 | Phase 2 | Complete |
-| STRM-01 | Phase 4 | Pending |
+| STRM-01 | Phase 4 | Complete |
 | STRM-02 | Phase 2 | Complete |
 | STRM-03 | Phase 2 | Complete |
 | FLOW-01 | Phase 6 | Pending |

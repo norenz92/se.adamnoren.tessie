@@ -8,5 +8,6 @@
   "uiComponent": "slider",
   "min": 50,
   "max": 145,
-  "step": 1
+  "step": 1,
+  "icon": "/assets/capabilities/speed_limit_speed.svg"
 }

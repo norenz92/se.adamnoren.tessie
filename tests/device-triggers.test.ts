@@ -328,3 +328,13 @@ describe('VehicleDevice resilience', () => {
     assert.equal(device._capabilities.measure_battery, 55);
   });
 });
+
+describe('VehicleDevice capability migration', () => {
+  it('removes the renamed measure_battery_health capability on init', async () => {
+    const device = createDevice();
+    device._store = { token: 't' };
+    await device.onInit();
+    assert.ok(device._removedCapabilities.includes('measure_battery_health'));
+    assert.equal(device.hasCapability('measure_soh'), true);
+  });
+});

@@ -9,5 +9,6 @@
   "min": 1,
   "max": 48,
   "step": 1,
-  "units": "A"
+  "units": "A",
+  "icon": "/assets/capabilities/charging_amps.svg"
 }

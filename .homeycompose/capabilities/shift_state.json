@@ -31,5 +31,6 @@
         "en": "Neutral"
       }
     }
-  ]
+  ],
+  "icon": "/assets/capabilities/shift_state.svg"
 }

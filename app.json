@@ -2195,7 +2195,7 @@
         "measure_latitude",
         "measure_longitude",
         "software_update",
-        "measure_battery_health",
+        "measure_soh",
         "charge_limit",
         "charging_amps",
         "target_temperature",
@@ -2514,7 +2514,8 @@
             "en": "AC"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/cabin_overheat_protection.svg"
     },
     "charge_limit": {
       "type": "number",
@@ -2527,7 +2528,8 @@
       "min": 0.5,
       "max": 1,
       "step": 0.01,
-      "units": "%"
+      "units": "%",
+      "icon": "/assets/capabilities/charge_limit.svg"
     },
     "charge_port": {
       "type": "boolean",
@@ -2536,7 +2538,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/charge_port.svg"
     },
     "charge_time_remaining": {
       "type": "number",
@@ -2550,7 +2553,8 @@
         "en": "min"
       },
       "min": 0,
-      "decimals": 0
+      "decimals": 0,
+      "icon": "/assets/capabilities/charge_time_remaining.svg"
     },
     "charger_power": {
       "type": "number",
@@ -2565,7 +2569,8 @@
       },
       "min": 0,
       "max": 400,
-      "decimals": 1
+      "decimals": 1,
+      "icon": "/assets/capabilities/charger_power.svg"
     },
     "charging_amps": {
       "type": "number",
@@ -2578,7 +2583,8 @@
       "min": 1,
       "max": 48,
       "step": 1,
-      "units": "A"
+      "units": "A",
+      "icon": "/assets/capabilities/charging_amps.svg"
     },
     "charging_control": {
       "type": "boolean",
@@ -2587,7 +2593,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/charging_control.svg"
     },
     "charging_status": {
       "type": "enum",
@@ -2634,7 +2641,8 @@
             "en": "No Power"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/charging_status.svg"
     },
     "climate_keeper_mode": {
       "type": "enum",
@@ -2669,7 +2677,8 @@
             "en": "Camp"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/climate_keeper_mode.svg"
     },
     "climate_onoff": {
       "type": "boolean",
@@ -2678,7 +2687,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/climate_onoff.svg"
     },
     "defrost_mode": {
       "type": "boolean",
@@ -2687,7 +2697,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/defrost_mode.svg"
     },
     "frunk": {
       "type": "boolean",
@@ -2696,7 +2707,8 @@
       },
       "getable": false,
       "setable": true,
-      "uiComponent": "button"
+      "uiComponent": "button",
+      "icon": "/assets/capabilities/frunk.svg"
     },
     "last_charge_cost": {
       "type": "number",
@@ -2706,7 +2718,8 @@
       "getable": true,
       "setable": false,
       "uiComponent": "sensor",
-      "decimals": 2
+      "decimals": 2,
+      "icon": "/assets/capabilities/last_charge_cost.svg"
     },
     "last_charge_energy": {
       "type": "number",
@@ -2719,7 +2732,8 @@
       "units": {
         "en": "kWh"
       },
-      "decimals": 1
+      "decimals": 1,
+      "icon": "/assets/capabilities/last_charge_energy.svg"
     },
     "last_charge_location": {
       "type": "string",
@@ -2728,23 +2742,8 @@
       },
       "getable": true,
       "setable": false,
-      "uiComponent": "sensor"
-    },
-    "measure_battery_health": {
-      "type": "number",
-      "title": {
-        "en": "Battery Health"
-      },
-      "getable": true,
-      "setable": false,
       "uiComponent": "sensor",
-      "units": {
-        "en": "%"
-      },
-      "min": 0,
-      "max": 100,
-      "step": 0.1,
-      "decimals": 1
+      "icon": "/assets/capabilities/last_charge_location.svg"
     },
     "measure_latitude": {
       "type": "number",
@@ -2757,7 +2756,8 @@
       "min": -90,
       "max": 90,
       "step": 0.000001,
-      "decimals": 6
+      "decimals": 6,
+      "icon": "/assets/capabilities/measure_latitude.svg"
     },
     "measure_longitude": {
       "type": "number",
@@ -2770,7 +2770,8 @@
       "min": -180,
       "max": 180,
       "step": 0.000001,
-      "decimals": 6
+      "decimals": 6,
+      "icon": "/assets/capabilities/measure_longitude.svg"
     },
     "measure_odometer": {
       "type": "number",
@@ -2786,7 +2787,8 @@
       "min": 0,
       "max": 999999,
       "step": 1,
-      "decimals": 0
+      "decimals": 0,
+      "icon": "/assets/capabilities/measure_odometer.svg"
     },
     "measure_range": {
       "type": "number",
@@ -2802,7 +2804,25 @@
       "min": 0,
       "max": 1000,
       "step": 1,
-      "decimals": 0
+      "decimals": 0,
+      "icon": "/assets/capabilities/measure_range.svg"
+    },
+    "measure_soh": {
+      "type": "number",
+      "title": {
+        "en": "Battery Health"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "%"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "decimals": 1,
+      "icon": "/assets/capabilities/measure_soh.svg"
     },
     "measure_tire_pressure_fl": {
       "type": "number",
@@ -2818,7 +2838,8 @@
       "min": 0,
       "max": 5,
       "step": 0.1,
-      "decimals": 1
+      "decimals": 1,
+      "icon": "/assets/capabilities/tire_fl.svg"
     },
     "measure_tire_pressure_fr": {
       "type": "number",
@@ -2834,7 +2855,8 @@
       "min": 0,
       "max": 5,
       "step": 0.1,
-      "decimals": 1
+      "decimals": 1,
+      "icon": "/assets/capabilities/tire_fr.svg"
     },
     "measure_tire_pressure_rl": {
       "type": "number",
@@ -2850,7 +2872,8 @@
       "min": 0,
       "max": 5,
       "step": 0.1,
-      "decimals": 1
+      "decimals": 1,
+      "icon": "/assets/capabilities/tire_rl.svg"
     },
     "measure_tire_pressure_rr": {
       "type": "number",
@@ -2866,7 +2889,8 @@
       "min": 0,
       "max": 5,
       "step": 0.1,
-      "decimals": 1
+      "decimals": 1,
+      "icon": "/assets/capabilities/tire_rr.svg"
     },
     "seat_heater_driver": {
       "type": "enum",
@@ -2901,7 +2925,8 @@
             "en": "High"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/seat_heater.svg"
     },
     "seat_heater_passenger": {
       "type": "enum",
@@ -2936,7 +2961,8 @@
             "en": "High"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/seat_heater.svg"
     },
     "seat_heater_rear_center": {
       "type": "enum",
@@ -2971,7 +2997,8 @@
             "en": "High"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/seat_heater.svg"
     },
     "seat_heater_rear_left": {
       "type": "enum",
@@ -3006,7 +3033,8 @@
             "en": "High"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/seat_heater.svg"
     },
     "seat_heater_rear_right": {
       "type": "enum",
@@ -3041,7 +3069,8 @@
             "en": "High"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/seat_heater.svg"
     },
     "sentry_mode": {
       "type": "boolean",
@@ -3050,7 +3079,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/sentry_mode.svg"
     },
     "shift_state": {
       "type": "enum",
@@ -3085,7 +3115,8 @@
             "en": "Neutral"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/shift_state.svg"
     },
     "software_update": {
       "type": "string",
@@ -3094,7 +3125,8 @@
       },
       "getable": true,
       "setable": false,
-      "uiComponent": "sensor"
+      "uiComponent": "sensor",
+      "icon": "/assets/capabilities/software_update.svg"
     },
     "speed_limit_mode": {
       "type": "boolean",
@@ -3103,7 +3135,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/speed_limit_mode.svg"
     },
     "speed_limit_speed": {
       "type": "number",
@@ -3115,7 +3148,8 @@
       "uiComponent": "slider",
       "min": 50,
       "max": 145,
-      "step": 1
+      "step": 1,
+      "icon": "/assets/capabilities/speed_limit_speed.svg"
     },
     "steering_wheel_heater": {
       "type": "boolean",
@@ -3124,7 +3158,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/steering_wheel_heater.svg"
     },
     "target_temperature": {
       "type": "number",
@@ -3137,7 +3172,8 @@
       "min": 15,
       "max": 28,
       "step": 0.5,
-      "units": "°C"
+      "units": "°C",
+      "icon": "/assets/capabilities/target_temperature.svg"
     },
     "trunk": {
       "type": "boolean",
@@ -3146,7 +3182,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/trunk.svg"
     },
     "valet_mode": {
       "type": "boolean",
@@ -3155,7 +3192,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/valet_mode.svg"
     },
     "vehicle_state_status": {
       "type": "enum",
@@ -3184,7 +3222,8 @@
             "en": "Offline"
           }
         }
-      ]
+      ],
+      "icon": "/assets/capabilities/vehicle_state_status.svg"
     },
     "windows": {
       "type": "boolean",
@@ -3193,7 +3232,8 @@
       },
       "getable": true,
       "setable": true,
-      "uiComponent": "toggle"
+      "uiComponent": "toggle",
+      "icon": "/assets/capabilities/windows.svg"
     }
   }
 }

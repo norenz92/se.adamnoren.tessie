@@ -31,5 +31,6 @@
         "en": "High"
       }
     }
-  ]
+  ],
+  "icon": "/assets/capabilities/seat_heater.svg"
 }

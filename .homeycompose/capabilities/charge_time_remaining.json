@@ -10,5 +10,6 @@
     "en": "min"
   },
   "min": 0,
-  "decimals": 0
+  "decimals": 0,
+  "icon": "/assets/capabilities/charge_time_remaining.svg"
 }

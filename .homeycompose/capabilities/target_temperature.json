@@ -9,5 +9,6 @@
   "min": 15,
   "max": 28,
   "step": 0.5,
-  "units": "\u00b0C"
+  "units": "°C",
+  "icon": "/assets/capabilities/target_temperature.svg"
 }

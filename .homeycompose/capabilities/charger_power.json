@@ -11,5 +11,6 @@
   },
   "min": 0,
   "max": 400,
-  "decimals": 1
+  "decimals": 1,
+  "icon": "/assets/capabilities/charger_power.svg"
 }

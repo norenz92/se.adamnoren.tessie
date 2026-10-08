@@ -35,7 +35,7 @@ const ALL_CAPABILITIES = [
   'measure_tire_pressure_rl', 'measure_tire_pressure_rr',
   'measure_odometer', 'vehicle_state_status',
   'measure_latitude', 'measure_longitude',
-  'software_update', 'measure_battery_health',
+  'software_update', 'measure_soh',
   'charge_limit', 'charging_amps', 'target_temperature',
   'climate_onoff', 'sentry_mode', 'charge_port',
   'trunk', 'frunk', 'charging_control',
@@ -47,6 +47,10 @@ const ALL_CAPABILITIES = [
   'last_charge_energy', 'last_charge_location', 'last_charge_cost',
   'shift_state', 'charger_power', 'charge_time_remaining',
 ];
+
+// Renamed/retired capabilities to remove from already-paired devices.
+// measure_battery_health was renamed: its measure_battery prefix made Homey present it like the battery level.
+const LEGACY_CAPABILITIES = ['measure_battery_health'];
 
 // Seat heater capability -> logical seat (driver/passenger resolved against RHD at runtime)
 const SEAT_CAPABILITY_TO_SEAT: Record<string, string> = {
@@ -109,6 +113,11 @@ class VehicleDevice extends Homey.Device {
     this.client = new TessieClient(token);
 
     // Migrate capabilities for already-paired devices (must precede listener registration)
+    for (const cap of LEGACY_CAPABILITIES) {
+      if (this.hasCapability(cap)) {
+        await this.removeCapability(cap).catch((err: any) => this.error(`Failed to remove ${cap}:`, err.message));
+      }
+    }
     for (const cap of ALL_CAPABILITIES) {
       if (!this.hasCapability(cap)) {
         await this.addCapability(cap);
@@ -731,7 +740,7 @@ class VehicleDevice extends Homey.Device {
 
   async updateBatteryHealth(healthData: any): Promise<void> {
     if (healthData?.health_percent != null) {
-      await this.setCap('measure_battery_health', healthData.health_percent);
+      await this.setCap('measure_soh', healthData.health_percent);
     }
   }
 

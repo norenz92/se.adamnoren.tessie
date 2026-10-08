@@ -73,8 +73,10 @@ export class MockHomeyDevice {
   async setSettings(settings: Record<string, any>) { Object.assign(this._settings, settings); }
   getCapabilityValue(id: string) { return this._capabilities[id]; }
   async setCapabilityValue(id: string, value: any) { this._capabilities[id] = value; }
-  hasCapability(_id: string) { return true; }
-  async addCapability(_id: string) {}
+  _removedCapabilities: string[] = [];
+  hasCapability(id: string) { return !this._removedCapabilities.includes(id); }
+  async addCapability(id: string) { this._removedCapabilities = this._removedCapabilities.filter((c) => c !== id); }
+  async removeCapability(id: string) { this._removedCapabilities.push(id); }
   async setCapabilityOptions(id: string, opts: any) { this._capabilityOptions[id] = opts; }
   registerCapabilityListener(id: string, fn: Function) { this._capabilityListeners[id] = fn; }
   async triggerCapabilityListener(id: string, value: any) {

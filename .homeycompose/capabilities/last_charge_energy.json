@@ -9,5 +9,6 @@
   "units": {
     "en": "kWh"
   },
-  "decimals": 1
+  "decimals": 1,
+  "icon": "/assets/capabilities/last_charge_energy.svg"
 }

@@ -45,7 +45,7 @@ const mockHomeyModule = new Module('__mock_homey__');
       'measure_tire_pressure_rl', 'measure_tire_pressure_rr',
       'measure_odometer', 'vehicle_state_status',
       'measure_latitude', 'measure_longitude',
-      'software_update', 'measure_battery_health',
+      'software_update', 'measure_soh',
       'charge_limit', 'charging_amps', 'target_temperature',
       'climate_onoff', 'sentry_mode', 'charge_port',
       'trunk', 'frunk', 'charging_control',
@@ -85,6 +85,7 @@ const mockHomeyModule = new Module('__mock_homey__');
     getCapabilityValue(name: string) { return this._capabilities[name]; }
     hasCapability(name: string) { return this._declaredCapabilities.has(name); }
     async addCapability(name: string) { this._declaredCapabilities.add(name); }
+    async removeCapability(name: string) { this._declaredCapabilities.delete(name); }
     _settings: Record<string, any> = {};
     async setSettings(settings: Record<string, any>) { Object.assign(this._settings, settings); }
     async setCapabilityOptions(name: string, opts: any) { this._capabilityOptions[name] = opts; }
@@ -613,7 +614,7 @@ describe('VehicleDevice', () => {
       assert.ok(device.client, 'client created');
     });
 
-    it('battery health fetched on init and updates measure_battery_health', async () => {
+    it('battery health fetched on init and updates measure_soh', async () => {
       const device = createDevice();
       await device.onInit();
       // Default MockTessieClient.getBatteryHealth returns null, so no update
@@ -623,16 +624,16 @@ describe('VehicleDevice', () => {
   });
 
   describe('updateBatteryHealth', () => {
-    it('sets measure_battery_health when health_percent present', async () => {
+    it('sets measure_soh when health_percent present', async () => {
       const device = createDevice();
       await device.updateBatteryHealth({ health_percent: 94.5 });
-      assert.equal(device._capabilities['measure_battery_health'], 94.5);
+      assert.equal(device._capabilities['measure_soh'], 94.5);
     });
 
-    it('does not set measure_battery_health when healthData is null', async () => {
+    it('does not set measure_soh when healthData is null', async () => {
       const device = createDevice();
       await device.updateBatteryHealth(null);
-      assert.equal(device._capabilities['measure_battery_health'], undefined);
+      assert.equal(device._capabilities['measure_soh'], undefined);
     });
   });
 

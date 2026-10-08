@@ -1,6 +1,6 @@
 import { describe, it } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync, readdirSync } from "node:fs";
+import { existsSync, readFileSync, readdirSync } from "node:fs";
 import { join } from "node:path";
 
 // Use process.cwd() since tests run from project root but compiled output is in dist-test/
@@ -107,4 +107,15 @@ describe("package.json", () => {
       "package.json should have a test script",
     );
   });
+});
+
+describe("Capability icons", () => {
+  const capabilitiesDir = join(process.cwd(), ".homeycompose", "capabilities");
+  for (const file of readdirSync(capabilitiesDir).filter((f: string) => f.endsWith(".json"))) {
+    it(`${file} has an existing SVG icon`, () => {
+      const cap = JSON.parse(readFileSync(join(capabilitiesDir, file), "utf-8"));
+      assert.ok(typeof cap.icon === "string" && cap.icon.endsWith(".svg"), `${file} has no icon`);
+      assert.ok(existsSync(join(process.cwd(), cap.icon)), `${file} icon ${cap.icon} does not exist`);
+    });
+  }
 });

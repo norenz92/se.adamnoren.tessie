@@ -8,6 +8,7 @@
   "uiComponent": "sensor",
   "min": -180,
   "max": 180,
-  "step": 0.000001,
-  "decimals": 6
+  "step": 1e-06,
+  "decimals": 6,
+  "icon": "/assets/capabilities/measure_longitude.svg"
 }

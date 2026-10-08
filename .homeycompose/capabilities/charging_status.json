@@ -43,5 +43,6 @@
         "en": "No Power"
       }
     }
-  ]
+  ],
+  "icon": "/assets/capabilities/charging_status.svg"
 }

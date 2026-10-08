@@ -6,5 +6,6 @@
   "getable": true,
   "setable": false,
   "uiComponent": "sensor",
-  "decimals": 2
+  "decimals": 2,
+  "icon": "/assets/capabilities/last_charge_cost.svg"
 }

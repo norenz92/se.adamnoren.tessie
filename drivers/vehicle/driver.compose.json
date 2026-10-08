@@ -25,7 +25,7 @@
     "measure_latitude",
     "measure_longitude",
     "software_update",
-    "measure_battery_health",
+    "measure_soh",
     "charge_limit",
     "charging_amps",
     "target_temperature",

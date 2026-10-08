@@ -1,13 +1,13 @@
 {
   "id": "com.adamnoren.tessie",
   "author": "Adam Norén",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "compatibility": ">=12.9.0",
   "sdk": 3,
   "platforms": [
     "local"
   ],
-  "brandColor": "#4A90D9",
+  "brandColor": "#333333",
   "name": {
     "en": "Tessie"
   },

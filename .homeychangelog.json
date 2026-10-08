@@ -1,0 +1,5 @@
+{
+  "0.1.0": {
+    "en": "First release. Monitor and control your Tesla through Tessie: live battery, range, charging, climate, tyre pressure, location and software update status, with real-time streaming. Over 50 Flow actions, 21 triggers and 12 conditions, including a home geofence, completed-drive reports with the car's driver profile, whether a lock or unlock came from Homey or outside it, and optional Timeline posts."
+  }
+}

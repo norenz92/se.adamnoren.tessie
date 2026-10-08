@@ -30,7 +30,7 @@
     {
       "type": "device",
       "name": "device",
-      "filter": "driver_id=vehicle"
+      "filter": "driver_id=car"
     }
   ]
 }

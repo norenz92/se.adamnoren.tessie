@@ -9,7 +9,7 @@ const originalResolve = (Module as any)._resolveFilename;
 
 (Module as any)._resolveFilename = function (request: string, parent: any, isMain: boolean, options: any) {
   if (request === 'homey') return '__mock_homey_triggers__';
-  if (parent && parent.filename && parent.filename.includes('drivers/vehicle/device')) {
+  if (parent && parent.filename && parent.filename.includes('drivers/car/device')) {
     if (request === '../../lib/tessie-streamer') return '__mock_tessie_streamer_triggers__';
     if (request === '../../lib/tessie-client') return '__mock_tessie_client_triggers__';
   }
@@ -38,7 +38,7 @@ for (const [name, moduleExports] of [
   (require as any).cache[name] = mod;
 }
 
-const VehicleDevice = require('../drivers/vehicle/device');
+const VehicleDevice = require('../drivers/car/device');
 
 // ---- Helpers ----
 
@@ -329,13 +329,46 @@ describe('VehicleDevice resilience', () => {
   });
 });
 
-describe('VehicleDevice capability migration', () => {
-  it('removes the renamed measure_battery_health capability on init', async () => {
+describe('VehicleDevice migration from v1.x', () => {
+  it('drops capabilities that are no longer part of the driver', async () => {
     const device = createDevice();
     device._store = { token: 't' };
+    device._capabilityList = ['measure_battery_health', 'car_doors_locked', 'measure_battery'];
     await device.onInit();
-    assert.ok(device._removedCapabilities.includes('measure_battery_health'));
-    assert.equal(device.hasCapability('measure_soh'), true);
+    assert.deepEqual(device._removedCapabilities.sort(), ['car_doors_locked', 'measure_battery_health']);
+  });
+
+  it('moves the token from v1 device data to the store and seeds units from the car', async () => {
+    const device = createDevice();
+    device._data = { id: 'VIN_TRIGGERS', accessToken: 'v1-token' };
+    device._settings = { unit_distance: 'km' };
+    const OfflineClient = (require as any).cache['__mock_tessie_client_triggers__'].exports;
+    const origGetVehicle = OfflineClient.prototype.getVehicle;
+    OfflineClient.prototype.getVehicle = async () => ({ gui_settings: { gui_distance_units: 'mi/hr', gui_tirepressure_units: 'Psi', gui_temperature_units: 'F' } });
+    try {
+      await device.onInit();
+    } finally {
+      OfflineClient.prototype.getVehicle = origGetVehicle;
+    }
+    assert.equal(device._store.token, 'v1-token');
+    assert.equal(device.client.token, 'v1-token');
+    assert.equal(device._settings.unit_distance, 'mi');
+    assert.equal(device.isMetric, false);
+    assert.ok(device._unset.includes('seed_units'));
+  });
+
+  it('falls back to the v1 app-wide token setting', async () => {
+    const device = createDevice();
+    device._appSettings = { accessToken: 'app-token' };
+    await device.onInit();
+    assert.equal(device._store.token, 'app-token');
+  });
+
+  it('marks the device unavailable when no token can be found', async () => {
+    const device = createDevice();
+    await device.onInit();
+    assert.equal(device._available, false);
+    assert.equal(device.streamer, null);
   });
 });
 

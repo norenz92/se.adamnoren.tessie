@@ -34,7 +34,7 @@ key-files:
     - .homeycompose/capabilities/software_update.json
     - .homeycompose/capabilities/measure_battery_health.json
   modified:
-    - drivers/vehicle/driver.compose.json
+    - drivers/car/driver.compose.json
     - lib/tessie-client.ts
 
 key-decisions:
@@ -90,7 +90,7 @@ Each task was committed atomically:
 - `.homeycompose/capabilities/measure_longitude.json` - GPS longitude, -180 to 180, 6 decimals
 - `.homeycompose/capabilities/software_update.json` - Software version string
 - `.homeycompose/capabilities/measure_battery_health.json` - Battery health percentage, 0-100
-- `drivers/vehicle/driver.compose.json` - Updated with 16 capabilities and temperature sub-capability options
+- `drivers/car/driver.compose.json` - Updated with 16 capabilities and temperature sub-capability options
 - `lib/tessie-client.ts` - Added getBatteryHealth(vin) method
 
 ## Decisions Made

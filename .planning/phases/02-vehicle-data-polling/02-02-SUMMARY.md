@@ -27,7 +27,7 @@ tech-stack:
 key-files:
   created: []
   modified:
-    - drivers/vehicle/device.ts
+    - drivers/car/device.ts
     - tests/device.test.ts
 
 key-decisions:
@@ -77,7 +77,7 @@ Each task was committed atomically:
 2. **Task 1 GREEN: Implement VehicleDevice to pass all tests** - `8624421` (feat)
 
 ## Files Created/Modified
-- `drivers/vehicle/device.ts` - Full VehicleDevice with adaptive polling, capability mapping, retry logic, unit conversion (264 lines)
+- `drivers/car/device.ts` - Full VehicleDevice with adaptive polling, capability mapping, retry logic, unit conversion (264 lines)
 - `tests/device.test.ts` - Comprehensive test suite with 35 device tests across 7 test groups (688 lines)
 
 ## Decisions Made

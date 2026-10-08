@@ -30,10 +30,10 @@ key-files:
     - ".homeycompose/capabilities/last_charge_energy.json"
     - ".homeycompose/capabilities/last_charge_location.json"
     - ".homeycompose/capabilities/last_charge_cost.json"
-    - "drivers/vehicle/driver.settings.compose.json"
+    - "drivers/car/driver.settings.compose.json"
   modified:
-    - "drivers/vehicle/driver.compose.json"
-    - "drivers/vehicle/device.ts"
+    - "drivers/car/driver.compose.json"
+    - "drivers/car/device.ts"
     - "lib/tessie-client.ts"
     - "tests/device-controls.test.ts"
     - "tests/tessie-client.test.ts"
@@ -90,9 +90,9 @@ Each task was committed atomically:
 - `.homeycompose/capabilities/last_charge_energy.json` - Number sensor kWh
 - `.homeycompose/capabilities/last_charge_location.json` - String sensor
 - `.homeycompose/capabilities/last_charge_cost.json` - String sensor with currency
-- `drivers/vehicle/driver.settings.compose.json` - Speed limit PIN password input
-- `drivers/vehicle/driver.compose.json` - Added 7 new capability IDs (41 total)
-- `drivers/vehicle/device.ts` - New listeners, state mappings, updateChargingHistory method
+- `drivers/car/driver.settings.compose.json` - Speed limit PIN password input
+- `drivers/car/driver.compose.json` - Added 7 new capability IDs (41 total)
+- `drivers/car/device.ts` - New listeners, state mappings, updateChargingHistory method
 - `lib/tessie-client.ts` - Added getCharges(vin) method
 - `tests/device-controls.test.ts` - 28 new tests for access controls and charging history
 - `tests/tessie-client.test.ts` - 2 new tests for getCharges

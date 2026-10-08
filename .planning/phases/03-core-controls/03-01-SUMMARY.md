@@ -34,7 +34,7 @@ key-files:
     - tests/commands.test.ts
   modified:
     - lib/tessie-client.ts
-    - drivers/vehicle/driver.compose.json
+    - drivers/car/driver.compose.json
     - tests/manifest.test.ts
 
 key-decisions:
@@ -89,7 +89,7 @@ Each task was committed atomically:
 - `.homeycompose/capabilities/trunk.json` - Trunk toggle
 - `.homeycompose/capabilities/frunk.json` - Frunk button (not getable)
 - `.homeycompose/capabilities/charging_control.json` - Charging start/stop toggle
-- `drivers/vehicle/driver.compose.json` - Added 9 new capability IDs
+- `drivers/car/driver.compose.json` - Added 9 new capability IDs
 - `tests/commands.test.ts` - Unit tests for command() and wake()
 - `tests/manifest.test.ts` - Added driver compose capability validation
 

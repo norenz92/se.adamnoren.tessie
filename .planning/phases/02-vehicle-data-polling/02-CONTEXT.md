@@ -58,7 +58,7 @@ No specific references — open to standard Homey app patterns and Tessie API co
 
 ### Reusable Assets
 - `TessieClient` (`lib/tessie-client.ts`): Has `getVehicle(vin)` for full state and `getStatus(vin)` for lightweight status check — both usable for sleep-aware polling
-- `VehicleDevice.refreshState()` (`drivers/vehicle/device.ts`): Existing poll cycle fetching battery and lock — extend this for all capabilities
+- `VehicleDevice.refreshState()` (`drivers/car/device.ts`): Existing poll cycle fetching battery and lock — extend this for all capabilities
 - `driver.compose.json`: Current capabilities `["measure_battery", "locked"]` — extend with all new sensor capabilities
 
 ### Established Patterns

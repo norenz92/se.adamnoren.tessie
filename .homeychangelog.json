@@ -1,5 +1,35 @@
 {
-  "0.2.0": {
-    "en": "Big update. 40 new Flow cards: tonneau, sunroof, seat cooling, boombox, guest and low power modes, software updates, charging, sleep/wake, driving and arriving or leaving home. Completed-drive reports with the car's driver profile, whether a lock or unlock came from Homey or outside it, optional Timeline posts, new icons and images. Flow actions now reliably send commands, plus many fixes."
+  "1.0.0": {
+    "en": "Initial release"
+  },
+  "1.0.1": {
+    "en": "Initial release"
+  },
+  "1.0.2": {
+    "en": "Bug fixes"
+  },
+  "1.0.3": {
+    "en": "Bug fixes"
+  },
+  "1.0.4": {
+    "en": "Bug fixes"
+  },
+  "1.1.0": {
+    "en": "Added more values and actions"
+  },
+  "1.2.0": {
+    "en": "Add trigger: SoC limit changed"
+  },
+  "1.3.0": {
+    "en": "Add odometer unit setting and distance unit conversion"
+  },
+  "1.4.0": {
+    "en": "Added widgets"
+  },
+  "1.4.1": {
+    "en": "Fixed issues related to telemetry, lock/unlock car and charge phases shown when not charging."
+  },
+  "2.0.0": {
+    "en": "Rewritten from the ground up. 50 Flow actions, 21 triggers and 12 conditions, including tonneau, sunroof, seat cooling, guest and low power modes, home geofence, completed-drive reports with the car's driver profile, whether a lock or unlock came from Homey, and optional Timeline posts. New icons and images. Existing cars are migrated automatically; Flows using old cards need to be recreated."
   }
 }

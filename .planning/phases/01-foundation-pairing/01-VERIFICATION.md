@@ -50,28 +50,28 @@ re_verification: false
 | `tests/tessie-client.test.ts`    | Unit tests for TessieClient (was `.js` in plan)       | VERIFIED   | 240 lines; 10 tests covering all specified behaviors; all pass            |
 | `tests/manifest.test.ts`         | Validation tests for app manifest (was `.js` in plan) | VERIFIED   | 57 lines; 7 tests; all pass                                               |
 
-**Note on TypeScript migration:** A quick-1 plan between Plan 01-01 and Plan 01-02 converted all source and test files to TypeScript. `app.js` became `app.ts`, `tessie-client.js` became `tessie-client.ts`, and test files became `.ts`. The original JS files (`lib/tessie-client.js`, `drivers/vehicle/driver.js`, `drivers/vehicle/device.js`) were preserved or restored for Homey runtime compatibility, since Homey executes plain JS. The plan's artifact paths refer to the JS originals; the TypeScript versions fulfill the same purpose via compilation.
+**Note on TypeScript migration:** A quick-1 plan between Plan 01-01 and Plan 01-02 converted all source and test files to TypeScript. `app.js` became `app.ts`, `tessie-client.js` became `tessie-client.ts`, and test files became `.ts`. The original JS files (`lib/tessie-client.js`, `drivers/car/driver.js`, `drivers/car/device.js`) were preserved or restored for Homey runtime compatibility, since Homey executes plain JS. The plan's artifact paths refer to the JS originals; the TypeScript versions fulfill the same purpose via compilation.
 
 #### Plan 01-02 Artifacts
 
 | Artifact                              | Expected                                                    | Status     | Details                                                                          |
 |---------------------------------------|-------------------------------------------------------------|------------|----------------------------------------------------------------------------------|
-| `drivers/vehicle/driver.js`           | Driver class with onPair and onRepair handlers              | VERIFIED   | 82 lines; exports `VehicleDriver`; both handlers present with correct logic       |
-| `drivers/vehicle/device.js`           | Device class with capabilities, polling, lifecycle          | VERIFIED   | 61 lines; exports `VehicleDevice`; onInit, refreshState, onDeleted all present   |
-| `drivers/vehicle/driver.compose.json` | Driver manifest with capabilities, pair steps, repair steps | VERIFIED   | Contains `measure_battery`, `locked`; pair chain: token_input -> list_devices -> add_devices; repair: token_input |
-| `drivers/vehicle/pair/token_input.html` | Custom pairing view with token input, inline errors, help link | VERIFIED | 139 lines; password input, error div, Tessie Settings help link, validate_token emit |
-| `drivers/vehicle/assets/icon.svg`     | Default vehicle icon (960x960 SVG)                          | VERIFIED   | 23 lines; SVG exists                                                             |
+| `drivers/car/driver.js`           | Driver class with onPair and onRepair handlers              | VERIFIED   | 82 lines; exports `VehicleDriver`; both handlers present with correct logic       |
+| `drivers/car/device.js`           | Device class with capabilities, polling, lifecycle          | VERIFIED   | 61 lines; exports `VehicleDevice`; onInit, refreshState, onDeleted all present   |
+| `drivers/car/driver.compose.json` | Driver manifest with capabilities, pair steps, repair steps | VERIFIED   | Contains `measure_battery`, `locked`; pair chain: token_input -> list_devices -> add_devices; repair: token_input |
+| `drivers/car/pair/token_input.html` | Custom pairing view with token input, inline errors, help link | VERIFIED | 139 lines; password input, error div, Tessie Settings help link, validate_token emit |
+| `drivers/car/assets/icon.svg`     | Default vehicle icon (960x960 SVG)                          | VERIFIED   | 23 lines; SVG exists                                                             |
 | `tests/device.test.js`                | Tests for device store ops and repair flow logic            | VERIFIED   | 298 lines; 14 tests; all pass                                                    |
 
 **Model-specific SVG icons:**
 
 | File                                              | Status   |
 |---------------------------------------------------|----------|
-| `drivers/vehicle/assets/icons/model_3.svg`        | VERIFIED |
-| `drivers/vehicle/assets/icons/model_y.svg`        | VERIFIED |
-| `drivers/vehicle/assets/icons/model_s.svg`        | VERIFIED |
-| `drivers/vehicle/assets/icons/model_x.svg`        | VERIFIED |
-| `drivers/vehicle/assets/icons/cybertruck.svg`     | VERIFIED |
+| `drivers/car/assets/icons/model_3.svg`        | VERIFIED |
+| `drivers/car/assets/icons/model_y.svg`        | VERIFIED |
+| `drivers/car/assets/icons/model_s.svg`        | VERIFIED |
+| `drivers/car/assets/icons/model_x.svg`        | VERIFIED |
+| `drivers/car/assets/icons/cybertruck.svg`     | VERIFIED |
 
 ---
 
@@ -81,11 +81,11 @@ re_verification: false
 |-----------------------------------------|----------------------------------|--------------------------------------------------|----------|--------------------------------------------------------------------------------|
 | `lib/tessie-client.js`                  | `https://api.tessie.com`         | `node:https` request with bearer token           | WIRED    | Line 19: `'Authorization': \`Bearer ${this.token}\``; hostname is `api.tessie.com` |
 | `tests/tessie-client.test.ts`           | `lib/tessie-client.js`           | `import TessieClient from '../lib/tessie-client'` | WIRED    | Line 5: `import TessieClient from '../lib/tessie-client'`                      |
-| `drivers/vehicle/driver.js`             | `lib/tessie-client.js`           | `require` and instantiate for token validation   | WIRED    | Line 4: `require('../../lib/tessie-client')`; lines 31, 65: `new TessieClient` |
-| `drivers/vehicle/device.js`             | `lib/tessie-client.js`           | `require` and instantiate for polling            | WIRED    | Line 4: `require('../../lib/tessie-client')`; line 13: `new TessieClient(token)` |
-| `drivers/vehicle/pair/token_input.html` | `drivers/vehicle/driver.js`      | `Homey.emit('validate_token')` -> session handler | WIRED   | Line 117: `Homey.emit('validate_token', token)`; driver.js line 30: `session.setHandler('validate_token', ...)` |
-| `drivers/vehicle/driver.compose.json`   | `drivers/vehicle/pair/token_input.html` | pair array referencing `token_input` id  | WIRED    | Lines 21 and 40: `"id": "token_input"` in both pair and repair arrays          |
-| `drivers/vehicle/device.js`             | Homey capabilities               | `setCapabilityValue` for measure_battery + locked | WIRED  | Lines 37 and 40: `setCapabilityValue('measure_battery', ...)` and `setCapabilityValue('locked', ...)` |
+| `drivers/car/driver.js`             | `lib/tessie-client.js`           | `require` and instantiate for token validation   | WIRED    | Line 4: `require('../../lib/tessie-client')`; lines 31, 65: `new TessieClient` |
+| `drivers/car/device.js`             | `lib/tessie-client.js`           | `require` and instantiate for polling            | WIRED    | Line 4: `require('../../lib/tessie-client')`; line 13: `new TessieClient(token)` |
+| `drivers/car/pair/token_input.html` | `drivers/car/driver.js`      | `Homey.emit('validate_token')` -> session handler | WIRED   | Line 117: `Homey.emit('validate_token', token)`; driver.js line 30: `session.setHandler('validate_token', ...)` |
+| `drivers/car/driver.compose.json`   | `drivers/car/pair/token_input.html` | pair array referencing `token_input` id  | WIRED    | Lines 21 and 40: `"id": "token_input"` in both pair and repair arrays          |
+| `drivers/car/device.js`             | Homey capabilities               | `setCapabilityValue` for measure_battery + locked | WIRED  | Lines 37 and 40: `setCapabilityValue('measure_battery', ...)` and `setCapabilityValue('locked', ...)` |
 
 ---
 
@@ -105,11 +105,11 @@ re_verification: false
 
 ### Anti-Patterns Found
 
-Scanned: `lib/tessie-client.js`, `drivers/vehicle/driver.js`, `drivers/vehicle/device.js`, `drivers/vehicle/pair/token_input.html`, `.homeycompose/app.json`, `tests/device.test.js`
+Scanned: `lib/tessie-client.js`, `drivers/car/driver.js`, `drivers/car/device.js`, `drivers/car/pair/token_input.html`, `.homeycompose/app.json`, `tests/device.test.js`
 
 | File                                 | Line | Pattern                             | Severity | Impact                                               |
 |--------------------------------------|------|-------------------------------------|----------|------------------------------------------------------|
-| `drivers/vehicle/device.js`          | 15-18 | `locked` capability listener throws "Control not yet available" | INFO | Intentional Phase 1 design — control implemented in Phase 3. Device is read-only for locked capability. Not a gap. |
+| `drivers/car/device.js`          | 15-18 | `locked` capability listener throws "Control not yet available" | INFO | Intentional Phase 1 design — control implemented in Phase 3. Device is read-only for locked capability. Not a gap. |
 
 No blockers. No unintentional stubs. The locked listener throwing is a documented, intentional design decision per the plan.
 
@@ -151,7 +151,7 @@ No gaps. All 11 observable truths verified, all required artifacts exist and are
 
 **Test suite:** 31 total tests pass (17 from npm test + 14 device tests run directly).
 
-**Notable context:** A TypeScript infrastructure was introduced between Plan 01-01 and Plan 01-02 via a quick-1 plan. This caused `.js` source files to gain `.ts` counterparts, and plan-documented artifact paths for test files shifted from `.js` to `.ts`. The JS source files (`lib/tessie-client.js`, `drivers/vehicle/driver.js`, `drivers/vehicle/device.js`) were retained alongside the TypeScript versions because Homey Pro executes plain Node.js JS. This dual-file pattern is intentional and correct.
+**Notable context:** A TypeScript infrastructure was introduced between Plan 01-01 and Plan 01-02 via a quick-1 plan. This caused `.js` source files to gain `.ts` counterparts, and plan-documented artifact paths for test files shifted from `.js` to `.ts`. The JS source files (`lib/tessie-client.js`, `drivers/car/driver.js`, `drivers/car/device.js`) were retained alongside the TypeScript versions because Homey Pro executes plain Node.js JS. This dual-file pattern is intentional and correct.
 
 ---
 

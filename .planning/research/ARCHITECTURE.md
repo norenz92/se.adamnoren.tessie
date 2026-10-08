@@ -21,7 +21,7 @@ The app follows Homey's standard driver-based architecture with a single driver 
 |         | this.homey.app                                   |
 |         v                                                 |
 |  +-----------------------------------------------------+ |
-|  |  Driver (drivers/vehicle/driver.ts)                  | |
+|  |  Driver (drivers/car/driver.ts)                  | |
 |  |  - Handles pairing (API token + vehicle discovery)   | |
 |  |  - Registers device-level Flow cards                 | |
 |  |  - Maps VINs to Device instances                     | |
@@ -30,7 +30,7 @@ The app follows Homey's standard driver-based architecture with a single driver 
 |         | creates per-vehicle                              |
 |         v                                                 |
 |  +-----------------------------------------------------+ |
-|  |  Device (drivers/vehicle/device.ts)   [per vehicle]  | |
+|  |  Device (drivers/car/device.ts)   [per vehicle]  | |
 |  |  - Owns WebSocket connection to streaming.tessie.com | |
 |  |  - Owns polling interval (fallback)                  | |
 |  |  - Maps Tessie data -> Homey capabilities            | |
@@ -55,8 +55,8 @@ The app follows Homey's standard driver-based architecture with a single driver 
 | Component | Responsibility | Communicates With |
 |-----------|---------------|-------------------|
 | **App** (`app.ts`) | Singleton entry point. No shared state needed since each device has its own API token. Registers global Flow cards if any. | Driver (via Homey lifecycle), Homey platform |
-| **Driver** (`drivers/vehicle/driver.ts`) | Vehicle discovery during pairing. Accepts API token via credentials login, calls Tessie `/vehicles` endpoint to list user's vehicles, returns device list. Registers device-scoped Flow card listeners. | App (via `this.homey.app`), Device (creates instances), Tessie REST API (during pairing only) |
-| **Device** (`drivers/vehicle/device.ts`) | Per-vehicle instance. Manages WebSocket connection for real-time telemetry. Runs polling interval as fallback. Translates Tessie data into Homey capability values. Dispatches commands via REST API when capability listeners fire. Manages availability. | TessieClient, Homey capabilities, Homey Flow engine |
+| **Driver** (`drivers/car/driver.ts`) | Vehicle discovery during pairing. Accepts API token via credentials login, calls Tessie `/vehicles` endpoint to list user's vehicles, returns device list. Registers device-scoped Flow card listeners. | App (via `this.homey.app`), Device (creates instances), Tessie REST API (during pairing only) |
+| **Device** (`drivers/car/device.ts`) | Per-vehicle instance. Manages WebSocket connection for real-time telemetry. Runs polling interval as fallback. Translates Tessie data into Homey capability values. Dispatches commands via REST API when capability listeners fire. Manages availability. | TessieClient, Homey capabilities, Homey Flow engine |
 | **TessieClient** (`lib/TessieClient.ts`) | Stateless HTTP client wrapping Tessie REST API. Handles authentication headers, request formatting, error normalization. One instance per device (each device may have different API tokens). | Tessie REST API (`api.tessie.com`) |
 | **TessieStream** (`lib/TessieStream.ts`) | WebSocket client for `wss://streaming.tessie.com/{VIN}`. Handles connection, reconnection with backoff, message parsing, and event emission. One instance per device. | Tessie WebSocket API (`streaming.tessie.com`) |
 | **CapabilityMapper** (`lib/capabilities.ts`) | Pure mapping functions between Tessie API field names and Homey capability IDs. Transforms values (unit conversion, boolean mapping, enum translation). No I/O. | Device (imported as utility) |

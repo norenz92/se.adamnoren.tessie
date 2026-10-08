@@ -24,16 +24,16 @@ tech-stack:
 
 key-files:
   created:
-    - drivers/vehicle/driver.js
-    - drivers/vehicle/device.js
-    - drivers/vehicle/driver.compose.json
-    - drivers/vehicle/pair/token_input.html
-    - drivers/vehicle/assets/icon.svg
-    - drivers/vehicle/assets/icons/model_3.svg
-    - drivers/vehicle/assets/icons/model_y.svg
-    - drivers/vehicle/assets/icons/model_s.svg
-    - drivers/vehicle/assets/icons/model_x.svg
-    - drivers/vehicle/assets/icons/cybertruck.svg
+    - drivers/car/driver.js
+    - drivers/car/device.js
+    - drivers/car/driver.compose.json
+    - drivers/car/pair/token_input.html
+    - drivers/car/assets/icon.svg
+    - drivers/car/assets/icons/model_3.svg
+    - drivers/car/assets/icons/model_y.svg
+    - drivers/car/assets/icons/model_s.svg
+    - drivers/car/assets/icons/model_x.svg
+    - drivers/car/assets/icons/cybertruck.svg
     - tests/device.test.js
     - lib/tessie-client.js
   modified:
@@ -87,16 +87,16 @@ Each task was committed atomically via TDD:
 3. **Task 2 GREEN: Device implementation** - `092433d` (feat) -- device.js, restored tessie-client.js, tests passing
 
 ## Files Created/Modified
-- `drivers/vehicle/driver.js` - VehicleDriver with onPair (validate_token + list_devices with duplicate VIN filtering) and onRepair
-- `drivers/vehicle/device.js` - VehicleDevice with onInit, refreshState (battery + lock), onDeleted, polling
-- `drivers/vehicle/driver.compose.json` - Driver manifest: class car, measure_battery + locked, pair/repair steps
-- `drivers/vehicle/pair/token_input.html` - Custom pairing view with masked token input, inline errors, help link
-- `drivers/vehicle/assets/icon.svg` - Default vehicle icon (960x960 SVG)
-- `drivers/vehicle/assets/icons/model_3.svg` - Model 3 silhouette icon
-- `drivers/vehicle/assets/icons/model_y.svg` - Model Y silhouette icon
-- `drivers/vehicle/assets/icons/model_s.svg` - Model S silhouette icon
-- `drivers/vehicle/assets/icons/model_x.svg` - Model X silhouette icon
-- `drivers/vehicle/assets/icons/cybertruck.svg` - Cybertruck silhouette icon
+- `drivers/car/driver.js` - VehicleDriver with onPair (validate_token + list_devices with duplicate VIN filtering) and onRepair
+- `drivers/car/device.js` - VehicleDevice with onInit, refreshState (battery + lock), onDeleted, polling
+- `drivers/car/driver.compose.json` - Driver manifest: class car, measure_battery + locked, pair/repair steps
+- `drivers/car/pair/token_input.html` - Custom pairing view with masked token input, inline errors, help link
+- `drivers/car/assets/icon.svg` - Default vehicle icon (960x960 SVG)
+- `drivers/car/assets/icons/model_3.svg` - Model 3 silhouette icon
+- `drivers/car/assets/icons/model_y.svg` - Model Y silhouette icon
+- `drivers/car/assets/icons/model_s.svg` - Model S silhouette icon
+- `drivers/car/assets/icons/model_x.svg` - Model X silhouette icon
+- `drivers/car/assets/icons/cybertruck.svg` - Cybertruck silhouette icon
 - `tests/device.test.js` - 14 tests: state mapping, error handling, cleanup, locked listener, repair flow
 - `lib/tessie-client.js` - Restored JS source for driver require paths
 - `locales/en.json` - Pairing UI strings (title, help, errors)

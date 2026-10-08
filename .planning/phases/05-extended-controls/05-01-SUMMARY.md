@@ -33,8 +33,8 @@ key-files:
     - .homeycompose/capabilities/defrost_mode.json
     - .homeycompose/capabilities/steering_wheel_heater.json
   modified:
-    - drivers/vehicle/device.ts
-    - drivers/vehicle/driver.compose.json
+    - drivers/car/device.ts
+    - drivers/car/driver.compose.json
     - tests/device-controls.test.ts
 
 key-decisions:
@@ -83,8 +83,8 @@ Each task was committed atomically:
 - `.homeycompose/capabilities/cabin_overheat_protection.json` - Enum Off/Fan Only/AC
 - `.homeycompose/capabilities/defrost_mode.json` - Boolean toggle
 - `.homeycompose/capabilities/steering_wheel_heater.json` - Boolean toggle
-- `drivers/vehicle/driver.compose.json` - Added 9 new capability IDs (34 total)
-- `drivers/vehicle/device.ts` - Constant maps, 9 listeners, 9 state mappings, ALL_CAPABILITIES updated
+- `drivers/car/driver.compose.json` - Added 9 new capability IDs (34 total)
+- `drivers/car/device.ts` - Constant maps, 9 listeners, 9 state mappings, ALL_CAPABILITIES updated
 - `tests/device-controls.test.ts` - 27 new tests for listeners and state mappings
 
 ## Decisions Made

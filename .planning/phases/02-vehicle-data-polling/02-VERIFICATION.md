@@ -58,9 +58,9 @@ re_verification: false
 | `.homeycompose/capabilities/measure_longitude.json` | GPS longitude | VERIFIED | type: number, min: -180, max: 180 |
 | `.homeycompose/capabilities/software_update.json` | Software update status | VERIFIED | type: string |
 | `.homeycompose/capabilities/measure_battery_health.json` | Battery health percentage | VERIFIED | type: number, units: %, min: 0, max: 100 |
-| `drivers/vehicle/driver.compose.json` | Driver manifest with all 16 capabilities | VERIFIED | 16 capabilities, capabilitiesOptions for temperature sub-capabilities |
+| `drivers/car/driver.compose.json` | Driver manifest with all 16 capabilities | VERIFIED | 16 capabilities, capabilitiesOptions for temperature sub-capabilities |
 | `lib/tessie-client.ts` | TessieClient with getBatteryHealth method | VERIFIED | 79 lines, substantive implementation, export = pattern |
-| `drivers/vehicle/device.ts` | Full VehicleDevice with adaptive polling | VERIFIED | 265 lines, pollCycle present, all capability mappings, retry logic, migration |
+| `drivers/car/device.ts` | Full VehicleDevice with adaptive polling | VERIFIED | 265 lines, pollCycle present, all capability mappings, retry logic, migration |
 | `tests/device.test.ts` | Comprehensive device tests | VERIFIED | 688 lines, pollCycle tested, 57 total tests passing |
 
 ---
@@ -69,9 +69,9 @@ re_verification: false
 
 | From | To | Via | Status | Details |
 |------|----|-----|--------|---------|
-| `drivers/vehicle/device.ts` | `lib/tessie-client.ts` | `this.client.getVehicle`, `this.client.getStatus`, `this.client.getBatteryHealth` | WIRED | All three method calls present; device.ts line 51-54 (init), 117/125 (pollCycle) |
-| `drivers/vehicle/device.ts` | `.homeycompose/capabilities/*.json` | setCapabilityValue calls using capability IDs | WIRED | All 16 capability IDs called via setCapabilityValue; tire pressures via loop on line 212 |
-| `drivers/vehicle/device.ts` | `drivers/vehicle/driver.compose.json` | addCapability migration matching ALL_CAPABILITIES array | WIRED | ALL_CAPABILITIES array on lines 12-21 matches driver.compose.json capabilities exactly; migration loop on lines 43-47 |
+| `drivers/car/device.ts` | `lib/tessie-client.ts` | `this.client.getVehicle`, `this.client.getStatus`, `this.client.getBatteryHealth` | WIRED | All three method calls present; device.ts line 51-54 (init), 117/125 (pollCycle) |
+| `drivers/car/device.ts` | `.homeycompose/capabilities/*.json` | setCapabilityValue calls using capability IDs | WIRED | All 16 capability IDs called via setCapabilityValue; tire pressures via loop on line 212 |
+| `drivers/car/device.ts` | `drivers/car/driver.compose.json` | addCapability migration matching ALL_CAPABILITIES array | WIRED | ALL_CAPABILITIES array on lines 12-21 matches driver.compose.json capabilities exactly; migration loop on lines 43-47 |
 
 ---
 

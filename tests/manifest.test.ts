@@ -15,10 +15,10 @@ describe("App manifest (.homeycompose/app.json)", () => {
     assert.ok(manifest, "Manifest should be a valid object");
   });
 
-  it('should have id "se.adamnoren.tessie"', () => {
+  it('should have id "com.adamnoren.tessie"', () => {
     const raw = readFileSync(manifestPath, "utf-8");
     const m = JSON.parse(raw);
-    assert.strictEqual(m.id, "se.adamnoren.tessie");
+    assert.strictEqual(m.id, "com.adamnoren.tessie");
   });
 
   it('should have compatibility ">=12.9.0"', () => {
@@ -47,8 +47,8 @@ describe("App manifest (.homeycompose/app.json)", () => {
   });
 });
 
-describe("Driver compose (drivers/vehicle/driver.compose.json)", () => {
-  const composePath = join(process.cwd(), "drivers", "vehicle", "driver.compose.json");
+describe("Driver compose (drivers/car/driver.compose.json)", () => {
+  const composePath = join(process.cwd(), "drivers", "car", "driver.compose.json");
   const capabilitiesDir = join(process.cwd(), ".homeycompose", "capabilities");
 
   it("should list all capability JSON files in capabilities array", () => {

@@ -47,8 +47,8 @@ re_verification: false
 | `.homeycompose/capabilities/trunk.json`               | Trunk toggle                                    | VERIFIED   | type:boolean, toggle, setable:true, getable:true               |
 | `.homeycompose/capabilities/frunk.json`               | Frunk button (not getable)                      | VERIFIED   | type:boolean, button, setable:true, getable:false (correct)    |
 | `.homeycompose/capabilities/charging_control.json`    | Charging start/stop toggle                      | VERIFIED   | type:boolean, toggle, setable:true, getable:true               |
-| `drivers/vehicle/driver.compose.json`                 | All 9 new capability IDs in capabilities array  | VERIFIED   | Lines 26-34: all 9 IDs present alongside existing 16           |
-| `drivers/vehicle/device.ts`                           | ensureAwake, executeCommand, refreshState, 10 listeners, extended updateCapabilities | VERIFIED | All present, substantive, wired |
+| `drivers/car/driver.compose.json`                 | All 9 new capability IDs in capabilities array  | VERIFIED   | Lines 26-34: all 9 IDs present alongside existing 16           |
+| `drivers/car/device.ts`                           | ensureAwake, executeCommand, refreshState, 10 listeners, extended updateCapabilities | VERIFIED | All present, substantive, wired |
 | `tests/commands.test.ts`                              | Unit tests for command() and wake()             | VERIFIED   | 9 tests covering POST path, params, return values, errors      |
 | `tests/device-controls.test.ts`                       | Unit tests for control methods, listeners, state mapping | VERIFIED | 30 tests across ensureAwake, executeCommand, 14 listener tests, 9 updateCapabilities tests |
 
@@ -57,10 +57,10 @@ re_verification: false
 | From                           | To                            | Via                                          | Status   | Details                                                              |
 |--------------------------------|-------------------------------|----------------------------------------------|----------|----------------------------------------------------------------------|
 | `lib/tessie-client.ts`         | Tessie API                    | command() POST with URLSearchParams           | VERIFIED | Line 74: `this.request(path, 'POST')` with URLSearchParams query     |
-| `drivers/vehicle/driver.compose.json` | .homeycompose/capabilities/*.json | capability ID references            | VERIFIED | All 9 IDs present in capabilities array (lines 26-34)               |
-| `drivers/vehicle/device.ts`    | `lib/tessie-client.ts`        | this.client.command() and this.client.wake() | VERIFIED | Line 171: `this.client.command(vin, command, params)`, line 150: `this.client.wake(vin)` |
-| `drivers/vehicle/device.ts`    | Tessie API state fields       | updateCapabilities() maps new control fields | VERIFIED | Lines 320-363: charge_limit_soc, charge_current_request, charge_port_door_open, charging_state, is_climate_on, driver_temp_setting, sentry_mode, rt all mapped |
-| `drivers/vehicle/device.ts`    | itself (refreshState -> getVehicle -> updateCapabilities) | executeCommand calls refreshState | VERIFIED | Lines 168-176: executeCommand -> refreshState -> getVehicle -> updateCapabilities |
+| `drivers/car/driver.compose.json` | .homeycompose/capabilities/*.json | capability ID references            | VERIFIED | All 9 IDs present in capabilities array (lines 26-34)               |
+| `drivers/car/device.ts`    | `lib/tessie-client.ts`        | this.client.command() and this.client.wake() | VERIFIED | Line 171: `this.client.command(vin, command, params)`, line 150: `this.client.wake(vin)` |
+| `drivers/car/device.ts`    | Tessie API state fields       | updateCapabilities() maps new control fields | VERIFIED | Lines 320-363: charge_limit_soc, charge_current_request, charge_port_door_open, charging_state, is_climate_on, driver_temp_setting, sentry_mode, rt all mapped |
+| `drivers/car/device.ts`    | itself (refreshState -> getVehicle -> updateCapabilities) | executeCommand calls refreshState | VERIFIED | Lines 168-176: executeCommand -> refreshState -> getVehicle -> updateCapabilities |
 
 ### Requirements Coverage
 
@@ -83,7 +83,7 @@ All 10 requirements satisfied. No orphaned requirements found — REQUIREMENTS.m
 
 No anti-patterns detected in modified files.
 
-- No TODO/FIXME/HACK/PLACEHOLDER comments in `lib/tessie-client.ts` or `drivers/vehicle/device.ts`
+- No TODO/FIXME/HACK/PLACEHOLDER comments in `lib/tessie-client.ts` or `drivers/car/device.ts`
 - No stub implementations (no `return null`, `return {}`, `return []` without DB/API backing)
 - No empty handlers
 - 10 capability listeners all delegate to `executeCommand()` with correct command names and params

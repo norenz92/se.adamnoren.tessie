@@ -63,10 +63,14 @@ export class MockHomeyDevice {
     clearInterval: () => {},
     flow: createMockFlow(),
     geolocation: createMockGeolocation(),
+    settings: { get: (key: string) => this._appSettings[key] },
     notifications: { createNotification: async ({ excerpt }: { excerpt: string }) => { this._notifications.push(excerpt); } },
   };
   _timers: Array<{ fn: Function; ms: number }> = [];
   _notifications: string[] = [];
+  _appSettings: Record<string, any> = {};
+  _unset: string[] = [];
+  async unsetStoreValue(key: string) { delete this._store[key]; this._unset.push(key); }
 
   getName() { return 'Test Car'; }
   getData() { return this._data; }
@@ -78,6 +82,8 @@ export class MockHomeyDevice {
   getCapabilityValue(id: string) { return this._capabilities[id]; }
   async setCapabilityValue(id: string, value: any) { this._capabilities[id] = value; }
   _removedCapabilities: string[] = [];
+  _capabilityList: string[] = []; // capabilities present before onInit (for migration tests)
+  getCapabilities() { return this._capabilityList.filter((c) => !this._removedCapabilities.includes(c)); }
   hasCapability(id: string) { return !this._removedCapabilities.includes(id); }
   async addCapability(id: string) { this._removedCapabilities = this._removedCapabilities.filter((c) => c !== id); }
   async removeCapability(id: string) { this._removedCapabilities.push(id); }

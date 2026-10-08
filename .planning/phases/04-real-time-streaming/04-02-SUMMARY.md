@@ -26,7 +26,7 @@ key-files:
   created:
     - tests/device-streaming.test.ts
   modified:
-    - drivers/vehicle/device.ts
+    - drivers/car/device.ts
 
 key-decisions:
   - "Streaming fallback check is first in pollCycle interval logic (highest priority over vehicle state)"
@@ -74,7 +74,7 @@ Each task was committed atomically:
    - `b893260` (feat: integrate TessieStreamer into VehicleDevice - TDD GREEN)
 
 ## Files Created/Modified
-- `drivers/vehicle/device.ts` - Added TessieStreamer + mapStreamData imports, streamer initialization in onInit, event handlers, polling fallback logic, and cleanup in onDeleted
+- `drivers/car/device.ts` - Added TessieStreamer + mapStreamData imports, streamer initialization in onInit, event handlers, polling fallback logic, and cleanup in onDeleted
 - `tests/device-streaming.test.ts` - 12 integration tests covering streamer creation, data/connected/disconnected events, polling intervals with streaming, and cleanup
 
 ## Decisions Made

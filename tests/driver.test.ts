@@ -16,7 +16,7 @@ function MockTessieClient(this: any, token: string) {
 
 (Module as any)._resolveFilename = function (request: string, parent: any, isMain: boolean, options: any) {
   if (request === 'homey') return '__mock_homey_driver__';
-  if (parent && parent.filename && parent.filename.includes('drivers/vehicle/driver')) {
+  if (parent && parent.filename && parent.filename.includes('drivers/car/driver')) {
     if (request === '../../lib/tessie-client') return '__mock_tessie_client_driver__';
   }
   return originalResolve.call(this, request, parent, isMain, options);
@@ -40,7 +40,7 @@ const mockTessieModule = new Module('__mock_tessie_client_driver__');
 (mockTessieModule as any).loaded = true;
 (require as any).cache['__mock_tessie_client_driver__'] = mockTessieModule;
 
-const VehicleDriver = require('../drivers/vehicle/driver');
+const VehicleDriver = require('../drivers/car/driver');
 
 // ---- Helpers ----
 
@@ -252,6 +252,17 @@ describe('VehicleDriver', () => {
       const session = createPairSession();
       await driver.onRepair(session, device);
       await assert.rejects(async () => session.handlers['validate_token']('wrong-account'), /Vehicle not found/);
+    });
+  });
+
+  describe('v1.x compatibility', () => {
+    it('start_climate still honours the temperature argument of v1 Flows', async () => {
+      const driver = await createDriver();
+      const device = createFakeDevice();
+      await driver.homey.flow.runListeners['start_climate']({ device, climate_temperature: 21.5 });
+      await driver.homey.flow.runListeners['start_climate']({ device });
+      assert.deepEqual(device.calls.triggerCapabilityListener, [['climate_onoff', true, { source: 'flow' }], ['climate_onoff', true, { source: 'flow' }]]);
+      assert.deepEqual(device.calls.setTargetTemperature, [[21.5, 'C']]);
     });
   });
 });

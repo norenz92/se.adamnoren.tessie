@@ -59,9 +59,9 @@ re_verification: false
 | `.homeycompose/capabilities/last_charge_energy.json` | Number sensor kWh | VERIFIED | Exists, type:number, setable:false, units:kWh, decimals:1, uiComponent:sensor |
 | `.homeycompose/capabilities/last_charge_location.json` | String sensor | VERIFIED | Exists, type:string, setable:false, uiComponent:sensor |
 | `.homeycompose/capabilities/last_charge_cost.json` | String sensor (currency formatted) | VERIFIED | Exists, type:string, setable:false, uiComponent:sensor |
-| `drivers/vehicle/driver.settings.compose.json` | Speed limit PIN input field | VERIFIED | Exists with speed_limit_pin password field in Security PINs group with descriptive hint |
+| `drivers/car/driver.settings.compose.json` | Speed limit PIN input field | VERIFIED | Exists with speed_limit_pin password field in Security PINs group with descriptive hint |
 | `lib/tessie-client.ts` | getCharges(vin) method | VERIFIED | Method exists at line 83, calls `/${vin}/charges`, returns `response.results` array or `[]` defensively |
-| `drivers/vehicle/device.ts` | Capability listeners + state mappings for all extended controls | VERIFIED | All 16 capability listeners registered in onInit(); all state mappings in updateCapabilities(); ALL_CAPABILITIES has all 40 IDs |
+| `drivers/car/device.ts` | Capability listeners + state mappings for all extended controls | VERIFIED | All 16 capability listeners registered in onInit(); all state mappings in updateCapabilities(); ALL_CAPABILITIES has all 40 IDs |
 
 ---
 

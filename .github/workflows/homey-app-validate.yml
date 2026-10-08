@@ -18,6 +18,6 @@ jobs:
       - run: npm ci --ignore-scripts
       - run: npm test
       # `verified` additionally requires a `support` URL in .homeycompose/app.json
-      - uses: athombv/github-action-homey-app-validate@master
+      - uses: athombv/github-action-homey-app-validate@0f3b42c15d26aab79d7c48cde4d2805524da910e # master 2024-08-15
         with:
           level: publish

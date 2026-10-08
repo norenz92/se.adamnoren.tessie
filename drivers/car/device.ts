@@ -3,6 +3,7 @@ import TessieClient = require('../../lib/tessie-client');
 import TessieStreamer = require('../../lib/tessie-streamer');
 import mapStreamData = require('../../lib/stream-mapper');
 import distanceMeters = require('../../lib/geo');
+import unitSettingsFromGui = require('../../lib/units');
 
 const AWAKE_INTERVAL_MS = 60 * 1000;
 const CHARGING_INTERVAL_MS = 2 * 60 * 1000;
@@ -47,10 +48,6 @@ const ALL_CAPABILITIES = [
   'last_charge_energy', 'last_charge_location', 'last_charge_cost',
   'shift_state', 'charger_power', 'charge_time_remaining',
 ];
-
-// Renamed/retired capabilities to remove from already-paired devices.
-// measure_battery_health was renamed: its measure_battery prefix made Homey present it like the battery level.
-const LEGACY_CAPABILITIES = ['measure_battery_health'];
 
 // Seat heater capability -> logical seat (driver/passenger resolved against RHD at runtime)
 const SEAT_CAPABILITY_TO_SEAT: Record<string, string> = {
@@ -126,12 +123,14 @@ class VehicleDevice extends Homey.Device {
 
   async onInit(): Promise<void> {
     const vin = this.getData().id;
-    const token = this.getStoreValue('token') as string;
-    this.client = new TessieClient(token);
+    const token = await this.resolveToken();
+    this.client = new TessieClient(token ?? '');
 
-    // Migrate capabilities for already-paired devices (must precede listener registration)
-    for (const cap of LEGACY_CAPABILITIES) {
-      if (this.hasCapability(cap)) {
+    // Migrate capabilities for already-paired devices (must precede listener registration).
+    // Anything not in the current set is dropped: v1.x capabilities and renamed ones such as
+    // measure_battery_health, whose measure_battery prefix made Homey present it like the battery level.
+    for (const cap of this.getCapabilities()) {
+      if (!ALL_CAPABILITIES.includes(cap)) {
         await this.removeCapability(cap).catch((err: any) => this.error(`Failed to remove ${cap}:`, err.message));
       }
     }
@@ -146,6 +145,11 @@ class VehicleDevice extends Homey.Device {
     // Unit settings are seeded from the car's gui_settings at pairing (see driver.ts)
     await this.applyUnitSettings();
 
+    if (!token) {
+      await this.setUnavailable('No Tessie API token. Repair the device to enter your token.').catch(this.error);
+      return;
+    }
+
     // Initial data fetch
     try {
       const [statusResponse, state] = await Promise.all([
@@ -155,6 +159,14 @@ class VehicleDevice extends Homey.Device {
 
       if (statusResponse?.status) {
         await this.setCap('vehicle_state_status', STATUS_MAP[statusResponse.status] || 'Awake');
+      }
+
+      // Cars migrated from v1.x were never paired with this driver, so seed their units once
+      const seeded = this.getStoreValue('seed_units') ? unitSettingsFromGui(state?.gui_settings) : null;
+      if (seeded) {
+        await this.setSettings(seeded);
+        await this.applyUnitSettings({ ...this.getSettings(), ...seeded });
+        await this.unsetStoreValue('seed_units');
       }
 
       await this.updateCapabilities(state);
@@ -171,11 +183,7 @@ class VehicleDevice extends Homey.Device {
     this.scheduleNextPoll(AWAKE_INTERVAL_MS);
     this.startStreamer(token);
 
-    // Battery health and charging history change slowly; refresh on a fixed cadence
-    this.batteryHealthTimer = this.homey.setInterval(async () => {
-      await this.refreshBatteryHealth();
-      await this.updateChargingHistory();
-    }, BATTERY_HEALTH_INTERVAL_MS);
+    this.startHealthRefresh();
 
     this.log('Vehicle device initialized:', vin);
   }
@@ -303,6 +311,30 @@ class VehicleDevice extends Homey.Device {
     this.streamer.connect();
   }
 
+  // Battery health and charging history change slowly; refresh on a fixed cadence
+  private startHealthRefresh(): void {
+    if (this.batteryHealthTimer != null || this.destroyed) return;
+    this.batteryHealthTimer = this.homey.setInterval(async () => {
+      await this.refreshBatteryHealth();
+      await this.updateChargingHistory();
+    }, BATTERY_HEALTH_INTERVAL_MS);
+  }
+
+  /**
+   * The Tessie token for this car. Devices paired with v1.x (com.adamnoren.tessie) kept it in
+   * the device data or the app-wide settings; move it to the store where v2 expects it.
+   */
+  private async resolveToken(): Promise<string | null> {
+    const stored = this.getStoreValue('token');
+    if (stored) return stored;
+    const legacy = this.getData().accessToken || this.homey.settings?.get('accessToken');
+    if (!legacy) return null;
+    this.log('Migrating Tessie token from v1.x');
+    await this.setStoreValue('token', legacy);
+    await this.setStoreValue('seed_units', true);
+    return legacy;
+  }
+
   // Called from the repair flow when the user supplies a new API token.
   async updateToken(token: string): Promise<void> {
     await this.setStoreValue('token', token);
@@ -313,6 +345,7 @@ class VehicleDevice extends Homey.Device {
     await this.setAvailable();
     await this.refreshState();
     this.scheduleNextPoll(AWAKE_INTERVAL_MS);
+    this.startHealthRefresh();
   }
 
   // --- Commands ---

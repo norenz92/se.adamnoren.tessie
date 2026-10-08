@@ -98,7 +98,7 @@ No additional packages. All new features are implemented via:
 ├── last_charge_energy.json          # Number sensor (kWh)
 └── last_charge_location.json        # String sensor
 
-drivers/vehicle/
+drivers/car/
 ├── driver.compose.json              # Add all new capabilities
 ├── driver.settings.compose.json     # NEW: PIN settings for valet/speed limit
 └── device.ts                        # Extended with new listeners + state mappings

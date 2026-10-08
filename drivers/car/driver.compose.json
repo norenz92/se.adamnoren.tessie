@@ -100,8 +100,8 @@
     }
   ],
   "images": {
-    "small": "/drivers/vehicle/assets/images/small.jpg",
-    "large": "/drivers/vehicle/assets/images/large.jpg",
-    "xlarge": "/drivers/vehicle/assets/images/xlarge.jpg"
+    "small": "/drivers/car/assets/images/small.jpg",
+    "large": "/drivers/car/assets/images/large.jpg",
+    "xlarge": "/drivers/car/assets/images/xlarge.jpg"
   }
 }

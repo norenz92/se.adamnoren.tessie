@@ -1,5 +1,6 @@
 import Homey from 'homey';
 import TessieClient = require('../../lib/tessie-client');
+import unitSettingsFromGui = require('../../lib/units');
 import type VehicleDevice = require('./device');
 
 // Map car_type to human-readable model name for the pairing list description.
@@ -13,11 +14,11 @@ const CAR_TYPE_TO_MODEL: Record<string, string> = {
 
 // Map car_type to icon path. Unknown types fall back to default.
 const ICON_MAP: Record<string, string> = {
-  'models': '/drivers/vehicle/assets/icons/model_s.svg',
-  'modelx': '/drivers/vehicle/assets/icons/model_x.svg',
-  'model3': '/drivers/vehicle/assets/icons/model_3.svg',
-  'modely': '/drivers/vehicle/assets/icons/model_y.svg',
-  'cybertruck': '/drivers/vehicle/assets/icons/cybertruck.svg',
+  'models': '/drivers/car/assets/icons/model_s.svg',
+  'modelx': '/drivers/car/assets/icons/model_x.svg',
+  'model3': '/drivers/car/assets/icons/model_3.svg',
+  'modely': '/drivers/car/assets/icons/model_y.svg',
+  'cybertruck': '/drivers/car/assets/icons/cybertruck.svg',
 };
 
 // Passed to capability listeners so state changes caused by a Flow can be attributed to it.
@@ -30,7 +31,6 @@ const CAPABILITY_ACTIONS: Record<string, [string, any]> = {
   unlock: ['locked', false],
   enable_sentry: ['sentry_mode', true],
   disable_sentry: ['sentry_mode', false],
-  start_climate: ['climate_onoff', true],
   stop_climate: ['climate_onoff', false],
   open_charge_port: ['charge_port', true],
   close_charge_port: ['charge_port', false],
@@ -118,6 +118,14 @@ class VehicleDriver extends Homey.Driver {
       });
     }
 
+    flow.getActionCard('start_climate').registerRunListener(async (args: any) => {
+      const device = args.device as VehicleDevice;
+      await device.triggerCapabilityListener('climate_onoff', true, FLOW);
+      // v1.x's "Start Climate" card had a temperature argument; Flows created with it still pass it
+      if (args.climate_temperature != null && args.climate_temperature !== '') {
+        await device.setTargetTemperature(Number(args.climate_temperature), 'C');
+      }
+    });
     flow.getActionCard('wake').registerRunListener(async (args: any) => {
       await (args.device as VehicleDevice).wake();
     });
@@ -238,18 +246,6 @@ class VehicleDriver extends Homey.Driver {
     });
   }
 
-}
-
-// Seed a new device's unit settings from the car's own display preferences.
-function unitSettingsFromGui(gs: any): Record<string, string> | null {
-  if (!gs) return null;
-  const metric = gs.gui_distance_units === 'km/hr';
-  return {
-    unit_distance: metric ? 'km' : 'mi',
-    unit_pressure: gs.gui_tirepressure_units === 'Psi' ? 'psi' : 'bar',
-    unit_temperature: gs.gui_temperature_units === 'F' ? 'F' : 'C',
-    unit_speed: metric ? 'kmh' : 'mph',
-  };
 }
 
 export = VehicleDriver;

@@ -109,7 +109,7 @@ No new packages needed. All dependencies are already installed.
     measure_longitude.json
     software_update.json
     measure_battery_health.json
-drivers/vehicle/
+drivers/car/
   device.ts                    # MODIFY: Expand refreshState, add adaptive polling
   driver.compose.json          # MODIFY: Add all new capabilities
 lib/

@@ -16,35 +16,40 @@ on:
         description: Changelog
         required: true
 
-# Needed in order to push the commit and create a release
-permissions:
-  contents: write
-
 jobs:
   main:
     name: Update Homey App Version
     runs-on: ubuntu-latest
+    # Needed in order to push the commit and create a release
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
 
       - name: Update Homey App Version
-        uses: athombv/github-action-homey-app-version@master
+        uses: athombv/github-action-homey-app-version@3342f092b437550e78074797b52fac6467a456e1 # master 2024-09-05
         id: update_app_version
         with:
           version: ${{ inputs.version }}
           changelog: ${{ inputs.changelog }}
 
       - name: Commit & Push
+        env:
+          VERSION: ${{ steps.update_app_version.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
         run: |
+          # Values come in via env (not template expansion) and must be a plain semver
+          if ! printf '%s' "$VERSION" | grep -Eq '^[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "Unexpected version: $VERSION" >&2
+            exit 1
+          fi
+
           git config --local user.name "github-actions[bot]"
           git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add -A
-          git commit -m "Update Homey App Version to v${{ steps.update_app_version.outputs.version }}"
-          git tag "v${{ steps.update_app_version.outputs.version }}"
+          git add app.json .homeycompose/app.json .homeychangelog.json package.json package-lock.json
+          git commit -m "Update Homey App Version to v${VERSION}"
+          git tag "v${VERSION}"
 
           git push origin HEAD --tags
-          gh release create "v${{ steps.update_app_version.outputs.version }}" -t "v${{ steps.update_app_version.outputs.version }}" --notes "" --generate-notes
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_TOKEN: ${{ github.token }}
+          gh release create "v${VERSION}" -t "v${VERSION}" --notes "" --generate-notes

@@ -51,7 +51,7 @@ Truths drawn from PLAN frontmatter (04-01 and 04-02), cross-referenced against R
 | `lib/tessie-streamer.ts` | WebSocket streaming client with auto-reconnect | VERIFIED | 84 lines; `TessieStreamer extends EventEmitter`; `export = TessieStreamer`; no Homey SDK dependency |
 | `tests/stream-mapper.test.ts` | Unit tests for stream field mapping | VERIFIED | 163 lines; 20 tests; all pass |
 | `tests/streamer.test.ts` | Unit tests for streamer connection lifecycle | VERIFIED | 242 lines; 11 tests; all pass |
-| `drivers/vehicle/device.ts` | VehicleDevice with integrated streaming + fallback polling | VERIFIED | Contains `TessieStreamer` import and instantiation; stream event handlers wired; polling fallback logic present |
+| `drivers/car/device.ts` | VehicleDevice with integrated streaming + fallback polling | VERIFIED | Contains `TessieStreamer` import and instantiation; stream event handlers wired; polling fallback logic present |
 | `tests/device-streaming.test.ts` | Tests for streaming integration and polling coordination | VERIFIED | 464 lines; 12 tests; all pass |
 
 **Test suite total: 43 tests, 0 failures.**
@@ -64,9 +64,9 @@ Truths drawn from PLAN frontmatter (04-01 and 04-02), cross-referenced against R
 |------|----|-----|--------|---------|
 | `lib/tessie-streamer.ts` | `wss://streaming.tessie.com/{VIN}` | Built-in `WebSocket` constructor | WIRED | Line 24: `new WebSocket(url)` with correct URL template |
 | `lib/tessie-streamer.ts` | `lib/stream-mapper.ts` | Does NOT import — emits raw data events per design | WIRED (by design) | `emit('data', msg.data, msg.createdAt)` on line 37; mapper applied by VehicleDevice in Plan 02 |
-| `drivers/vehicle/device.ts` | `lib/tessie-streamer.ts` | `import TessieStreamer = require(...)` and `new TessieStreamer(vin, token)` in `onInit` | WIRED | Line 3 import; line 137 instantiation |
-| `drivers/vehicle/device.ts` | `lib/stream-mapper.ts` | `import mapStreamData = require(...)` and call in `data` event handler | WIRED | Line 4 import; line 140 call `mapStreamData(dataPoints, this.isMetric, this.usesPsi)` |
-| `drivers/vehicle/device.ts` | `pollCycle` | `streamer.isConnected` check for fallback interval | WIRED | Line 246: `if (this.streamer?.isConnected) { nextInterval = STREAMING_FALLBACK_INTERVAL_MS; }` |
+| `drivers/car/device.ts` | `lib/tessie-streamer.ts` | `import TessieStreamer = require(...)` and `new TessieStreamer(vin, token)` in `onInit` | WIRED | Line 3 import; line 137 instantiation |
+| `drivers/car/device.ts` | `lib/stream-mapper.ts` | `import mapStreamData = require(...)` and call in `data` event handler | WIRED | Line 4 import; line 140 call `mapStreamData(dataPoints, this.isMetric, this.usesPsi)` |
+| `drivers/car/device.ts` | `pollCycle` | `streamer.isConnected` check for fallback interval | WIRED | Line 246: `if (this.streamer?.isConnected) { nextInterval = STREAMING_FALLBACK_INTERVAL_MS; }` |
 
 ---
 
@@ -78,7 +78,7 @@ Truths drawn from PLAN frontmatter (04-01 and 04-02), cross-referenced against R
 
 **No orphaned requirements.** REQUIREMENTS.md maps only STRM-01 to Phase 4, and both plans claim STRM-01. The traceability table shows STRM-01 as Complete for Phase 4.
 
-**Note on ROADMAP success criterion 2:** The criterion states "device shows as unavailable during extended outages." This is satisfied by the existing `consecutiveFailures` mechanism in `pollCycle()` — after 3 consecutive REST poll failures, `setUnavailable()` is called. Stream disconnect intentionally does not trigger unavailability (vehicle may be sleeping). The behavior is correct and the mechanism remains intact in `drivers/vehicle/device.ts` lines 256-261.
+**Note on ROADMAP success criterion 2:** The criterion states "device shows as unavailable during extended outages." This is satisfied by the existing `consecutiveFailures` mechanism in `pollCycle()` — after 3 consecutive REST poll failures, `setUnavailable()` is called. Stream disconnect intentionally does not trigger unavailability (vehicle may be sleeping). The behavior is correct and the mechanism remains intact in `drivers/car/device.ts` lines 256-261.
 
 ---
 

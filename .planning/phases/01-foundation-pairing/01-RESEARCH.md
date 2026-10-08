@@ -120,7 +120,7 @@ se.adamnoren.tessie/
 **When to use:** When the pairing flow needs a custom form (not username/password)
 **Example:**
 
-Frontend (`drivers/vehicle/pair/token_input.html`):
+Frontend (`drivers/car/pair/token_input.html`):
 ```html
 <script>
   function submitToken() {
@@ -142,7 +142,7 @@ Frontend (`drivers/vehicle/pair/token_input.html`):
 </script>
 ```
 
-Backend (`drivers/vehicle/driver.js`):
+Backend (`drivers/car/driver.js`):
 ```javascript
 // Source: https://apps.developer.homey.app/advanced/custom-views/custom-pairing-views
 async onPair(session) {
@@ -365,9 +365,9 @@ async onInit() {
     }
   ],
   "images": {
-    "small": "/drivers/vehicle/assets/images/small.png",
-    "large": "/drivers/vehicle/assets/images/large.png",
-    "xlarge": "/drivers/vehicle/assets/images/xlarge.png"
+    "small": "/drivers/car/assets/images/small.png",
+    "large": "/drivers/car/assets/images/large.png",
+    "xlarge": "/drivers/car/assets/images/xlarge.png"
   }
 }
 ```
@@ -424,13 +424,13 @@ async onInit() {
 // "models", "modelx", "model3", "modely", "cybertruck"
 function getIconForModel(carType) {
   const iconMap = {
-    'models': '/drivers/vehicle/assets/icons/model_s.svg',
-    'modelx': '/drivers/vehicle/assets/icons/model_x.svg',
-    'model3': '/drivers/vehicle/assets/icons/model_3.svg',
-    'modely': '/drivers/vehicle/assets/icons/model_y.svg',
-    'cybertruck': '/drivers/vehicle/assets/icons/cybertruck.svg',
+    'models': '/drivers/car/assets/icons/model_s.svg',
+    'modelx': '/drivers/car/assets/icons/model_x.svg',
+    'model3': '/drivers/car/assets/icons/model_3.svg',
+    'modely': '/drivers/car/assets/icons/model_y.svg',
+    'cybertruck': '/drivers/car/assets/icons/cybertruck.svg',
   };
-  return iconMap[carType] || '/drivers/vehicle/assets/icon.svg';
+  return iconMap[carType] || '/drivers/car/assets/icon.svg';
 }
 ```
 
@@ -575,7 +575,7 @@ The `store` is the correct choice. Store the token per-device via `device.setSto
 
 4. **Dynamic icon assignment during pairing**
    - What we know: The `icon` property in the device object returned from `list_devices` can override the default driver icon. Path must be relative to the app.
-   - What's unclear: Whether icon paths work with `/drivers/vehicle/assets/icons/model_3.svg` or need to be in a specific location. Also whether icons must be pre-declared.
+   - What's unclear: Whether icon paths work with `/drivers/car/assets/icons/model_3.svg` or need to be in a specific location. Also whether icons must be pre-declared.
    - Recommendation: Test icon assignment with a simple prototype. Fallback plan: use a single generic vehicle icon and differentiate by device name.
 
 ## Validation Architecture

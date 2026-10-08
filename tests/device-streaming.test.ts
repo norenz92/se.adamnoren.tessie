@@ -60,7 +60,7 @@ function MockTessieClient(this: any, _token: string) {
 
 (Module as any)._resolveFilename = function (request: string, parent: any, isMain: boolean, options: any) {
   if (request === 'homey') return '__mock_homey_stream__';
-  if (parent && parent.filename && parent.filename.includes('drivers/vehicle/device')) {
+  if (parent && parent.filename && parent.filename.includes('drivers/car/device')) {
     if (request === '../../lib/tessie-client') return '__mock_tessie_client_stream__';
     if (request === '../../lib/tessie-streamer') return '__mock_tessie_streamer__';
     if (request === '../../lib/stream-mapper') return '__mock_stream_mapper__';
@@ -126,6 +126,7 @@ const mockHomeyModule = new Module('__mock_homey_stream__');
     hasCapability(name: string) { return this._declaredCapabilities.has(name); }
     async addCapability(name: string) { this._declaredCapabilities.add(name); }
     async removeCapability(name: string) { this._declaredCapabilities.delete(name); }
+    getCapabilities() { return [...this._declaredCapabilities]; }
     _settings: Record<string, any> = {};
     async setSettings(settings: Record<string, any>) { Object.assign(this._settings, settings); }
     async setCapabilityOptions(name: string, opts: any) { this._capabilityOptions[name] = opts; }
@@ -164,7 +165,7 @@ const mockMapperModule = new Module('__mock_stream_mapper__');
 (require as any).cache['__mock_stream_mapper__'] = mockMapperModule;
 
 // Now require the device module
-const VehicleDevice = require('../drivers/vehicle/device');
+const VehicleDevice = require('../drivers/car/device');
 
 // ---- Test fixtures ----
 

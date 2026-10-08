@@ -27,7 +27,7 @@ key-files:
   created:
     - tests/device-controls.test.ts
   modified:
-    - drivers/vehicle/device.ts
+    - drivers/car/device.ts
     - tests/device.test.ts
 
 key-decisions:
@@ -73,7 +73,7 @@ Each task was committed atomically:
 2. **Task 1 (GREEN): Implementation** - `14ac09d` (feat)
 
 ## Files Created/Modified
-- `drivers/vehicle/device.ts` - Added ensureAwake, executeCommand, refreshState, 10 capability listeners, extended updateCapabilities with 9 new state field mappings
+- `drivers/car/device.ts` - Added ensureAwake, executeCommand, refreshState, 10 capability listeners, extended updateCapabilities with 9 new state field mappings
 - `tests/device-controls.test.ts` - 30 new tests for control methods, capability listeners, and state mapping
 - `tests/device.test.ts` - Updated MockTessieClient with command/wake stubs, added 9 new capability IDs, updated locked listener test
 

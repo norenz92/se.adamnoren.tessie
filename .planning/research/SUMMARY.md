@@ -68,8 +68,8 @@ The architecture follows Homey's canonical pattern: App singleton (entry point, 
 
 **Major components:**
 1. **App (`app.ts`)** — Singleton entry point. Registers app-level Flow cards if any. No shared state since auth is per-device.
-2. **Driver (`drivers/vehicle/driver.ts`)** — Handles pairing: accepts API token via credentials-login view, calls Tessie `/vehicles` to discover vehicles, returns device list. Implements `onRepair()` for token rotation.
-3. **Device (`drivers/vehicle/device.ts`)** — Per-vehicle instance. Owns `TessieStream` (WebSocket primary) and polling interval (fallback). Registers capability listeners for commands. Manages device availability state.
+2. **Driver (`drivers/car/driver.ts`)** — Handles pairing: accepts API token via credentials-login view, calls Tessie `/vehicles` to discover vehicles, returns device list. Implements `onRepair()` for token rotation.
+3. **Device (`drivers/car/device.ts`)** — Per-vehicle instance. Owns `TessieStream` (WebSocket primary) and polling interval (fallback). Registers capability listeners for commands. Manages device availability state.
 4. **TessieClient (`lib/TessieClient.ts`)** — Stateless HTTP wrapper for `api.tessie.com`. One instance per device (auth token may differ per device).
 5. **TessieStream (`lib/TessieStream.ts`)** — WebSocket client for `streaming.tessie.com/{VIN}`. Handles connection, exponential backoff reconnection, heartbeat, and event emission.
 6. **CapabilityMapper (`lib/capabilities.ts`)** — Pure mapping functions between Tessie fields and Homey capability IDs. No I/O.

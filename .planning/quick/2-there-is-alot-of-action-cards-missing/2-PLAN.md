@@ -52,7 +52,7 @@ files_modified:
   - .homeycompose/flow/conditions/is_sentry_on.json
   - .homeycompose/flow/conditions/is_home.json
   - .homeycompose/flow/conditions/charge_port_open.json
-  - drivers/vehicle/device.ts
+  - drivers/car/device.ts
 autonomous: true
 must_haves:
   truths:
@@ -67,17 +67,17 @@ must_haves:
       provides: "Trigger card JSON files for key state changes"
     - path: ".homeycompose/flow/conditions/"
       provides: "Condition card JSON files for key state checks"
-    - path: "drivers/vehicle/device.ts"
+    - path: "drivers/car/device.ts"
       provides: "Flow card run listeners and trigger registrations"
   key_links:
     - from: ".homeycompose/flow/actions/*.json"
-      to: "drivers/vehicle/device.ts"
+      to: "drivers/car/device.ts"
       via: "Homey Compose auto-wires capability-based actions; custom run listeners for non-capability actions"
     - from: ".homeycompose/flow/triggers/*.json"
-      to: "drivers/vehicle/device.ts"
+      to: "drivers/car/device.ts"
       via: "Flow card trigger() calls in updateCapabilities and capability listeners"
     - from: ".homeycompose/flow/conditions/*.json"
-      to: "drivers/vehicle/device.ts"
+      to: "drivers/car/device.ts"
       via: "registerRunListener checking current capability values"
 ---
 
@@ -94,7 +94,7 @@ Output: Complete set of flow card JSON files in .homeycompose/flow/ plus run lis
 </execution_context>
 
 <context>
-@drivers/vehicle/device.ts
+@drivers/car/device.ts
 @CLAUDE.md
 </context>
 
@@ -154,7 +154,7 @@ Output: Complete set of flow card JSON files in .homeycompose/flow/ plus run lis
   <action>
 Create directories: `.homeycompose/flow/actions/`, `.homeycompose/flow/triggers/`, `.homeycompose/flow/conditions/`.
 
-**ACTION CARDS** -- Create one JSON file per action. All must include `"platforms": ["local"]` and a device arg with `"filter": "driver_id=vehicle"`.
+**ACTION CARDS** -- Create one JSON file per action. All must include `"platforms": ["local"]` and a device arg with `"filter": "driver_id=car"`.
 
 Simple toggle actions (no extra args beyond device): lock, unlock, enable_sentry, disable_sentry, start_climate, stop_climate, open_charge_port, close_charge_port, start_charging, stop_charging, activate_trunk, activate_frunk, enable_steering_wheel_heater, disable_steering_wheel_heater, enable_defrost, disable_defrost, close_windows, vent_windows, enable_valet_mode, disable_valet_mode, enable_speed_limit, disable_speed_limit, wake, honk, flash_lights, trigger_homelink.
 
@@ -181,7 +181,7 @@ Use descriptive `title` and `hint` for each card. Example titles: "Lock the vehi
 
 <task type="auto">
   <name>Task 2: Wire flow card run listeners in device.ts</name>
-  <files>drivers/vehicle/device.ts</files>
+  <files>drivers/car/device.ts</files>
   <action>
 In VehicleDevice.onInit(), after existing capability listener registrations, add flow card registrations.
 

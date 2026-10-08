@@ -6,15 +6,19 @@ jobs:
   main:
     name: Publish Homey App
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
       - name: Publish Homey App
-        uses: athombv/github-action-homey-app-publish@master
+        # Pinned to a commit: this step receives the Homey publishing token
+        uses: athombv/github-action-homey-app-publish@0642b483f1eb66fbceb0c91b73df35d45fd2f3db # master 2024-08-15
         id: publish
         with:
           personal_access_token: ${{ secrets.HOMEY_PAT }}
 
       - name: URL
-        run: |
-          echo "Manage your app at ${{ steps.publish.outputs.url }}." >> $GITHUB_STEP_SUMMARY
+        env:
+          URL: ${{ steps.publish.outputs.url }}
+        run: echo "Manage your app at ${URL}." >> "$GITHUB_STEP_SUMMARY"

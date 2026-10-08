@@ -1,7 +1,7 @@
 {
-  "id": "se.adamnoren.tessie",
+  "id": "com.adamnoren.tessie",
   "author": "Adam Norén",
-  "version": "0.2.0",
+  "version": "2.0.0",
   "compatibility": ">=12.9.0",
   "sdk": 3,
   "platforms": [
@@ -24,5 +24,25 @@
     "small": "/assets/images/small.jpg",
     "large": "/assets/images/large.jpg",
     "xlarge": "/assets/images/xlarge.jpg"
-  }
+  },
+  "tags": {
+    "en": [
+      "Tesla",
+      "Tessie"
+    ]
+  },
+  "contributing": {
+    "donate": {
+      "paypal": {
+        "username": "adamnorenverisure"
+      },
+      "githubSponsors": {
+        "username": "norenz92"
+      }
+    }
+  },
+  "bugs": {
+    "url": "https://github.com/norenz92/se.adamnoren.tessie/issues"
+  },
+  "homepage": "https://share.tessie.com/1oPgpu3hfMb"
 }

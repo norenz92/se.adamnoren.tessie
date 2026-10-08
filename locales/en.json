@@ -1,15 +1,1 @@
-{
-  "pair": {
-    "token_input": {
-      "title": "Connect to Tessie",
-      "help": "Find your API token at",
-      "help_link_text": "Tessie Settings > API",
-      "placeholder": "Enter your Tessie API token",
-      "submit": "Connect",
-      "error_empty": "Please enter your API token",
-      "error_invalid": "Invalid or expired API token. Please check and try again.",
-      "error_no_vehicles": "No active vehicles found for this account.",
-      "error_generic": "Could not connect to Tessie. Please try again."
-    }
-  }
-}
+{}

@@ -2,118 +2,66 @@
 <html>
 <head>
   <style>
-    .container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1.5em;
-      max-width: 400px;
-      margin: 0 auto;
-    }
-
-    h2 {
-      margin-bottom: 0.25em;
-    }
-
-    .help-text {
-      font-size: 0.85em;
-      color: #999;
-      margin-bottom: 1.5em;
-      text-align: center;
-    }
-
-    .help-text a {
-      color: #4A90D9;
-      text-decoration: none;
-    }
-
-    .help-text a:hover {
-      text-decoration: underline;
-    }
-
-    .form-group {
-      width: 100%;
-      margin-bottom: 1em;
-    }
-
-    input[type="password"] {
-      width: 100%;
-      padding: 0.75em;
-      font-size: 1em;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      box-sizing: border-box;
-    }
-
-    input[type="password"]:focus {
-      outline: none;
-      border-color: #4A90D9;
-    }
-
-    .error-message {
-      display: none;
-      color: #e74c3c;
-      font-size: 0.85em;
-      margin-top: 0.5em;
-      text-align: center;
-    }
-
-    button {
-      width: 100%;
-      padding: 0.75em;
-      font-size: 1em;
-      background-color: #4A90D9;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 0.5em;
-    }
-
-    button:hover {
-      background-color: #357ABD;
-    }
+    .steps { margin: 0 0 1.25em; padding-left: 1.25em; line-height: 1.5; }
+    .steps li { margin-bottom: 0.35em; }
+    .link { color: inherit; font-weight: 600; text-decoration: underline; cursor: pointer; }
+    .signup { margin: 1em 0 0; font-size: 0.9em; opacity: 0.8; }
+    .error { display: none; margin-top: 0.75em; color: #e74c3c; font-size: 0.9em; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h2>Connect to Tessie</h2>
-    <p class="help-text">
-      Find your API token at
-      <a href="https://my.tessie.com/settings/api" target="_blank" rel="noopener noreferrer">Tessie Settings &gt; API</a>
-    </p>
+  <header class="homey-header">
+    <h1 class="homey-title">Connect to Tessie</h1>
+    <p class="homey-subtitle">Homey connects to your Tesla through Tessie. Paste your Tessie access token to continue.</p>
+  </header>
 
-    <div class="form-group">
-      <input
-        type="password"
-        id="token"
-        placeholder="Enter your Tessie API token"
-        autocomplete="off"
-      />
+  <ol class="steps">
+    <li>Open <a class="link" data-url="https://dash.tessie.com/settings/api">dash.tessie.com/settings/api</a> and sign in.</li>
+    <li>Select <strong>Generate Access Token</strong> and copy the token.</li>
+    <li>Paste it below.</li>
+  </ol>
+
+  <form id="form" class="homey-form">
+  <fieldset class="homey-form-fieldset">
+    <div class="homey-form-group">
+      <label class="homey-form-label" for="token">Tessie access token</label>
+      <input class="homey-form-input" id="token" type="password" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Paste your access token" />
     </div>
+  </fieldset>
+  <p id="error" class="error" role="alert"></p>
 
-    <div id="error" class="error-message"></div>
+  <button id="submit" type="submit" class="homey-button-primary-full">Connect</button>
+  </form>
 
-    <button id="submit" onclick="submitToken()">Connect</button>
-  </div>
+  <p class="signup">New to Tessie? <a class="link" data-url="https://share.tessie.com/1oPgpu3hfMb">Create an account</a> (referral link).</p>
 
-  <script>
+  <script type="text/javascript">
+    var tokenEl = document.getElementById('token');
+    var errorEl = document.getElementById('error');
+    var submitEl = document.getElementById('submit');
+
+    // External pages must open via Homey.popup; plain links don't work inside the pairing view
+    document.querySelectorAll('[data-url]').forEach(function (el) {
+      el.addEventListener('click', function (e) {
+        e.preventDefault();
+        Homey.popup(el.getAttribute('data-url'));
+      });
+    });
+
+    function showError(message) {
+      errorEl.textContent = message;
+      errorEl.style.display = message ? 'block' : 'none';
+    }
+
     function submitToken() {
-      var token = document.getElementById('token').value.trim();
-      var errorEl = document.getElementById('error');
-
-      // Hide previous error
-      errorEl.style.display = 'none';
-      errorEl.textContent = '';
-
+      var token = tokenEl.value.trim();
+      showError('');
       if (!token) {
-        errorEl.textContent = 'Please enter your API token';
-        errorEl.style.display = 'block';
+        showError('Please paste your Tessie access token.');
         return;
       }
-
+      submitEl.classList.add('is-loading');
       Homey.showLoadingOverlay();
-
       Homey.emit('validate_token', token)
         .then(function () {
           Homey.hideLoadingOverlay();
@@ -121,17 +69,14 @@
         })
         .catch(function (err) {
           Homey.hideLoadingOverlay();
-          var message = (err && err.message) || 'Could not connect to Tessie. Please try again.';
-          errorEl.textContent = message;
-          errorEl.style.display = 'block';
+          submitEl.classList.remove('is-loading');
+          showError((err && err.message) || 'Could not connect to Tessie. Please try again.');
         });
     }
 
-    // Allow pressing Enter to submit
-    document.getElementById('token').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        submitToken();
-      }
+    document.getElementById('form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      submitToken();
     });
   </script>
 </body>

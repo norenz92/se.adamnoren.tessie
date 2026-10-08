@@ -1,26 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
-  <!-- Cybertruck: angular truck silhouette -->
-  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Body - angular, geometric shapes -->
-    <path d="M140 540 L200 420 L300 340 L480 260 L700 340 L800 420 L840 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Bed - flat truck bed -->
-    <path d="M520 260 L700 260 L700 340" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Angular roof -->
-    <path d="M300 340 L480 260 L520 260 L520 340" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Undercarriage -->
-    <path d="M110 540 L110 590 L270 590 L270 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <path d="M700 540 L700 590 L860 590 L860 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Bottom line -->
-    <line x1="270" y1="590" x2="700" y2="590" stroke="#FFFFFF"/>
-    <!-- Front wheel - larger for truck -->
-    <circle cx="250" cy="590" r="64" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="250" cy="590" r="26" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Rear wheel -->
-    <circle cx="720" cy="590" r="64" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="720" cy="590" r="26" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Windshield - angular -->
-    <line x1="320" y1="340" x2="480" y2="268" stroke="#FFFFFF" stroke-width="8"/>
-    <!-- Light bar -->
-    <line x1="180" y1="460" x2="240" y2="440" stroke="#FFFFFF" stroke-width="10"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="960" viewBox="0 0 960 960">
+  <title>Cybertruck</title>
+  <g fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M93.1 558.5 L127.8 558.5 L183.8 454.8 L193.8 448.8 L266.9 448.8 L276.9 454.8 L332.9 558.5 L678.7 558.5 L734.6 455.3 L744.6 449.3 L817.4 449.3 L827.4 455.3 L883.3 558.5 L877.7 558.5 L896 520.2 L885.2 517.9 L892 464.3 L568.4 351.9 L76 412.4 L70.3 420.9 L77.7 503.7 L86.8 513.4 L64 514 L93.1 558.5 Z"/>
+    <path d="M388.2 374 L381.8 415.9 L823.2 440.4" stroke-width="22"/>
+    <path d="M519.9 423.5 L519.9 357.8" stroke-width="22"/>
+    <circle cx="230.3" cy="547.3" r="59"/>
+    <circle cx="781" cy="547.6" r="58.7"/>
   </g>
 </svg>

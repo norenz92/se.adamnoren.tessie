@@ -2,6 +2,7 @@ import { describe, it, mock, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import Module from 'node:module';
+import { createMockFlow, createMockGeolocation, StubTessieStreamer } from './helpers/homey-stubs';
 import { EventEmitter } from 'node:events';
 
 // ---- Module mocking setup ----
@@ -113,6 +114,8 @@ const mockHomeyModule = new Module('__mock_homey_stream__');
       clearInterval: (id: number) => {
         this._clearedIntervals.push(id);
       },
+      flow: createMockFlow(),
+      geolocation: createMockGeolocation(),
     };
 
     getData() { return this._data; }
@@ -122,8 +125,16 @@ const mockHomeyModule = new Module('__mock_homey_stream__');
     getCapabilityValue(name: string) { return this._capabilities[name]; }
     hasCapability(name: string) { return this._declaredCapabilities.has(name); }
     async addCapability(name: string) { this._declaredCapabilities.add(name); }
+    _settings: Record<string, any> = {};
+    async setSettings(settings: Record<string, any>) { Object.assign(this._settings, settings); }
     async setCapabilityOptions(name: string, opts: any) { this._capabilityOptions[name] = opts; }
     registerCapabilityListener(name: string, fn: Function) { this._capabilityListeners[name] = fn; }
+    getSetting(key: string) { return this._settings[key]; }
+    getSettings() { return { ...this._settings }; }
+    async triggerCapabilityListener(name: string, value: any) {
+      await this._capabilityListeners[name](value, {});
+      this._capabilities[name] = value;
+    }
     async setAvailable() { this._available = true; this._unavailableMessage = null; }
     async setUnavailable(msg: string) { this._available = false; this._unavailableMessage = msg; }
     log(..._args: any[]) {}
@@ -348,7 +359,7 @@ describe('VehicleDevice Streaming Integration', () => {
   });
 
   describe('pollCycle with streaming', () => {
-    it('uses STREAMING_FALLBACK_INTERVAL_MS (600000) when streamer.isConnected is true', async () => {
+    it('uses STREAMING_FALLBACK_INTERVAL_MS (600000) when the stream is connected and delivering data', async () => {
       const device = createDevice();
       device.isMetric = true;
       device.usesPsi = false;
@@ -358,6 +369,7 @@ describe('VehicleDevice Streaming Integration', () => {
       const streamer = lastStreamerInstance;
       assert.ok(streamer, 'streamer should exist');
       streamer._connected = true;
+      device.lastStreamDataAt = Date.now();
 
       device.client = createMockClient({
         getStatusResult: { status: 'awake' },
@@ -393,6 +405,23 @@ describe('VehicleDevice Streaming Integration', () => {
       assert.equal(lastTimeout.ms, 60000, 'should use normal awake interval');
     });
 
+    it('keeps the normal interval when the stream is connected but silent', async () => {
+      const device = createDevice();
+      await device.onInit();
+      lastStreamerInstance._connected = true;
+      device.lastStreamDataAt = Date.now() - 6 * 60 * 1000;
+
+      device.client = createMockClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState({ charge_state: { charging_state: 'Disconnected' } }),
+      });
+
+      await device.pollCycle();
+
+      const lastTimeout = device._timeoutCalls[device._timeoutCalls.length - 1];
+      assert.equal(lastTimeout.ms, 60000, 'stale stream must not slow down polling');
+    });
+
     it('uses streaming fallback even when vehicle is charging', async () => {
       const device = createDevice();
       device.isMetric = true;
@@ -402,6 +431,7 @@ describe('VehicleDevice Streaming Integration', () => {
       const streamer = lastStreamerInstance;
       assert.ok(streamer, 'streamer should exist');
       streamer._connected = true;
+      device.lastStreamDataAt = Date.now();
 
       device.client = createMockClient({
         getStatusResult: { status: 'awake' },
@@ -423,6 +453,7 @@ describe('VehicleDevice Streaming Integration', () => {
       const streamer = lastStreamerInstance;
       assert.ok(streamer, 'streamer should exist');
       streamer._connected = true;
+      device.lastStreamDataAt = Date.now();
 
       device.client = createMockClient({
         getStatusResult: { status: 'asleep' },

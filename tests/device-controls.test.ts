@@ -2,6 +2,7 @@ import { describe, it, mock, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import Module from 'node:module';
+import { createMockFlow, createMockGeolocation, StubTessieStreamer } from './helpers/homey-stubs';
 
 // ---- Module mocking setup ----
 const originalResolve = (Module as any)._resolveFilename;
@@ -20,6 +21,7 @@ function MockTessieClient(this: any, token: string) {
   if (request === 'homey') return '__mock_homey_controls__';
   if (parent && parent.filename && parent.filename.includes('drivers/vehicle/device')) {
     if (request === '../../lib/tessie-client') return '__mock_tessie_client_controls__';
+    if (request === '../../lib/tessie-streamer') return '__mock_tessie_streamer_controls__';
   }
   return originalResolve.call(this, request, parent, isMain, options);
 };
@@ -76,6 +78,8 @@ const mockHomeyModule = new Module('__mock_homey_controls__');
       clearInterval: (id: number) => {
         this._clearedIntervals.push(id);
       },
+      flow: createMockFlow(),
+      geolocation: createMockGeolocation(),
     };
 
     getData() { return this._data; }
@@ -86,9 +90,15 @@ const mockHomeyModule = new Module('__mock_homey_controls__');
     hasCapability(name: string) { return this._declaredCapabilities.has(name); }
     async addCapability(name: string) { this._declaredCapabilities.add(name); }
     _settings: Record<string, any> = {};
+    async setSettings(settings: Record<string, any>) { Object.assign(this._settings, settings); }
     async setCapabilityOptions(name: string, opts: any) { this._capabilityOptions[name] = opts; }
     registerCapabilityListener(name: string, fn: Function) { this._capabilityListeners[name] = fn; }
     getSetting(key: string) { return this._settings[key]; }
+    getSettings() { return { ...this._settings }; }
+    async triggerCapabilityListener(name: string, value: any) {
+      await this._capabilityListeners[name](value, {});
+      this._capabilities[name] = value;
+    }
     async setAvailable() { this._available = true; this._unavailableMessage = null; }
     async setUnavailable(msg: string) { this._available = false; this._unavailableMessage = msg; }
     log(..._args: any[]) {}
@@ -103,6 +113,11 @@ const mockTessieModule = new Module('__mock_tessie_client_controls__');
 (mockTessieModule as any).exports = MockTessieClient;
 (mockTessieModule as any).loaded = true;
 (require as any).cache['__mock_tessie_client_controls__'] = mockTessieModule;
+
+const stubStreamerModule = new Module('__mock_tessie_streamer_controls__');
+(stubStreamerModule as any).exports = StubTessieStreamer;
+(stubStreamerModule as any).loaded = true;
+(require as any).cache['__mock_tessie_streamer_controls__'] = stubStreamerModule;
 
 // Now require the device module
 const VehicleDevice = require('../drivers/vehicle/device');
@@ -272,10 +287,10 @@ describe('VehicleDevice Controls', () => {
       assert.equal(client.calls.wake.length, 0);
     });
 
-    it('throws "Vehicle did not wake up in time" after timeout', async () => {
+    it('throws "Vehicle did not wake up in time" when Tessie wake times out', async () => {
       const device = createDevice();
       const client = createTrackedClient({
-        getStatusResult: { status: 'asleep' }, // never wakes
+        wakeResult: false, // Tessie gave up after ~90s
       });
       device.client = client;
       device._capabilities['vehicle_state_status'] = 'Asleep';
@@ -501,7 +516,7 @@ describe('VehicleDevice Controls', () => {
       device.isMetric = true;
       device.usesPsi = false;
       await device.updateCapabilities(fullTessieState({ charge_state: { charge_current_request_max: 48 } }));
-      assert.deepEqual(device._capabilityOptions['charging_amps'], { max: 48 });
+      assert.equal(device._capabilityOptions['charging_amps']?.max, 48);
     });
 
     it('maps charge_port_door_open to charge_port', async () => {
@@ -578,39 +593,39 @@ describe('VehicleDevice Controls', () => {
       return { device, client };
     }
 
-    it('seat_heater_driver sends set_seat_heating with seat=0', async () => {
+    it('seat_heater_driver sends set_seat_heat with seat=front_left', async () => {
       const { device, client } = await setupDeviceWithListeners();
       await device._capabilityListeners['seat_heater_driver']('2');
-      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
-      assert.deepEqual(client.calls.command[0].args[2], { seat: 0, level: 2 });
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heat');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 'front_left', level: 2 });
     });
 
-    it('seat_heater_passenger sends set_seat_heating with seat=1', async () => {
+    it('seat_heater_passenger sends set_seat_heat with seat=front_right', async () => {
       const { device, client } = await setupDeviceWithListeners();
       await device._capabilityListeners['seat_heater_passenger']('3');
-      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
-      assert.deepEqual(client.calls.command[0].args[2], { seat: 1, level: 3 });
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heat');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 'front_right', level: 3 });
     });
 
-    it('seat_heater_rear_left sends set_seat_heating with seat=2', async () => {
+    it('seat_heater_rear_left sends set_seat_heat with seat=rear_left', async () => {
       const { device, client } = await setupDeviceWithListeners();
       await device._capabilityListeners['seat_heater_rear_left']('1');
-      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
-      assert.deepEqual(client.calls.command[0].args[2], { seat: 2, level: 1 });
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heat');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 'rear_left', level: 1 });
     });
 
-    it('seat_heater_rear_center sends set_seat_heating with seat=4 (not 3)', async () => {
+    it('seat_heater_rear_center sends set_seat_heat with seat=rear_center', async () => {
       const { device, client } = await setupDeviceWithListeners();
       await device._capabilityListeners['seat_heater_rear_center']('1');
-      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
-      assert.deepEqual(client.calls.command[0].args[2], { seat: 4, level: 1 });
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heat');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 'rear_center', level: 1 });
     });
 
-    it('seat_heater_rear_right sends set_seat_heating with seat=5', async () => {
+    it('seat_heater_rear_right sends set_seat_heat with seat=rear_right', async () => {
       const { device, client } = await setupDeviceWithListeners();
       await device._capabilityListeners['seat_heater_rear_right']('0');
-      assert.equal(client.calls.command[0].args[1], 'set_seat_heating');
-      assert.deepEqual(client.calls.command[0].args[2], { seat: 5, level: 0 });
+      assert.equal(client.calls.command[0].args[1], 'set_seat_heat');
+      assert.deepEqual(client.calls.command[0].args[2], { seat: 'rear_right', level: 0 });
     });
   });
 
@@ -998,11 +1013,19 @@ describe('VehicleDevice Controls', () => {
       return { device, client };
     }
 
-    it('calls set_speed_limit with limit_mph', async () => {
+    it('calls set_speed_limit with mph param', async () => {
       const { device, client } = await setupDeviceWithListeners();
+      await device.applyUnitSettings({ unit_speed: 'mph' });
       await device._capabilityListeners['speed_limit_speed'](75);
       assert.equal(client.calls.command[0].args[1], 'set_speed_limit');
-      assert.deepEqual(client.calls.command[0].args[2], { limit_mph: 75 });
+      assert.deepEqual(client.calls.command[0].args[2], { mph: 75 });
+    });
+
+    it('rejects speed limits outside the 50-90 mph range without calling the API', async () => {
+      const { device, client } = await setupDeviceWithListeners();
+      await device.applyUnitSettings({ unit_speed: 'mph' });
+      await assert.rejects(async () => device._capabilityListeners['speed_limit_speed'](120));
+      assert.equal(client.calls.command.length, 0);
     });
   });
 
@@ -1054,7 +1077,8 @@ describe('VehicleDevice Controls', () => {
       await device.updateCapabilities(fullTessieState({
         vehicle_state: { speed_limit_mode: { active: false, current_limit_mph: 85 } },
       }));
-      assert.equal(device._capabilities['speed_limit_speed'], 85);
+      // Default unit is km/h: 85 mph -> 137 km/h
+      assert.equal(device._capabilities['speed_limit_speed'], 137);
     });
   });
 
@@ -1076,7 +1100,7 @@ describe('VehicleDevice Controls', () => {
 
       assert.equal(device._capabilities['last_charge_energy'], 42.3);
       assert.equal(device._capabilities['last_charge_location'], 'Home');
-      assert.equal(device._capabilities['last_charge_cost'], '$4.32');
+      assert.equal(device._capabilities['last_charge_cost'], 4.32);
     });
 
     it('handles empty charges array gracefully', async () => {
@@ -1096,6 +1120,158 @@ describe('VehicleDevice Controls', () => {
       await device.updateChargingHistory();
       // Should not throw
       assert.equal(device._capabilities['last_charge_energy'], undefined);
+    });
+  });
+
+  describe('unit settings and conversions', () => {
+    it('applyUnitSettings sets metric capability options', async () => {
+      const device = createDevice();
+      device._settings = { unit_distance: 'km', unit_pressure: 'bar', unit_temperature: 'C', unit_speed: 'kmh', currency: 'USD' };
+      await device.applyUnitSettings();
+
+      assert.equal(device._capabilityOptions['measure_range']?.units, 'km');
+      assert.equal(device._capabilityOptions['measure_odometer']?.units, 'km');
+      assert.equal(device._capabilityOptions['measure_tire_pressure_fl']?.units, 'bar');
+      assert.equal(device._capabilityOptions['target_temperature']?.units, '°C');
+      assert.equal(device._capabilityOptions['target_temperature']?.min, 15);
+      assert.equal(device._capabilityOptions['target_temperature']?.max, 28);
+      assert.equal(device._capabilityOptions['speed_limit_speed']?.units, 'km/h');
+      assert.equal(device._capabilityOptions['speed_limit_speed']?.min, 80);
+      assert.equal(device._capabilityOptions['last_charge_cost']?.units, '$');
+      assert.equal(device.isMetric, true);
+      assert.equal(device.usesPsi, false);
+    });
+
+    it('applyUnitSettings sets imperial capability options', async () => {
+      const device = createDevice();
+      device._settings = { unit_distance: 'mi', unit_pressure: 'psi', unit_temperature: 'F', unit_speed: 'mph', currency: 'SEK' };
+      await device.applyUnitSettings();
+
+      assert.equal(device._capabilityOptions['measure_range']?.units, 'mi');
+      assert.equal(device._capabilityOptions['measure_tire_pressure_fl']?.units, 'psi');
+      assert.equal(device._capabilityOptions['target_temperature']?.units, '°F');
+      assert.equal(device._capabilityOptions['target_temperature']?.min, 59);
+      assert.equal(device._capabilityOptions['target_temperature']?.max, 82);
+      assert.equal(device._capabilityOptions['speed_limit_speed']?.units, 'mph');
+      assert.equal(device._capabilityOptions['speed_limit_speed']?.min, 50);
+      assert.equal(device._capabilityOptions['last_charge_cost']?.units, 'kr');
+      assert.equal(device.isMetric, false);
+      assert.equal(device.usesPsi, true);
+    });
+
+    it('onSettings triggers applyUnitSettings and refreshState', async () => {
+      const device = createDevice();
+      device._settings = { unit_distance: 'km', unit_pressure: 'bar', unit_temperature: 'C', unit_speed: 'kmh', currency: 'USD' };
+      const client = createTrackedClient({ getVehicleResult: fullTessieState(), getChargesResult: [] });
+      device.client = client;
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+
+      await device.onSettings({
+        oldSettings: { unit_distance: 'km' },
+        newSettings: { unit_distance: 'mi' },
+        changedKeys: ['unit_distance'],
+      });
+
+      // Background refresh (refreshState -> getVehicle) is kicked off
+      await new Promise((resolve) => setImmediate(resolve));
+      assert.ok(client.calls.getVehicle.length >= 1);
+      // Units come from newSettings, not the stale persisted settings
+      assert.equal(device._capabilityOptions['measure_range']?.units, 'mi');
+      assert.equal(device.isMetric, false);
+    });
+
+    it('speed limit converts mph->km/h when unit_speed is kmh', async () => {
+      const device = createDevice();
+      device._settings = { unit_speed: 'kmh' };
+      await device.applyUnitSettings();
+      const state = fullTessieState({ vehicle_state: { speed_limit_mode: { active: true, current_limit_mph: 70 } } });
+      await device.updateCapabilities(state);
+      // 70 mph / 0.621371 = ~112.65 -> rounds to 113
+      assert.equal(device._capabilities['speed_limit_speed'], 113);
+    });
+
+    it('speed limit stays in mph when unit_speed is mph', async () => {
+      const device = createDevice();
+      device._settings = { unit_speed: 'mph' };
+      await device.applyUnitSettings();
+      const state = fullTessieState({ vehicle_state: { speed_limit_mode: { active: true, current_limit_mph: 70 } } });
+      await device.updateCapabilities(state);
+      assert.equal(device._capabilities['speed_limit_speed'], 70);
+    });
+
+    it('target_temperature converts C->F when unit_temperature is F', async () => {
+      const device = createDevice();
+      device._settings = { unit_temperature: 'F' };
+      await device.applyUnitSettings();
+      const state = fullTessieState({ climate_state: { driver_temp_setting: 21.0 } });
+      await device.updateCapabilities(state);
+      // 21°C = 69.8°F -> Math.round(69.8 * 10) / 10 = 69.8
+      assert.equal(device._capabilities['target_temperature'], 69.8);
+    });
+
+    it('target_temperature stays in C when unit_temperature is C', async () => {
+      const device = createDevice();
+      device._settings = { unit_temperature: 'C' };
+      await device.applyUnitSettings();
+      const state = fullTessieState({ climate_state: { driver_temp_setting: 21.0 } });
+      await device.updateCapabilities(state);
+      assert.equal(device._capabilities['target_temperature'], 21.0);
+    });
+
+    it('target_temperature listener converts F->C before sending to API', async () => {
+      const device = createDevice();
+      device._settings = { unit_temperature: 'F' };
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+
+      await device._capabilityListeners['target_temperature'](69.8);
+      // (69.8 - 32) * 5/9 = 21.0
+      const sentTemp = client.calls.command[0].args[2].temperature;
+      assert.ok(Math.abs(sentTemp - 21.0) < 0.1);
+    });
+
+    it('speed_limit_speed listener converts km/h->mph before sending to API', async () => {
+      const device = createDevice();
+      device._settings = { unit_speed: 'kmh' };
+      await device.onInit();
+      const client = createTrackedClient({
+        getStatusResult: { status: 'awake' },
+        getVehicleResult: fullTessieState(),
+      });
+      device.client = client;
+      device._capabilities['vehicle_state_status'] = 'Awake';
+      device.homey.setTimeout = (fn: Function, _ms: number) => {
+        fn();
+        return device._nextTimerId++;
+      };
+
+      await device._capabilityListeners['speed_limit_speed'](113);
+      // 113 * 0.621371 = ~70.2 -> rounds to 70
+      assert.equal(client.calls.command[0].args[2].mph, 70);
+    });
+
+    it('charging history sets cost as number', async () => {
+      const device = createDevice();
+      device._settings = { currency: 'EUR' };
+      const client = createTrackedClient({
+        getChargesResult: [{ charge_energy_added: 35.2, location: 'Home', total_cost: 12.50 }],
+      });
+      device.client = client;
+
+      await device.updateChargingHistory();
+      assert.equal(device._capabilities['last_charge_cost'], 12.50);
     });
   });
 

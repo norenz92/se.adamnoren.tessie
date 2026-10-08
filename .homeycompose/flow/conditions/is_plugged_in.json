@@ -1,0 +1,18 @@
+{
+  "title": {
+    "en": "Charge cable !{{is|is not}} plugged in"
+  },
+  "hint": {
+    "en": "Check if a charge cable is connected"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

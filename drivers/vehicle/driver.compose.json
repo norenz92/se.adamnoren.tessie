@@ -3,8 +3,12 @@
     "en": "Vehicle"
   },
   "class": "car",
-  "platforms": ["local"],
-  "connectivity": ["cloud"],
+  "platforms": [
+    "local"
+  ],
+  "connectivity": [
+    "cloud"
+  ],
   "capabilities": [
     "measure_battery",
     "locked",
@@ -46,7 +50,10 @@
     "speed_limit_speed",
     "last_charge_energy",
     "last_charge_location",
-    "last_charge_cost"
+    "last_charge_cost",
+    "shift_state",
+    "charger_power",
+    "charge_time_remaining"
   ],
   "capabilitiesOptions": {
     "measure_battery": {
@@ -64,6 +71,9 @@
         "en": "Outside"
       }
     }
+  },
+  "energy": {
+    "electricCar": true
   },
   "pair": [
     {
@@ -90,8 +100,8 @@
     }
   ],
   "images": {
-    "small": "/drivers/vehicle/assets/images/small.png",
-    "large": "/drivers/vehicle/assets/images/large.png",
-    "xlarge": "/drivers/vehicle/assets/images/xlarge.png"
+    "small": "/drivers/vehicle/assets/images/small.jpg",
+    "large": "/drivers/vehicle/assets/images/large.jpg",
+    "xlarge": "/drivers/vehicle/assets/images/xlarge.jpg"
   }
 }

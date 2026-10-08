@@ -1,0 +1,18 @@
+{
+  "title": {
+    "en": "Enable keyless driving"
+  },
+  "hint": {
+    "en": "Allow driving without a key for the next two minutes"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

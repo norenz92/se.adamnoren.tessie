@@ -198,7 +198,19 @@ describe('TessieStreamer', () => {
     assert.ok(lastDelay >= 60000, `Delay ${lastDelay} should be >= 60000`);
   });
 
-  it('resets backoff on successful open', () => {
+  it('does not reset backoff on open alone (server may accept then close)', () => {
+    const streamer = new TessieStreamer('VIN123', 'TOKEN456');
+    streamer.connect();
+    MockWebSocket.instances[0].simulateClose();
+    capturedTimeouts[capturedTimeouts.length - 1].fn();
+    MockWebSocket.instances[MockWebSocket.instances.length - 1].simulateOpen();
+    MockWebSocket.instances[MockWebSocket.instances.length - 1].simulateClose();
+
+    const lastTimeout = capturedTimeouts[capturedTimeouts.length - 1];
+    assert.ok(lastTimeout.delay >= 2000, `Delay ${lastTimeout.delay} should keep backing off`);
+  });
+
+  it('resets backoff once the connection delivers a message', () => {
     const streamer = new TessieStreamer('VIN123', 'TOKEN456');
     streamer.connect();
 
@@ -206,8 +218,9 @@ describe('TessieStreamer', () => {
     MockWebSocket.instances[0].simulateClose();
     capturedTimeouts[0].fn(); // reconnects
 
-    // Simulate successful open on the new connection
+    // Successful open plus traffic on the new connection
     MockWebSocket.instances[MockWebSocket.instances.length - 1].simulateOpen();
+    MockWebSocket.instances[MockWebSocket.instances.length - 1].simulateMessage({ data: [] });
 
     // Now close again - delay should be reset to base (1000)
     MockWebSocket.instances[MockWebSocket.instances.length - 1].simulateClose();
@@ -226,6 +239,30 @@ describe('TessieStreamer', () => {
     assert.equal(streamer.isConnected, false);
     // No new timeouts should be scheduled
     assert.equal(capturedTimeouts.length, timeoutsBefore);
+  });
+
+  it('reconnects when an open connection goes silent (watchdog)', () => {
+    const streamer = new TessieStreamer('VIN123', 'TOKEN456');
+    let disconnected = 0;
+    streamer.on('disconnected', () => { disconnected++; });
+    streamer.connect();
+    MockWebSocket.instances[0].simulateOpen();
+    const watchdog = capturedTimeouts.find((t) => t.delay === 15 * 60 * 1000);
+    assert.ok(watchdog, 'watchdog should be armed on open');
+    watchdog!.fn();
+    assert.equal(disconnected, 1);
+    assert.equal(streamer.isConnected, false);
+    // Closing the stale socket must not trigger a second disconnect
+    assert.equal(disconnected, 1);
+    const reconnect = capturedTimeouts[capturedTimeouts.length - 1];
+    reconnect.fn();
+    assert.equal(MockWebSocket.instances.length, 2);
+  });
+
+  it('url-encodes vin and token', () => {
+    const streamer = new TessieStreamer('VIN 1', 'a&b=c');
+    streamer.connect();
+    assert.equal(MockWebSocket.instances[0].url, 'wss://streaming.tessie.com/VIN%201?access_token=a%26b%3Dc');
   });
 
   it('ignores JSON parse errors on malformed messages', () => {

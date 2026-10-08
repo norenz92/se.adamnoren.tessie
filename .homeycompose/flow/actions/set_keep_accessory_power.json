@@ -1,0 +1,42 @@
+{
+  "title": {
+    "en": "Set keep accessory power"
+  },
+  "titleFormatted": {
+    "en": "Turn keep accessory power [[state]]"
+  },
+  "hint": {
+    "en": "Keep accessory power (12V/USB) on after leaving the vehicle"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "dropdown",
+      "name": "state",
+      "title": {
+        "en": "State"
+      },
+      "values": [
+        {
+          "id": "on",
+          "title": {
+            "en": "On"
+          }
+        },
+        {
+          "id": "off",
+          "title": {
+            "en": "Off"
+          }
+        }
+      ]
+    }
+  ]
+}

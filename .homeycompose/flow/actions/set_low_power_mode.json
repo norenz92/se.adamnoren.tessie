@@ -1,0 +1,42 @@
+{
+  "title": {
+    "en": "Set low power mode"
+  },
+  "titleFormatted": {
+    "en": "Turn low power mode [[state]]"
+  },
+  "hint": {
+    "en": "Turn low power mode on or off"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "dropdown",
+      "name": "state",
+      "title": {
+        "en": "State"
+      },
+      "values": [
+        {
+          "id": "on",
+          "title": {
+            "en": "On"
+          }
+        },
+        {
+          "id": "off",
+          "title": {
+            "en": "Off"
+          }
+        }
+      ]
+    }
+  ]
+}

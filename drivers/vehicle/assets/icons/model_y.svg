@@ -1,26 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
-  <!-- Model Y: compact SUV/crossover silhouette - taller than Model 3 -->
-  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Body - higher ride height -->
-    <path d="M140 540 L200 400 L330 310 L630 310 L760 400 L820 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Roof - taller, crossover proportions -->
-    <path d="M330 310 L380 230 L580 230 L630 310" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Undercarriage -->
-    <path d="M110 540 L110 590 L260 590 L260 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <path d="M700 540 L700 590 L850 590 L850 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Bottom line -->
-    <line x1="260" y1="590" x2="700" y2="590" stroke="#FFFFFF"/>
-    <!-- Front wheel -->
-    <circle cx="240" cy="590" r="62" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="240" cy="590" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Rear wheel -->
-    <circle cx="720" cy="590" r="62" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="720" cy="590" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Window -->
-    <path d="M350 310 L395 244 L565 244 L610 310" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-    <!-- B-pillar hint -->
-    <line x1="480" y1="244" x2="480" y2="310" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Headlight accent -->
-    <line x1="170" y1="460" x2="210" y2="440" stroke="#FFFFFF" stroke-width="8"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="960" viewBox="0 0 960 960">
+  <title>Model Y</title>
+  <g fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M862.4 570.2 L894.2 570.2 C894.2 570.2 891.6 540 891.2 528.5 C890.8 517 891.8 501.1 891.8 501.1 C891.8 501.1 888.7 494.1 881.1 488.6 C873.6 483.2 861.2 474.7 846.6 468.4 C832 462 818.9 456.6 793.6 450.5 C768.3 444.5 726.7 444.2 694.8 432.1 C663 420 629.2 391.2 602.6 377.9 C576 364.6 556.7 358.5 535.3 352.3 C514 346.2 497.5 343.2 474.6 341 C451.8 338.9 423.5 338.5 398.5 339.3 C373.5 340 346.8 343 324.7 345.8 C302.6 348.6 288.7 350.9 265.8 355.9 C242.8 361 214.3 367.9 187.2 376.1 C160.1 384.4 122.1 399.9 103.3 405.3 C84.4 410.8 74.1 408.9 74.1 408.9 C74.1 408.9 81.9 424.9 81.9 424.9 C81.9 424.9 75.3 448.2 75.3 448.2 C75.3 448.2 83 452.3 83 452.3 C83 452.3 72.6 487.9 70.5 498.2 C68.5 508.4 70.5 513.6 70.5 513.6 C70.5 513.6 64 516.6 64 516.6 C64 516.6 83.6 570.2 83.6 570.2 L126.6 570.2 M318.6 570.2 L672.5 570.2"/>
+    <path d="M205.8 371.3 L240.2 416.5 L796.7 451.6" stroke-width="22"/>
+    <path d="M424.1 428.1 L424.1 339.9" stroke-width="22"/>
+    <circle cx="222.6" cy="558.6" r="60.3"/>
+    <circle cx="767.5" cy="559.2" r="59.2"/>
   </g>
 </svg>

@@ -1,15 +1,12 @@
 {
   "type": "number",
   "title": {
-    "en": "Speed Limit (mph)"
+    "en": "Speed Limit"
   },
   "getable": true,
   "setable": true,
   "uiComponent": "slider",
   "min": 50,
-  "max": 90,
-  "step": 1,
-  "units": {
-    "en": "mph"
-  }
+  "max": 145,
+  "step": 1
 }

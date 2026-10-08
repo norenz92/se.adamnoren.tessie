@@ -101,6 +101,8 @@ describe('mapStreamData', () => {
     assert.deepStrictEqual(result, [
       { id: 'charging_status', value: 'Stopped' },
       { id: 'charging_control', value: false },
+      { id: 'charger_power', value: 0 },
+      { id: 'charge_time_remaining', value: 0 },
     ]);
   });
 
@@ -118,11 +120,64 @@ describe('mapStreamData', () => {
     assert.deepStrictEqual(result, [{ id: 'climate_onoff', value: false }]);
   });
 
-  it('maps ChargeAmps to charging_amps', () => {
-    const result = mapStreamData(
-      [{ key: 'ChargeAmps', value: { stringValue: '16' } }], true, false
-    );
-    assert.deepStrictEqual(result, [{ id: 'charging_amps', value: 16 }]);
+  it('maps ChargeCurrentRequest to charging_amps and ignores actual ChargeAmps', () => {
+    const result = mapStreamData([
+      { key: 'ChargeAmps', value: { stringValue: '0' } },
+      { key: 'ChargeCurrentRequest', value: { stringValue: '16' } },
+    ], true, false);
+    assert.deepEqual(result, [{ id: 'charging_amps', value: 16 }]);
+  });
+
+  it('reads typed Fleet Telemetry values and strips enum prefixes', () => {
+    const result = mapStreamData([
+      { key: 'HvacPower', value: { hvacPowerValue: 'HvacPowerStateOff' } },
+      { key: 'SentryMode', value: { sentryModeStateValue: 'SentryModeStateArmed' } },
+      { key: 'Gear', value: { shiftStateValue: 'ShiftStateD' } },
+      { key: 'Locked', value: { booleanValue: true } },
+    ] as any, true, false);
+    assert.deepEqual(result, [
+      { id: 'climate_onoff', value: false },
+      { id: 'sentry_mode', value: true },
+      { id: 'shift_state', value: 'D' },
+      { id: 'locked', value: true },
+    ]);
+  });
+
+  it('maps DetailedChargeState and resets charger power when not charging', () => {
+    const result = mapStreamData([
+      { key: 'ChargeState', value: { stringValue: 'Charging' } },
+      { key: 'DetailedChargeState', value: { detailedChargeStateValue: 'DetailedChargeStateComplete' } },
+    ] as any, true, false);
+    assert.deepEqual(result, [
+      { id: 'charging_status', value: 'Complete' },
+      { id: 'charging_control', value: false },
+      { id: 'charger_power', value: 0 },
+      { id: 'charge_time_remaining', value: 0 },
+    ]);
+  });
+
+  it('prefers BatteryLevel and RatedRange over Soc and IdealBatteryRange', () => {
+    const result = mapStreamData([
+      { key: 'Soc', value: { stringValue: '80.6' } },
+      { key: 'BatteryLevel', value: { stringValue: '78.2' } },
+      { key: 'IdealBatteryRange', value: { stringValue: '300' } },
+      { key: 'RatedRange', value: { stringValue: '250' } },
+    ], false, false);
+    assert.deepEqual(result, [
+      { id: 'measure_battery', value: 78 },
+      { id: 'measure_range', value: 250 },
+    ]);
+  });
+
+  it('ignores unknown gears, invalid charge states and malformed points', () => {
+    const result = mapStreamData([
+      { key: 'Gear', value: { stringValue: 'ShiftStateSNA' } },
+      { key: 'ChargeState', value: { stringValue: 'Bogus' } },
+      { key: 'Soc', value: null },
+      null,
+    ] as any, true, false);
+    assert.deepEqual(result, []);
+    assert.deepEqual(mapStreamData(undefined as any, true, false), []);
   });
 
   it('maps Odometer to measure_odometer (metric, miles to km)', () => {

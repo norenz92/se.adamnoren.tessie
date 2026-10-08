@@ -1,11 +1,13 @@
 {
   "title": {
-    "en": "Charge port is open"
+    "en": "Charge port !{{is|is not}} open"
   },
   "hint": {
-    "en": "Check if the charge port door is currently open"
+    "en": "Check if the charge port door is open"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",

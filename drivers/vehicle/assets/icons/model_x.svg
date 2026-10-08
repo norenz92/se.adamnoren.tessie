@@ -1,26 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
-  <!-- Model X: SUV with falcon wing door hint -->
-  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Body - SUV height -->
-    <path d="M130 540 L190 390 L320 300 L640 300 L770 390 L830 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Roof - tall, SUV proportions -->
-    <path d="M320 300 L370 220 L590 220 L640 300" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Falcon wing hint - subtle upward lines -->
-    <line x1="420" y1="220" x2="400" y2="190" stroke="#FFFFFF" stroke-width="8"/>
-    <line x1="540" y1="220" x2="560" y2="190" stroke="#FFFFFF" stroke-width="8"/>
-    <!-- Undercarriage -->
-    <path d="M100 540 L100 590 L260 590 L260 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <path d="M700 540 L700 590 L860 590 L860 540" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Bottom line -->
-    <line x1="260" y1="590" x2="700" y2="590" stroke="#FFFFFF"/>
-    <!-- Front wheel -->
-    <circle cx="240" cy="590" r="62" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="240" cy="590" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Rear wheel -->
-    <circle cx="720" cy="590" r="62" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="720" cy="590" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Window -->
-    <path d="M340 300 L385 234 L575 234 L620 300" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-    <line x1="480" y1="234" x2="480" y2="300" stroke="#FFFFFF" stroke-width="6"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="960" viewBox="0 0 960 960">
+  <title>Model X</title>
+  <g fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M867.9 567.7 L896 567.7 C896 567.7 892.2 535.8 891.9 523 C891.6 510.2 894.3 491 894.3 491 C894.3 491 886.6 482.6 879.2 477.7 C871.7 472.7 861.1 466.4 849.5 461.4 C837.9 456.4 832.6 453.4 809.4 447.5 C786.3 441.6 741.7 437.1 710.7 426 C679.6 414.8 649.7 392.6 622.9 380.6 C596.2 368.7 574.2 360.9 550.3 354.5 C526.4 348.1 506.3 344.8 479.4 342.3 C452.5 339.8 417.7 338.9 388.8 339.4 C359.8 339.9 330.4 342.6 305.7 345.2 C281 347.8 264.2 350 240.6 355.1 C217.1 360.1 188.2 367.9 164.5 375.4 C140.8 383 114.5 395.2 98.3 400.4 C82 405.6 66.9 406.8 66.9 406.8 C66.9 406.8 73.2 407.4 72.7 423.6 C72.2 439.9 65.4 487.4 64 504.4 C62.6 521.4 59.5 515.3 64.6 525.9 C69.6 536.5 94.2 567.7 94.2 567.7 L130.9 567.7 M327.7 567.7 L674.9 567.7"/>
+    <path d="M193.2 367.8 L206.3 416.6 L833.8 455.9" stroke-width="22"/>
+    <path d="M434.7 430.9 L434.7 340.9" stroke-width="22"/>
+    <circle cx="229.3" cy="554.7" r="62.8"/>
+    <circle cx="771.4" cy="558.1" r="60.6"/>
   </g>
 </svg>

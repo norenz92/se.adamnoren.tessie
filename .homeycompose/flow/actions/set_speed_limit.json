@@ -3,12 +3,14 @@
     "en": "Set speed limit"
   },
   "titleFormatted": {
-    "en": "Set speed limit to [[speed]] mph"
+    "en": "Set speed limit to [[speed]] [[unit]]"
   },
   "hint": {
-    "en": "Set the speed limit in mph"
+    "en": "Set the speed limit (50–90 mph / 80–145 km/h)"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",
@@ -19,11 +21,32 @@
       "type": "number",
       "name": "speed",
       "title": {
-        "en": "Speed (mph)"
+        "en": "Speed"
       },
       "min": 50,
-      "max": 90,
+      "max": 145,
       "step": 1
+    },
+    {
+      "type": "dropdown",
+      "name": "unit",
+      "title": {
+        "en": "Unit"
+      },
+      "values": [
+        {
+          "id": "kmh",
+          "title": {
+            "en": "km/h"
+          }
+        },
+        {
+          "id": "mph",
+          "title": {
+            "en": "mph"
+          }
+        }
+      ]
     }
   ]
 }

@@ -1,0 +1,28 @@
+{
+  "title": {
+    "en": "Charging completed"
+  },
+  "hint": {
+    "en": "When the vehicle reaches its charge limit"
+  },
+  "platforms": [
+    "local"
+  ],
+  "tokens": [
+    {
+      "name": "battery",
+      "type": "number",
+      "title": {
+        "en": "Battery level"
+      },
+      "example": 80
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

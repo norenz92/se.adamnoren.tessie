@@ -3,12 +3,14 @@
     "en": "Set the temperature"
   },
   "titleFormatted": {
-    "en": "Set temperature to [[temperature]]"
+    "en": "Set temperature to [[temperature]] [[unit]]"
   },
   "hint": {
-    "en": "Set the target cabin temperature"
+    "en": "Set the target cabin temperature (15–28 °C / 59–82 °F)"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",
@@ -22,8 +24,29 @@
         "en": "Temperature"
       },
       "min": 15,
-      "max": 28,
+      "max": 82,
       "step": 0.5
+    },
+    {
+      "type": "dropdown",
+      "name": "unit",
+      "title": {
+        "en": "Unit"
+      },
+      "values": [
+        {
+          "id": "C",
+          "title": {
+            "en": "°C"
+          }
+        },
+        {
+          "id": "F",
+          "title": {
+            "en": "°F"
+          }
+        }
+      ]
     }
   ]
 }

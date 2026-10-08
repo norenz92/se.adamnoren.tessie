@@ -1,0 +1,31 @@
+{
+  "title": {
+    "en": "Send destination"
+  },
+  "titleFormatted": {
+    "en": "Send [[destination]] to the vehicle"
+  },
+  "hint": {
+    "en": "Send an address, coordinates or video URL to the vehicle"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "text",
+      "name": "destination",
+      "title": {
+        "en": "Destination"
+      },
+      "placeholder": {
+        "en": "Address, lat,lon or URL"
+      }
+    }
+  ]
+}

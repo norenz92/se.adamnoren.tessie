@@ -1,13 +1,207 @@
 [
   {
     "type": "group",
-    "label": { "en": "Security PINs" },
+    "label": {
+      "en": "Units"
+    },
+    "children": [
+      {
+        "id": "unit_distance",
+        "type": "dropdown",
+        "label": {
+          "en": "Distance"
+        },
+        "hint": {
+          "en": "Unit for range and odometer."
+        },
+        "value": "km",
+        "values": [
+          {
+            "id": "km",
+            "label": {
+              "en": "km"
+            }
+          },
+          {
+            "id": "mi",
+            "label": {
+              "en": "mi"
+            }
+          }
+        ]
+      },
+      {
+        "id": "unit_pressure",
+        "type": "dropdown",
+        "label": {
+          "en": "Tire Pressure"
+        },
+        "hint": {
+          "en": "Unit for tire pressure readings."
+        },
+        "value": "bar",
+        "values": [
+          {
+            "id": "bar",
+            "label": {
+              "en": "bar"
+            }
+          },
+          {
+            "id": "psi",
+            "label": {
+              "en": "psi"
+            }
+          }
+        ]
+      },
+      {
+        "id": "unit_temperature",
+        "type": "dropdown",
+        "label": {
+          "en": "Temperature"
+        },
+        "hint": {
+          "en": "Unit for target temperature."
+        },
+        "value": "C",
+        "values": [
+          {
+            "id": "C",
+            "label": {
+              "en": "°C"
+            }
+          },
+          {
+            "id": "F",
+            "label": {
+              "en": "°F"
+            }
+          }
+        ]
+      },
+      {
+        "id": "unit_speed",
+        "type": "dropdown",
+        "label": {
+          "en": "Speed"
+        },
+        "hint": {
+          "en": "Unit for speed limit."
+        },
+        "value": "kmh",
+        "values": [
+          {
+            "id": "kmh",
+            "label": {
+              "en": "km/h"
+            }
+          },
+          {
+            "id": "mph",
+            "label": {
+              "en": "mph"
+            }
+          }
+        ]
+      },
+      {
+        "id": "currency",
+        "type": "dropdown",
+        "label": {
+          "en": "Currency"
+        },
+        "hint": {
+          "en": "Currency symbol for charging cost."
+        },
+        "value": "USD",
+        "values": [
+          {
+            "id": "USD",
+            "label": {
+              "en": "USD ($)"
+            }
+          },
+          {
+            "id": "EUR",
+            "label": {
+              "en": "EUR (€)"
+            }
+          },
+          {
+            "id": "GBP",
+            "label": {
+              "en": "GBP (£)"
+            }
+          },
+          {
+            "id": "SEK",
+            "label": {
+              "en": "SEK (kr)"
+            }
+          },
+          {
+            "id": "NOK",
+            "label": {
+              "en": "NOK (kr)"
+            }
+          },
+          {
+            "id": "DKK",
+            "label": {
+              "en": "DKK (kr)"
+            }
+          },
+          {
+            "id": "CHF",
+            "label": {
+              "en": "CHF (CHF)"
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Location"
+    },
+    "children": [
+      {
+        "id": "home_radius",
+        "type": "number",
+        "label": {
+          "en": "Home radius"
+        },
+        "hint": {
+          "en": "Distance from Homey's location within which the vehicle counts as home. Used by the 'Arrived home', 'Left home' and 'Vehicle is home' Flow cards."
+        },
+        "value": 100,
+        "min": 10,
+        "max": 5000,
+        "step": 10,
+        "units": {
+          "en": "m"
+        }
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
+      "en": "Security PINs"
+    },
     "children": [
       {
         "id": "speed_limit_pin",
         "type": "password",
-        "label": { "en": "Speed Limit PIN" },
-        "hint": { "en": "4-digit PIN required to activate/deactivate speed limit mode. Set this before using the speed limit toggle." },
+        "label": {
+          "en": "Speed Limit PIN"
+        },
+        "hint": {
+          "en": "4-digit PIN required to activate/deactivate speed limit mode. Set this before using the speed limit toggle."
+        },
         "value": ""
       }
     ]

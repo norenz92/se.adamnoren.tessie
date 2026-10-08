@@ -1,0 +1,18 @@
+{
+  "title": {
+    "en": "Charge cable plugged in"
+  },
+  "hint": {
+    "en": "When a charge cable is connected"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

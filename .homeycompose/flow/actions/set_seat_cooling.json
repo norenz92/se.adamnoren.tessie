@@ -1,0 +1,75 @@
+{
+  "title": {
+    "en": "Set seat cooling"
+  },
+  "titleFormatted": {
+    "en": "Set [[seat]] seat cooling to [[level]]"
+  },
+  "hint": {
+    "en": "Set the ventilation level for a front seat (vehicles with seat cooling only)"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "dropdown",
+      "name": "seat",
+      "title": {
+        "en": "Seat"
+      },
+      "values": [
+        {
+          "id": "driver",
+          "title": {
+            "en": "Driver"
+          }
+        },
+        {
+          "id": "passenger",
+          "title": {
+            "en": "Passenger"
+          }
+        }
+      ]
+    },
+    {
+      "type": "dropdown",
+      "name": "level",
+      "title": {
+        "en": "Cooling level"
+      },
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Medium"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "title": {
+    "en": "Clear speed limit PIN"
+  },
+  "hint": {
+    "en": "Clear the speed limit PIN on the vehicle using the PIN from device settings"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,27 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
-  <!-- Model S: full-size sedan silhouette - longer, sleeker -->
-  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Body - longer proportions -->
-    <path d="M120 560 L180 410 L320 330 L640 330 L780 410 L840 560" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Roof - long sweeping roofline -->
-    <path d="M320 330 L370 250 L590 250 L640 330" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Undercarriage -->
-    <path d="M90 560 L90 600 L250 600 L250 560" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <path d="M710 560 L710 600 L870 600 L870 560" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Bottom line -->
-    <line x1="250" y1="600" x2="710" y2="600" stroke="#FFFFFF"/>
-    <!-- Front wheel -->
-    <circle cx="230" cy="600" r="60" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="230" cy="600" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Rear wheel -->
-    <circle cx="730" cy="600" r="60" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="730" cy="600" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Window - elegant sweep -->
-    <path d="M340 330 L385 262 L575 262 L620 330" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-    <line x1="480" y1="262" x2="480" y2="330" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Front fascia accent -->
-    <line x1="150" y1="490" x2="195" y2="465" stroke="#FFFFFF" stroke-width="8"/>
-    <!-- Rear accent -->
-    <line x1="810" y1="490" x2="765" y2="465" stroke="#FFFFFF" stroke-width="8"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="960" viewBox="0 0 960 960">
+  <title>Model S</title>
+  <g fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M853.5 552 L893.6 552 C893.6 552 884.8 486.5 884.8 486.5 C884.8 486.5 860.3 470.6 841.1 463.5 C821.9 456.4 797.9 449.2 769.7 444 C741.6 438.8 702 440.9 672.4 432.2 C642.8 423.5 616.7 402.7 592.1 392.1 C567.5 381.5 545.6 373.9 524.8 368.5 C504.1 363.1 489.2 361.4 467.6 359.6 C446 357.9 418 357.4 395 357.9 C372 358.3 350.7 360.2 329.5 362.6 C308.4 364.9 289.8 367.6 268.2 372 C246.5 376.4 223 382 199.7 389.1 C176.4 396.2 148.1 409.2 128.3 414.5 C108.6 419.8 81.1 421 81.1 421 C81.1 421 78.8 450.5 78.8 450.5 C78.8 450.5 81.1 452.3 81.1 452.3 C81.1 452.3 78 474.1 75.2 483 C72.5 491.8 65.5 493.9 64.6 505.4 C63.7 516.9 69.9 552 69.9 552 L139.2 552 M329.3 552 L663.6 552"/>
+    <path d="M222.6 383.4 L274.7 423.8 L802.1 452.8" stroke-width="22"/>
+    <path d="M422.8 431.9 L422.8 358.5" stroke-width="22"/>
+    <circle cx="234.2" cy="541.1" r="59.2"/>
+    <circle cx="758.5" cy="540.5" r="59.2"/>
   </g>
 </svg>

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="960" viewBox="0 0 960 960">
+  <title>Tessie for Homey</title>
+  <g fill="none" stroke="#000000" stroke-width="27" stroke-linecap="round" stroke-linejoin="round" transform="translate(480 480) scale(1.25) translate(-480 -455)">
+    <path d="M250 690 V566 Q250 512 300 494 L352 380 Q366 350 400 350 H560 Q594 350 608 380 L660 494 Q710 512 710 566 V690 Z"/>
+    <path d="M384 380 H576 L618 474 H342 Z" stroke-width="20"/>
+    <path d="M290 566 L372 582 M670 566 L588 582" stroke-width="22"/>
+    <path d="M408 640 H552" stroke-width="20"/>
+    <path d="M270 690 V744 Q270 760 286 760 H334 Q350 760 350 744 V690 M610 690 V744 Q610 760 626 760 H674 Q690 760 690 744 V690"/>
+    <path d="M422 252 A82 82 0 0 1 538 252 M368 198 A158 158 0 0 1 592 198"/>
+    <circle cx="480" cy="300" r="16" fill="#000000" stroke="none"/>
+  </g>
+</svg>

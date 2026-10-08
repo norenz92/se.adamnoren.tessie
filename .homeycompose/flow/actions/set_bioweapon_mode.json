@@ -1,0 +1,42 @@
+{
+  "title": {
+    "en": "Set Bioweapon Defense Mode"
+  },
+  "titleFormatted": {
+    "en": "Turn Bioweapon Defense Mode [[state]]"
+  },
+  "hint": {
+    "en": "Turn Bioweapon Defense Mode on or off (vehicles with HEPA filter only)"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "dropdown",
+      "name": "state",
+      "title": {
+        "en": "State"
+      },
+      "values": [
+        {
+          "id": "on",
+          "title": {
+            "en": "On"
+          }
+        },
+        {
+          "id": "off",
+          "title": {
+            "en": "Off"
+          }
+        }
+      ]
+    }
+  ]
+}

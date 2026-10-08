@@ -1,0 +1,3199 @@
+{
+  "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
+  "id": "se.adamnoren.tessie",
+  "author": "Adam Norén",
+  "version": "0.1.0",
+  "compatibility": ">=12.9.0",
+  "sdk": 3,
+  "platforms": [
+    "local"
+  ],
+  "brandColor": "#4A90D9",
+  "name": {
+    "en": "Tessie"
+  },
+  "description": {
+    "en": "Monitor and control your Tesla vehicles via Tessie"
+  },
+  "category": [
+    "tools"
+  ],
+  "permissions": [
+    "homey:manager:geolocation"
+  ],
+  "images": {
+    "small": "/assets/images/small.jpg",
+    "large": "/assets/images/large.jpg",
+    "xlarge": "/assets/images/xlarge.jpg"
+  },
+  "flow": {
+    "triggers": [
+      {
+        "title": {
+          "en": "Arrived home"
+        },
+        "hint": {
+          "en": "When the vehicle arrives within the home radius of Homey's location"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "arrived_home"
+      },
+      {
+        "title": {
+          "en": "Battery dropped below"
+        },
+        "titleFormatted": {
+          "en": "Battery dropped below [[percent]]%"
+        },
+        "hint": {
+          "en": "When the battery level drops below a threshold"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [
+          {
+            "name": "battery",
+            "type": "number",
+            "title": {
+              "en": "Battery level"
+            },
+            "example": 80
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "percent",
+            "title": {
+              "en": "Battery level (%)"
+            },
+            "min": 1,
+            "max": 100,
+            "step": 1
+          }
+        ],
+        "id": "battery_below"
+      },
+      {
+        "title": {
+          "en": "Charging completed"
+        },
+        "hint": {
+          "en": "When the vehicle reaches its charge limit"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [
+          {
+            "name": "battery",
+            "type": "number",
+            "title": {
+              "en": "Battery level"
+            },
+            "example": 80
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "charging_complete"
+      },
+      {
+        "title": {
+          "en": "Charging started"
+        },
+        "hint": {
+          "en": "When the vehicle starts charging"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [
+          {
+            "name": "battery",
+            "type": "number",
+            "title": {
+              "en": "Battery level"
+            },
+            "example": 80
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "charging_started"
+      },
+      {
+        "title": {
+          "en": "Charging status changed"
+        },
+        "hint": {
+          "en": "When the charging status changes"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [
+          {
+            "name": "status",
+            "type": "string",
+            "title": {
+              "en": "Charging status"
+            },
+            "example": "Charging"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "charging_status_changed"
+      },
+      {
+        "title": {
+          "en": "Charging stopped"
+        },
+        "hint": {
+          "en": "When the vehicle stops charging"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [
+          {
+            "name": "battery",
+            "type": "number",
+            "title": {
+              "en": "Battery level"
+            },
+            "example": 80
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "charging_stopped"
+      },
+      {
+        "title": {
+          "en": "Climate started"
+        },
+        "hint": {
+          "en": "When the climate system is turned on"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "climate_started"
+      },
+      {
+        "title": {
+          "en": "Climate stopped"
+        },
+        "hint": {
+          "en": "When the climate system is turned off"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "climate_stopped"
+      },
+      {
+        "title": {
+          "en": "Left home"
+        },
+        "hint": {
+          "en": "When the vehicle leaves the home radius of Homey's location"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "left_home"
+      },
+      {
+        "title": {
+          "en": "Parked"
+        },
+        "hint": {
+          "en": "When the vehicle is shifted into Park"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "parked"
+      },
+      {
+        "title": {
+          "en": "Charge cable plugged in"
+        },
+        "hint": {
+          "en": "When a charge cable is connected"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "plugged_in"
+      },
+      {
+        "title": {
+          "en": "Sentry mode disabled"
+        },
+        "hint": {
+          "en": "When sentry mode is turned off"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "sentry_disabled"
+      },
+      {
+        "title": {
+          "en": "Sentry mode enabled"
+        },
+        "hint": {
+          "en": "When sentry mode is turned on"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "sentry_enabled"
+      },
+      {
+        "title": {
+          "en": "Software update available"
+        },
+        "hint": {
+          "en": "When a new software update is available"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [
+          {
+            "name": "version",
+            "type": "string",
+            "title": {
+              "en": "Version"
+            },
+            "example": "2026.20.1"
+          }
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "software_update_available"
+      },
+      {
+        "title": {
+          "en": "Started driving"
+        },
+        "hint": {
+          "en": "When the vehicle is shifted out of Park"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "started_driving"
+      },
+      {
+        "title": {
+          "en": "Charge cable unplugged"
+        },
+        "hint": {
+          "en": "When the charge cable is disconnected"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "unplugged"
+      },
+      {
+        "title": {
+          "en": "Vehicle fell asleep"
+        },
+        "hint": {
+          "en": "When the vehicle goes to sleep"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "vehicle_fell_asleep"
+      },
+      {
+        "title": {
+          "en": "Vehicle was locked"
+        },
+        "hint": {
+          "en": "When the vehicle is locked"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "vehicle_locked"
+      },
+      {
+        "title": {
+          "en": "Vehicle was unlocked"
+        },
+        "hint": {
+          "en": "When the vehicle is unlocked"
+        },
+        "platforms": [
+          "local"
+        ],
+        "tokens": [],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "vehicle_unlocked"
+      },
+      {
+        "title": {
+          "en": "Vehicle woke up"
+        },
+        "hint": {
+          "en": "When the vehicle wakes up from sleep"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "vehicle_woke_up"
+      }
+    ],
+    "conditions": [
+      {
+        "title": {
+          "en": "Battery !{{is|is not}} above"
+        },
+        "titleFormatted": {
+          "en": "Battery !{{is|is not}} above [[percent]]%"
+        },
+        "hint": {
+          "en": "Check if the battery level is above a threshold"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "percent",
+            "title": {
+              "en": "Battery level (%)"
+            },
+            "min": 0,
+            "max": 100,
+            "step": 1
+          }
+        ],
+        "id": "battery_above"
+      },
+      {
+        "title": {
+          "en": "Charge port !{{is|is not}} open"
+        },
+        "hint": {
+          "en": "Check if the charge port door is open"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "charge_port_open"
+      },
+      {
+        "title": {
+          "en": "Vehicle !{{is|is not}} asleep"
+        },
+        "hint": {
+          "en": "Check if the vehicle is asleep"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "is_asleep"
+      },
+      {
+        "title": {
+          "en": "Vehicle !{{is|is not}} charging"
+        },
+        "hint": {
+          "en": "Check if the vehicle is charging"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "is_charging"
+      },
+      {
+        "title": {
+          "en": "Climate !{{is|is not}} on"
+        },
+        "hint": {
+          "en": "Check if climate control is on"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "is_climate_on"
+      },
+      {
+        "title": {
+          "en": "Vehicle !{{is|is not}} driving"
+        },
+        "hint": {
+          "en": "Check if the vehicle is out of Park"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "is_driving"
+      },
+      {
+        "title": {
+          "en": "Vehicle !{{is|is not}} home"
+        },
+        "hint": {
+          "en": "Check if the vehicle is within the home radius of Homey's location"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "is_home"
+      },
+      {
+        "title": {
+          "en": "Vehicle !{{is|is not}} locked"
+        },
+        "hint": {
+          "en": "Check if the vehicle is locked"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "is_locked"
+      },
+      {
+        "title": {
+          "en": "Charge cable !{{is|is not}} plugged in"
+        },
+        "hint": {
+          "en": "Check if a charge cable is connected"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "is_plugged_in"
+      },
+      {
+        "title": {
+          "en": "Sentry mode !{{is|is not}} on"
+        },
+        "hint": {
+          "en": "Check if sentry mode is on"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "is_sentry_on"
+      },
+      {
+        "title": {
+          "en": "Software update !{{is|is not}} available"
+        },
+        "hint": {
+          "en": "Check if a software update is pending"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "software_update_available"
+      },
+      {
+        "title": {
+          "en": "Windows !{{are|are not}} closed"
+        },
+        "hint": {
+          "en": "Check if all windows are closed"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "windows_closed"
+      }
+    ],
+    "actions": [
+      {
+        "title": {
+          "en": "Open the frunk"
+        },
+        "hint": {
+          "en": "Open the front trunk (frunk)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "activate_frunk"
+      },
+      {
+        "title": {
+          "en": "Activate the trunk"
+        },
+        "hint": {
+          "en": "Open or close the rear trunk"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "activate_trunk"
+      },
+      {
+        "title": {
+          "en": "Cancel software update"
+        },
+        "hint": {
+          "en": "Cancel a scheduled software update"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "cancel_software_update"
+      },
+      {
+        "title": {
+          "en": "Clear speed limit PIN"
+        },
+        "hint": {
+          "en": "Clear the speed limit PIN on the vehicle using the PIN from device settings"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "clear_speed_limit_pin"
+      },
+      {
+        "title": {
+          "en": "Close the charge port"
+        },
+        "hint": {
+          "en": "Close the vehicle's charge port door"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "close_charge_port"
+      },
+      {
+        "title": {
+          "en": "Close sunroof"
+        },
+        "hint": {
+          "en": "Close the sunroof (vehicles with a sunroof only)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "close_sunroof"
+      },
+      {
+        "title": {
+          "en": "Close tonneau"
+        },
+        "hint": {
+          "en": "Close the Cybertruck tonneau cover"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "close_tonneau"
+      },
+      {
+        "title": {
+          "en": "Close the windows"
+        },
+        "hint": {
+          "en": "Close all vehicle windows"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "close_windows"
+      },
+      {
+        "title": {
+          "en": "Disable max defrost"
+        },
+        "hint": {
+          "en": "Turn off max defrost mode"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "disable_defrost"
+      },
+      {
+        "title": {
+          "en": "Disable sentry mode"
+        },
+        "hint": {
+          "en": "Turn off sentry mode for the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "disable_sentry"
+      },
+      {
+        "title": {
+          "en": "Disable speed limit"
+        },
+        "hint": {
+          "en": "Turn off speed limit mode (requires PIN in device settings)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "disable_speed_limit"
+      },
+      {
+        "title": {
+          "en": "Disable steering wheel heater"
+        },
+        "hint": {
+          "en": "Turn off the steering wheel heater"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "disable_steering_wheel_heater"
+      },
+      {
+        "title": {
+          "en": "Disable valet mode"
+        },
+        "hint": {
+          "en": "Turn off valet mode"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "disable_valet_mode"
+      },
+      {
+        "title": {
+          "en": "Enable max defrost"
+        },
+        "hint": {
+          "en": "Turn on max defrost mode"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "enable_defrost"
+      },
+      {
+        "title": {
+          "en": "Enable keyless driving"
+        },
+        "hint": {
+          "en": "Allow driving without a key for the next two minutes"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "enable_keyless_driving"
+      },
+      {
+        "title": {
+          "en": "Enable sentry mode"
+        },
+        "hint": {
+          "en": "Turn on sentry mode for the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "enable_sentry"
+      },
+      {
+        "title": {
+          "en": "Enable speed limit"
+        },
+        "hint": {
+          "en": "Turn on speed limit mode (requires PIN in device settings)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "enable_speed_limit"
+      },
+      {
+        "title": {
+          "en": "Enable steering wheel heater"
+        },
+        "hint": {
+          "en": "Turn on the steering wheel heater"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "enable_steering_wheel_heater"
+      },
+      {
+        "title": {
+          "en": "Enable valet mode"
+        },
+        "hint": {
+          "en": "Turn on valet mode to limit vehicle access"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "enable_valet_mode"
+      },
+      {
+        "title": {
+          "en": "Flash the lights"
+        },
+        "hint": {
+          "en": "Flash the vehicle's headlights"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "flash_lights"
+      },
+      {
+        "title": {
+          "en": "Honk the horn"
+        },
+        "hint": {
+          "en": "Sound the vehicle's horn"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "honk"
+      },
+      {
+        "title": {
+          "en": "Lock the vehicle"
+        },
+        "hint": {
+          "en": "Lock all doors on the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "lock"
+      },
+      {
+        "title": {
+          "en": "Open the charge port"
+        },
+        "hint": {
+          "en": "Open the vehicle's charge port door"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "open_charge_port"
+      },
+      {
+        "title": {
+          "en": "Open tonneau"
+        },
+        "hint": {
+          "en": "Open the Cybertruck tonneau cover"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "open_tonneau"
+      },
+      {
+        "title": {
+          "en": "Play boombox sound"
+        },
+        "titleFormatted": {
+          "en": "Play [[sound]] from the boombox"
+        },
+        "hint": {
+          "en": "Play a sound from the external speaker (requires 2022.40.25+ and a pedestrian speaker)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "sound",
+            "title": {
+              "en": "Sound"
+            },
+            "values": [
+              {
+                "id": "2000",
+                "title": {
+                  "en": "Locate ping"
+                }
+              },
+              {
+                "id": "0",
+                "title": {
+                  "en": "Random fart"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "play_boombox"
+      },
+      {
+        "title": {
+          "en": "Refresh vehicle data"
+        },
+        "hint": {
+          "en": "Fetch the latest vehicle state from Tessie without waking the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "refresh"
+      },
+      {
+        "title": {
+          "en": "Schedule software update"
+        },
+        "titleFormatted": {
+          "en": "Install software update in [[minutes]] minutes"
+        },
+        "hint": {
+          "en": "Install a downloaded software update after a delay (0 = now)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "minutes",
+            "title": {
+              "en": "Delay (minutes)"
+            },
+            "min": 0,
+            "max": 1440,
+            "step": 1,
+            "placeholder": {
+              "en": "0"
+            }
+          }
+        ],
+        "id": "schedule_software_update"
+      },
+      {
+        "title": {
+          "en": "Set Bioweapon Defense Mode"
+        },
+        "titleFormatted": {
+          "en": "Turn Bioweapon Defense Mode [[state]]"
+        },
+        "hint": {
+          "en": "Turn Bioweapon Defense Mode on or off (vehicles with HEPA filter only)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State"
+            },
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "On"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_bioweapon_mode"
+      },
+      {
+        "title": {
+          "en": "Set cabin overheat protection"
+        },
+        "titleFormatted": {
+          "en": "Set cabin overheat protection to [[mode]]"
+        },
+        "hint": {
+          "en": "Set the cabin overheat protection mode"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "Off",
+                "title": {
+                  "en": "Off"
+                }
+              },
+              {
+                "id": "FanOnly",
+                "title": {
+                  "en": "Fan only"
+                }
+              },
+              {
+                "id": "AC",
+                "title": {
+                  "en": "A/C"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_cabin_overheat_protection"
+      },
+      {
+        "title": {
+          "en": "Set charge limit"
+        },
+        "titleFormatted": {
+          "en": "Set charge limit to [[percent]]%"
+        },
+        "hint": {
+          "en": "Set the maximum charge level"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "percent",
+            "title": {
+              "en": "Charge limit (%)"
+            },
+            "min": 50,
+            "max": 100,
+            "step": 1
+          }
+        ],
+        "id": "set_charge_limit"
+      },
+      {
+        "title": {
+          "en": "Set charging amps"
+        },
+        "titleFormatted": {
+          "en": "Set charging amps to [[amps]]"
+        },
+        "hint": {
+          "en": "Set the charging current in amps"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "amps",
+            "title": {
+              "en": "Amps"
+            },
+            "min": 1,
+            "max": 48,
+            "step": 1
+          }
+        ],
+        "id": "set_charging_amps"
+      },
+      {
+        "title": {
+          "en": "Set climate keeper mode"
+        },
+        "titleFormatted": {
+          "en": "Set climate keeper mode to [[mode]]"
+        },
+        "hint": {
+          "en": "Set the climate keeper mode (Keep, Dog, or Camp)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "mode",
+            "title": {
+              "en": "Mode"
+            },
+            "values": [
+              {
+                "id": "Off",
+                "title": {
+                  "en": "Off"
+                }
+              },
+              {
+                "id": "Keep",
+                "title": {
+                  "en": "Keep"
+                }
+              },
+              {
+                "id": "Dog",
+                "title": {
+                  "en": "Dog"
+                }
+              },
+              {
+                "id": "Camp",
+                "title": {
+                  "en": "Camp"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_climate_keeper_mode"
+      },
+      {
+        "title": {
+          "en": "Set cabin overheat protection temperature"
+        },
+        "titleFormatted": {
+          "en": "Set cabin overheat protection temperature to [[level]]"
+        },
+        "hint": {
+          "en": "Set the temperature at which cabin overheat protection activates"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Activation temperature"
+            },
+            "values": [
+              {
+                "id": "1",
+                "title": {
+                  "en": "Low"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Medium"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "High"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_cop_temperature"
+      },
+      {
+        "title": {
+          "en": "Set guest mode"
+        },
+        "titleFormatted": {
+          "en": "Turn guest mode [[state]]"
+        },
+        "hint": {
+          "en": "Turn guest mode on or off"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State"
+            },
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "On"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_guest_mode"
+      },
+      {
+        "title": {
+          "en": "Set keep accessory power"
+        },
+        "titleFormatted": {
+          "en": "Turn keep accessory power [[state]]"
+        },
+        "hint": {
+          "en": "Keep accessory power (12V/USB) on after leaving the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State"
+            },
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "On"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_keep_accessory_power"
+      },
+      {
+        "title": {
+          "en": "Set low power mode"
+        },
+        "titleFormatted": {
+          "en": "Turn low power mode [[state]]"
+        },
+        "hint": {
+          "en": "Turn low power mode on or off"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "state",
+            "title": {
+              "en": "State"
+            },
+            "values": [
+              {
+                "id": "on",
+                "title": {
+                  "en": "On"
+                }
+              },
+              {
+                "id": "off",
+                "title": {
+                  "en": "Off"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_low_power_mode"
+      },
+      {
+        "title": {
+          "en": "Set seat cooling"
+        },
+        "titleFormatted": {
+          "en": "Set [[seat]] seat cooling to [[level]]"
+        },
+        "hint": {
+          "en": "Set the ventilation level for a front seat (vehicles with seat cooling only)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "seat",
+            "title": {
+              "en": "Seat"
+            },
+            "values": [
+              {
+                "id": "driver",
+                "title": {
+                  "en": "Driver"
+                }
+              },
+              {
+                "id": "passenger",
+                "title": {
+                  "en": "Passenger"
+                }
+              }
+            ]
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Cooling level"
+            },
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "Off"
+                }
+              },
+              {
+                "id": "1",
+                "title": {
+                  "en": "Low"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Medium"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "High"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_seat_cooling"
+      },
+      {
+        "title": {
+          "en": "Set seat heater"
+        },
+        "titleFormatted": {
+          "en": "Set [[seat]] seat heater to [[level]]"
+        },
+        "hint": {
+          "en": "Set the heating level for a specific seat"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "dropdown",
+            "name": "seat",
+            "title": {
+              "en": "Seat"
+            },
+            "values": [
+              {
+                "id": "driver",
+                "title": {
+                  "en": "Driver"
+                }
+              },
+              {
+                "id": "passenger",
+                "title": {
+                  "en": "Passenger"
+                }
+              },
+              {
+                "id": "rear_left",
+                "title": {
+                  "en": "Rear left"
+                }
+              },
+              {
+                "id": "rear_center",
+                "title": {
+                  "en": "Rear center"
+                }
+              },
+              {
+                "id": "rear_right",
+                "title": {
+                  "en": "Rear right"
+                }
+              },
+              {
+                "id": "third_row_left",
+                "title": {
+                  "en": "Third row left"
+                }
+              },
+              {
+                "id": "third_row_right",
+                "title": {
+                  "en": "Third row right"
+                }
+              }
+            ]
+          },
+          {
+            "type": "dropdown",
+            "name": "level",
+            "title": {
+              "en": "Heat level"
+            },
+            "values": [
+              {
+                "id": "0",
+                "title": {
+                  "en": "Off"
+                }
+              },
+              {
+                "id": "1",
+                "title": {
+                  "en": "Low"
+                }
+              },
+              {
+                "id": "2",
+                "title": {
+                  "en": "Medium"
+                }
+              },
+              {
+                "id": "3",
+                "title": {
+                  "en": "High"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_seat_heater"
+      },
+      {
+        "title": {
+          "en": "Set speed limit"
+        },
+        "titleFormatted": {
+          "en": "Set speed limit to [[speed]] [[unit]]"
+        },
+        "hint": {
+          "en": "Set the speed limit (50–90 mph / 80–145 km/h)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "speed",
+            "title": {
+              "en": "Speed"
+            },
+            "min": 50,
+            "max": 145,
+            "step": 1
+          },
+          {
+            "type": "dropdown",
+            "name": "unit",
+            "title": {
+              "en": "Unit"
+            },
+            "values": [
+              {
+                "id": "kmh",
+                "title": {
+                  "en": "km/h"
+                }
+              },
+              {
+                "id": "mph",
+                "title": {
+                  "en": "mph"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_speed_limit"
+      },
+      {
+        "title": {
+          "en": "Set the temperature"
+        },
+        "titleFormatted": {
+          "en": "Set temperature to [[temperature]] [[unit]]"
+        },
+        "hint": {
+          "en": "Set the target cabin temperature (15–28 °C / 59–82 °F)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "number",
+            "name": "temperature",
+            "title": {
+              "en": "Temperature"
+            },
+            "min": 15,
+            "max": 82,
+            "step": 0.5
+          },
+          {
+            "type": "dropdown",
+            "name": "unit",
+            "title": {
+              "en": "Unit"
+            },
+            "values": [
+              {
+                "id": "C",
+                "title": {
+                  "en": "°C"
+                }
+              },
+              {
+                "id": "F",
+                "title": {
+                  "en": "°F"
+                }
+              }
+            ]
+          }
+        ],
+        "id": "set_temperature"
+      },
+      {
+        "title": {
+          "en": "Send destination"
+        },
+        "titleFormatted": {
+          "en": "Send [[destination]] to the vehicle"
+        },
+        "hint": {
+          "en": "Send an address, coordinates or video URL to the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          },
+          {
+            "type": "text",
+            "name": "destination",
+            "title": {
+              "en": "Destination"
+            },
+            "placeholder": {
+              "en": "Address, lat,lon or URL"
+            }
+          }
+        ],
+        "id": "share_destination"
+      },
+      {
+        "title": {
+          "en": "Start charging"
+        },
+        "hint": {
+          "en": "Begin charging the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "start_charging"
+      },
+      {
+        "title": {
+          "en": "Start climate control"
+        },
+        "hint": {
+          "en": "Turn on the vehicle's climate system"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "start_climate"
+      },
+      {
+        "title": {
+          "en": "Stop charging"
+        },
+        "hint": {
+          "en": "Stop charging the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "stop_charging"
+      },
+      {
+        "title": {
+          "en": "Stop climate control"
+        },
+        "hint": {
+          "en": "Turn off the vehicle's climate system"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "stop_climate"
+      },
+      {
+        "title": {
+          "en": "Trigger HomeLink"
+        },
+        "hint": {
+          "en": "Trigger the HomeLink garage door opener"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "trigger_homelink"
+      },
+      {
+        "title": {
+          "en": "Unlock the vehicle"
+        },
+        "hint": {
+          "en": "Unlock all doors on the vehicle"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "unlock"
+      },
+      {
+        "title": {
+          "en": "Vent sunroof"
+        },
+        "hint": {
+          "en": "Vent the sunroof (vehicles with a sunroof only)"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "vent_sunroof"
+      },
+      {
+        "title": {
+          "en": "Vent the windows"
+        },
+        "hint": {
+          "en": "Vent all vehicle windows slightly open"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "vent_windows"
+      },
+      {
+        "title": {
+          "en": "Wake up the vehicle"
+        },
+        "hint": {
+          "en": "Wake the vehicle from sleep mode"
+        },
+        "platforms": [
+          "local"
+        ],
+        "args": [
+          {
+            "type": "device",
+            "name": "device",
+            "filter": "driver_id=vehicle"
+          }
+        ],
+        "id": "wake"
+      }
+    ]
+  },
+  "drivers": [
+    {
+      "name": {
+        "en": "Vehicle"
+      },
+      "class": "car",
+      "platforms": [
+        "local"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "capabilities": [
+        "measure_battery",
+        "locked",
+        "measure_temperature.inside",
+        "measure_temperature.outside",
+        "measure_range",
+        "charging_status",
+        "measure_tire_pressure_fl",
+        "measure_tire_pressure_fr",
+        "measure_tire_pressure_rl",
+        "measure_tire_pressure_rr",
+        "measure_odometer",
+        "vehicle_state_status",
+        "measure_latitude",
+        "measure_longitude",
+        "software_update",
+        "measure_battery_health",
+        "charge_limit",
+        "charging_amps",
+        "target_temperature",
+        "climate_onoff",
+        "sentry_mode",
+        "charge_port",
+        "trunk",
+        "frunk",
+        "charging_control",
+        "seat_heater_driver",
+        "seat_heater_passenger",
+        "seat_heater_rear_left",
+        "seat_heater_rear_center",
+        "seat_heater_rear_right",
+        "climate_keeper_mode",
+        "cabin_overheat_protection",
+        "defrost_mode",
+        "steering_wheel_heater",
+        "windows",
+        "valet_mode",
+        "speed_limit_mode",
+        "speed_limit_speed",
+        "last_charge_energy",
+        "last_charge_location",
+        "last_charge_cost",
+        "shift_state",
+        "charger_power",
+        "charge_time_remaining"
+      ],
+      "capabilitiesOptions": {
+        "measure_battery": {
+          "title": {
+            "en": "Battery"
+          }
+        },
+        "measure_temperature.inside": {
+          "title": {
+            "en": "Inside"
+          }
+        },
+        "measure_temperature.outside": {
+          "title": {
+            "en": "Outside"
+          }
+        }
+      },
+      "energy": {
+        "electricCar": true
+      },
+      "pair": [
+        {
+          "id": "token_input",
+          "navigation": {
+            "next": "list_devices"
+          }
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "token_input"
+        }
+      ],
+      "images": {
+        "small": "/drivers/vehicle/assets/images/small.jpg",
+        "large": "/drivers/vehicle/assets/images/large.jpg",
+        "xlarge": "/drivers/vehicle/assets/images/xlarge.jpg"
+      },
+      "id": "vehicle",
+      "settings": [
+        {
+          "type": "group",
+          "label": {
+            "en": "Units"
+          },
+          "children": [
+            {
+              "id": "unit_distance",
+              "type": "dropdown",
+              "label": {
+                "en": "Distance"
+              },
+              "hint": {
+                "en": "Unit for range and odometer."
+              },
+              "value": "km",
+              "values": [
+                {
+                  "id": "km",
+                  "label": {
+                    "en": "km"
+                  }
+                },
+                {
+                  "id": "mi",
+                  "label": {
+                    "en": "mi"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "unit_pressure",
+              "type": "dropdown",
+              "label": {
+                "en": "Tire Pressure"
+              },
+              "hint": {
+                "en": "Unit for tire pressure readings."
+              },
+              "value": "bar",
+              "values": [
+                {
+                  "id": "bar",
+                  "label": {
+                    "en": "bar"
+                  }
+                },
+                {
+                  "id": "psi",
+                  "label": {
+                    "en": "psi"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "unit_temperature",
+              "type": "dropdown",
+              "label": {
+                "en": "Temperature"
+              },
+              "hint": {
+                "en": "Unit for target temperature."
+              },
+              "value": "C",
+              "values": [
+                {
+                  "id": "C",
+                  "label": {
+                    "en": "°C"
+                  }
+                },
+                {
+                  "id": "F",
+                  "label": {
+                    "en": "°F"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "unit_speed",
+              "type": "dropdown",
+              "label": {
+                "en": "Speed"
+              },
+              "hint": {
+                "en": "Unit for speed limit."
+              },
+              "value": "kmh",
+              "values": [
+                {
+                  "id": "kmh",
+                  "label": {
+                    "en": "km/h"
+                  }
+                },
+                {
+                  "id": "mph",
+                  "label": {
+                    "en": "mph"
+                  }
+                }
+              ]
+            },
+            {
+              "id": "currency",
+              "type": "dropdown",
+              "label": {
+                "en": "Currency"
+              },
+              "hint": {
+                "en": "Currency symbol for charging cost."
+              },
+              "value": "USD",
+              "values": [
+                {
+                  "id": "USD",
+                  "label": {
+                    "en": "USD ($)"
+                  }
+                },
+                {
+                  "id": "EUR",
+                  "label": {
+                    "en": "EUR (€)"
+                  }
+                },
+                {
+                  "id": "GBP",
+                  "label": {
+                    "en": "GBP (£)"
+                  }
+                },
+                {
+                  "id": "SEK",
+                  "label": {
+                    "en": "SEK (kr)"
+                  }
+                },
+                {
+                  "id": "NOK",
+                  "label": {
+                    "en": "NOK (kr)"
+                  }
+                },
+                {
+                  "id": "DKK",
+                  "label": {
+                    "en": "DKK (kr)"
+                  }
+                },
+                {
+                  "id": "CHF",
+                  "label": {
+                    "en": "CHF (CHF)"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Location"
+          },
+          "children": [
+            {
+              "id": "home_radius",
+              "type": "number",
+              "label": {
+                "en": "Home radius"
+              },
+              "hint": {
+                "en": "Distance from Homey's location within which the vehicle counts as home. Used by the 'Arrived home', 'Left home' and 'Vehicle is home' Flow cards."
+              },
+              "value": 100,
+              "min": 10,
+              "max": 5000,
+              "step": 10,
+              "units": {
+                "en": "m"
+              }
+            }
+          ]
+        },
+        {
+          "type": "group",
+          "label": {
+            "en": "Security PINs"
+          },
+          "children": [
+            {
+              "id": "speed_limit_pin",
+              "type": "password",
+              "label": {
+                "en": "Speed Limit PIN"
+              },
+              "hint": {
+                "en": "4-digit PIN required to activate/deactivate speed limit mode. Set this before using the speed limit toggle."
+              },
+              "value": ""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "capabilities": {
+    "cabin_overheat_protection": {
+      "type": "enum",
+      "title": {
+        "en": "Cabin Overheat Protection"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "Off",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "FanOnly",
+          "title": {
+            "en": "Fan Only"
+          }
+        },
+        {
+          "id": "AC",
+          "title": {
+            "en": "AC"
+          }
+        }
+      ]
+    },
+    "charge_limit": {
+      "type": "number",
+      "title": {
+        "en": "Charge Limit"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "slider",
+      "min": 0.5,
+      "max": 1,
+      "step": 0.01,
+      "units": "%"
+    },
+    "charge_port": {
+      "type": "boolean",
+      "title": {
+        "en": "Charge Port"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "charge_time_remaining": {
+      "type": "number",
+      "title": {
+        "en": "Time to Full"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "min"
+      },
+      "min": 0,
+      "decimals": 0
+    },
+    "charger_power": {
+      "type": "number",
+      "title": {
+        "en": "Charging Power"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "kW"
+      },
+      "min": 0,
+      "max": 400,
+      "decimals": 1
+    },
+    "charging_amps": {
+      "type": "number",
+      "title": {
+        "en": "Charging Amps"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "slider",
+      "min": 1,
+      "max": 48,
+      "step": 1,
+      "units": "A"
+    },
+    "charging_control": {
+      "type": "boolean",
+      "title": {
+        "en": "Charging"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "charging_status": {
+      "type": "enum",
+      "title": {
+        "en": "Charging"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "values": [
+        {
+          "id": "Disconnected",
+          "title": {
+            "en": "Disconnected"
+          }
+        },
+        {
+          "id": "Starting",
+          "title": {
+            "en": "Starting"
+          }
+        },
+        {
+          "id": "Charging",
+          "title": {
+            "en": "Charging"
+          }
+        },
+        {
+          "id": "Stopped",
+          "title": {
+            "en": "Stopped"
+          }
+        },
+        {
+          "id": "Complete",
+          "title": {
+            "en": "Complete"
+          }
+        },
+        {
+          "id": "NoPower",
+          "title": {
+            "en": "No Power"
+          }
+        }
+      ]
+    },
+    "climate_keeper_mode": {
+      "type": "enum",
+      "title": {
+        "en": "Climate Keeper"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "Off",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "Keep",
+          "title": {
+            "en": "Keep"
+          }
+        },
+        {
+          "id": "Dog",
+          "title": {
+            "en": "Dog"
+          }
+        },
+        {
+          "id": "Camp",
+          "title": {
+            "en": "Camp"
+          }
+        }
+      ]
+    },
+    "climate_onoff": {
+      "type": "boolean",
+      "title": {
+        "en": "Climate"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "defrost_mode": {
+      "type": "boolean",
+      "title": {
+        "en": "Defrost"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "frunk": {
+      "type": "boolean",
+      "title": {
+        "en": "Frunk"
+      },
+      "getable": false,
+      "setable": true,
+      "uiComponent": "button"
+    },
+    "last_charge_cost": {
+      "type": "number",
+      "title": {
+        "en": "Last Charge Cost"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "decimals": 2
+    },
+    "last_charge_energy": {
+      "type": "number",
+      "title": {
+        "en": "Last Charge Energy"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "kWh"
+      },
+      "decimals": 1
+    },
+    "last_charge_location": {
+      "type": "string",
+      "title": {
+        "en": "Last Charge Location"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "measure_battery_health": {
+      "type": "number",
+      "title": {
+        "en": "Battery Health"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "%"
+      },
+      "min": 0,
+      "max": 100,
+      "step": 0.1,
+      "decimals": 1
+    },
+    "measure_latitude": {
+      "type": "number",
+      "title": {
+        "en": "Latitude"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "min": -90,
+      "max": 90,
+      "step": 0.000001,
+      "decimals": 6
+    },
+    "measure_longitude": {
+      "type": "number",
+      "title": {
+        "en": "Longitude"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "min": -180,
+      "max": 180,
+      "step": 0.000001,
+      "decimals": 6
+    },
+    "measure_odometer": {
+      "type": "number",
+      "title": {
+        "en": "Odometer"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "km"
+      },
+      "min": 0,
+      "max": 999999,
+      "step": 1,
+      "decimals": 0
+    },
+    "measure_range": {
+      "type": "number",
+      "title": {
+        "en": "Range"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "km"
+      },
+      "min": 0,
+      "max": 1000,
+      "step": 1,
+      "decimals": 0
+    },
+    "measure_tire_pressure_fl": {
+      "type": "number",
+      "title": {
+        "en": "Tire FL"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "bar"
+      },
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "decimals": 1
+    },
+    "measure_tire_pressure_fr": {
+      "type": "number",
+      "title": {
+        "en": "Tire FR"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "bar"
+      },
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "decimals": 1
+    },
+    "measure_tire_pressure_rl": {
+      "type": "number",
+      "title": {
+        "en": "Tire RL"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "bar"
+      },
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "decimals": 1
+    },
+    "measure_tire_pressure_rr": {
+      "type": "number",
+      "title": {
+        "en": "Tire RR"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "units": {
+        "en": "bar"
+      },
+      "min": 0,
+      "max": 5,
+      "step": 0.1,
+      "decimals": 1
+    },
+    "seat_heater_driver": {
+      "type": "enum",
+      "title": {
+        "en": "Seat Heater (Driver)"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Med"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    },
+    "seat_heater_passenger": {
+      "type": "enum",
+      "title": {
+        "en": "Seat Heater (Passenger)"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Med"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    },
+    "seat_heater_rear_center": {
+      "type": "enum",
+      "title": {
+        "en": "Seat Heater (Rear Center)"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Med"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    },
+    "seat_heater_rear_left": {
+      "type": "enum",
+      "title": {
+        "en": "Seat Heater (Rear Left)"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Med"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    },
+    "seat_heater_rear_right": {
+      "type": "enum",
+      "title": {
+        "en": "Seat Heater (Rear Right)"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "picker",
+      "values": [
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Med"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    },
+    "sentry_mode": {
+      "type": "boolean",
+      "title": {
+        "en": "Sentry Mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "shift_state": {
+      "type": "enum",
+      "title": {
+        "en": "Gear"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "values": [
+        {
+          "id": "P",
+          "title": {
+            "en": "Park"
+          }
+        },
+        {
+          "id": "D",
+          "title": {
+            "en": "Drive"
+          }
+        },
+        {
+          "id": "R",
+          "title": {
+            "en": "Reverse"
+          }
+        },
+        {
+          "id": "N",
+          "title": {
+            "en": "Neutral"
+          }
+        }
+      ]
+    },
+    "software_update": {
+      "type": "string",
+      "title": {
+        "en": "Software"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor"
+    },
+    "speed_limit_mode": {
+      "type": "boolean",
+      "title": {
+        "en": "Speed Limit"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "speed_limit_speed": {
+      "type": "number",
+      "title": {
+        "en": "Speed Limit"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "slider",
+      "min": 50,
+      "max": 145,
+      "step": 1
+    },
+    "steering_wheel_heater": {
+      "type": "boolean",
+      "title": {
+        "en": "Steering Wheel Heater"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "target_temperature": {
+      "type": "number",
+      "title": {
+        "en": "Target Temperature"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "thermostat",
+      "min": 15,
+      "max": 28,
+      "step": 0.5,
+      "units": "°C"
+    },
+    "trunk": {
+      "type": "boolean",
+      "title": {
+        "en": "Trunk"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "valet_mode": {
+      "type": "boolean",
+      "title": {
+        "en": "Valet Mode"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    },
+    "vehicle_state_status": {
+      "type": "enum",
+      "title": {
+        "en": "Vehicle"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "values": [
+        {
+          "id": "Awake",
+          "title": {
+            "en": "Awake"
+          }
+        },
+        {
+          "id": "Asleep",
+          "title": {
+            "en": "Asleep"
+          }
+        },
+        {
+          "id": "Offline",
+          "title": {
+            "en": "Offline"
+          }
+        }
+      ]
+    },
+    "windows": {
+      "type": "boolean",
+      "title": {
+        "en": "Windows"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
+    }
+  }
+}

@@ -8,3 +8,4 @@ tsconfig.json
 tsconfig.test.json
 dist-test/
 .gitignore
+.DS_Store

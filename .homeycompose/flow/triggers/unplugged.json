@@ -1,0 +1,18 @@
+{
+  "title": {
+    "en": "Charge cable unplugged"
+  },
+  "hint": {
+    "en": "When the charge cable is disconnected"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

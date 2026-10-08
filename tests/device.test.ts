@@ -2,6 +2,7 @@ import { describe, it, mock, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import path from 'node:path';
 import Module from 'node:module';
+import { createMockFlow, createMockGeolocation, StubTessieStreamer } from './helpers/homey-stubs';
 
 // ---- Module mocking setup ----
 const originalResolve = (Module as any)._resolveFilename;
@@ -22,6 +23,7 @@ function MockTessieClient(this: any, token: string) {
   if (request === 'homey') return '__mock_homey__';
   if (parent && parent.filename && parent.filename.includes('drivers/vehicle/device')) {
     if (request === '../../lib/tessie-client') return '__mock_tessie_client__';
+    if (request === '../../lib/tessie-streamer') return '__mock_tessie_streamer_device__';
   }
   return originalResolve.call(this, request, parent, isMain, options);
 };
@@ -72,6 +74,8 @@ const mockHomeyModule = new Module('__mock_homey__');
       clearInterval: (id: number) => {
         this._clearedIntervals.push(id);
       },
+      flow: createMockFlow(),
+      geolocation: createMockGeolocation(),
     };
 
     getData() { return this._data; }
@@ -81,8 +85,16 @@ const mockHomeyModule = new Module('__mock_homey__');
     getCapabilityValue(name: string) { return this._capabilities[name]; }
     hasCapability(name: string) { return this._declaredCapabilities.has(name); }
     async addCapability(name: string) { this._declaredCapabilities.add(name); }
+    _settings: Record<string, any> = {};
+    async setSettings(settings: Record<string, any>) { Object.assign(this._settings, settings); }
     async setCapabilityOptions(name: string, opts: any) { this._capabilityOptions[name] = opts; }
     registerCapabilityListener(name: string, fn: Function) { this._capabilityListeners[name] = fn; }
+    getSetting(key: string) { return this._settings[key]; }
+    getSettings() { return { ...this._settings }; }
+    async triggerCapabilityListener(name: string, value: any) {
+      await this._capabilityListeners[name](value, {});
+      this._capabilities[name] = value;
+    }
     async setAvailable() { this._available = true; this._unavailableMessage = null; }
     async setUnavailable(msg: string) { this._available = false; this._unavailableMessage = msg; }
     log(..._args: any[]) {}
@@ -97,6 +109,11 @@ const mockTessieModule = new Module('__mock_tessie_client__');
 (mockTessieModule as any).exports = MockTessieClient;
 (mockTessieModule as any).loaded = true;
 (require as any).cache['__mock_tessie_client__'] = mockTessieModule;
+
+const stubStreamerModule = new Module('__mock_tessie_streamer_device__');
+(stubStreamerModule as any).exports = StubTessieStreamer;
+(stubStreamerModule as any).loaded = true;
+(require as any).cache['__mock_tessie_streamer_device__'] = stubStreamerModule;
 
 // Now require the device module
 const VehicleDevice = require('../drivers/vehicle/device');
@@ -395,7 +412,7 @@ describe('VehicleDevice', () => {
       assert.equal(device._capabilities['vehicle_state_status'], 'Asleep');
     });
 
-    it('sets vehicle_state_status to "Asleep" when status is "waiting_for_sleep"', async () => {
+    it('sets vehicle_state_status to "Awake" when status is "waiting_for_sleep" (car is idle but awake)', async () => {
       const device = createDevice();
       device.isMetric = true;
       device.usesPsi = false;
@@ -404,7 +421,7 @@ describe('VehicleDevice', () => {
         getVehicleResult: fullTessieState(),
       });
       await device.pollCycle();
-      assert.equal(device._capabilities['vehicle_state_status'], 'Asleep');
+      assert.equal(device._capabilities['vehicle_state_status'], 'Awake');
     });
 
     it('sets vehicle_state_status to "Awake" when status is "awake"', async () => {

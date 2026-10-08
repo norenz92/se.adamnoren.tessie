@@ -1,11 +1,13 @@
 {
   "title": {
-    "en": "Vehicle is locked"
+    "en": "Vehicle !{{is|is not}} locked"
   },
   "hint": {
-    "en": "Check if the vehicle is currently locked"
+    "en": "Check if the vehicle is locked"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",

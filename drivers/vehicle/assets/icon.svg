@@ -1,23 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 960" width="960" height="960">
-  <!-- Default vehicle icon: generic sedan silhouette -->
-  <g fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Body -->
-    <path d="M160 560 L220 400 L360 320 L600 320 L740 400 L800 560" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Roof line -->
-    <path d="M320 320 L380 240 L580 240 L640 320" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Undercarriage -->
-    <path d="M120 560 L120 600 L280 600 L280 560" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <path d="M680 560 L680 600 L840 600 L840 560" fill="#FFFFFF" stroke="#FFFFFF"/>
-    <!-- Bottom line -->
-    <line x1="280" y1="600" x2="680" y2="600" stroke="#FFFFFF"/>
-    <!-- Front wheel -->
-    <circle cx="260" cy="600" r="60" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="260" cy="600" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Rear wheel -->
-    <circle cx="700" cy="600" r="60" fill="none" stroke="#FFFFFF" stroke-width="14"/>
-    <circle cx="700" cy="600" r="24" fill="#FFFFFF" stroke="#FFFFFF" stroke-width="6"/>
-    <!-- Window -->
-    <path d="M350 320 L390 252 L560 252 L620 320" fill="none" stroke="#FFFFFF" stroke-width="8"/>
-    <line x1="480" y1="252" x2="480" y2="320" stroke="#FFFFFF" stroke-width="6"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="960" viewBox="0 0 960 960">
+  <title>Electric vehicle</title>
+  <g fill="none" stroke="#000000" stroke-width="30" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M872.8 554.3 L889.5 554.3 C889.5 554.3 896 501.2 896 501.2 C896 501.2 880.7 489 868.3 482.4 C855.9 475.7 839.3 467 821.7 461.1 C804.1 455.2 784.4 450.5 762.7 447 C741.1 443.4 718.4 448.8 692 439.9 C665.5 431 633.4 406.1 604.1 393.3 C574.8 380.5 540.9 369.7 516.3 363.2 C491.6 356.8 479 356.3 456.1 354.4 C433.2 352.5 403.7 351.5 378.9 352 C354 352.6 328.1 355.3 306.9 357.9 C285.8 360.6 268.9 364.2 252.1 368 C235.3 371.7 229.2 372.8 206.1 380.3 C183 387.9 134.9 406.7 113.5 413.4 C92.2 420.1 78.2 420.4 78.2 420.4 C78.2 420.4 82 426.4 81.7 431.6 C81.4 436.9 76.4 451.7 76.4 451.7 C76.4 451.7 80.5 455.8 80.5 455.8 C80.5 455.8 80.4 460.1 79.3 465.8 C78.2 471.5 76.6 483.8 74 490 C71.5 496.2 64 503 64 503 C64 503 68.7 554.3 68.7 554.3 L115.1 554.3 M313 554.3 L675.1 554.3"/>
+    <path d="M217 377.4 L226.2 421 L801.3 456.2" stroke-width="22"/>
+    <path d="M420.2 432.9 L420.2 353.3" stroke-width="22"/>
+    <circle cx="214.1" cy="542.8" r="63.2"/>
+    <circle cx="773.9" cy="542.2" r="63.2"/>
   </g>
 </svg>

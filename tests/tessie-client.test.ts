@@ -204,7 +204,7 @@ describe('TessieClient', () => {
       const client = new TessieClient('my-token');
       const results = await client.getCharges('VIN123');
 
-      assert.strictEqual(capturedOptions!.path, '/VIN123/charges');
+      assert.ok(/^\/VIN123\/charges\?from=\d+$/.test(capturedOptions!.path!), `unexpected path ${capturedOptions!.path}`);
       assert.ok(Array.isArray(results), 'Should return an array');
       assert.strictEqual(results.length, 2);
       assert.strictEqual(results[0].charge_energy_added, 42.3);

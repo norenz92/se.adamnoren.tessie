@@ -1,11 +1,13 @@
 {
   "title": {
-    "en": "Sentry mode is on"
+    "en": "Sentry mode !{{is|is not}} on"
   },
   "hint": {
-    "en": "Check if sentry mode is currently active"
+    "en": "Check if sentry mode is on"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",

@@ -38,6 +38,14 @@ Tesla owners can monitor and control their vehicles directly from their Homey sm
 - **Authentication**: Tessie uses API tokens (bearer auth) — user provides their token during the pairing flow to discover and add vehicles
 - **Data pipeline**: Dual approach — WebSocket streaming for real-time updates, periodic REST polling as fallback
 
+## Tech Stack
+
+- **Language**: TypeScript (strict mode)
+- **Build**: `tsc` → CommonJS output to `dist/`
+- **Tests**: Node.js built-in test runner (`node --test`) with separate `tsconfig.test.json`
+- **Runtime**: Homey Pro (Node.js, CommonJS modules)
+- **Dependencies**: Minimal — prefer Node.js built-ins (e.g. `node:https`)
+
 ## Constraints
 
 - **Platform**: Homey Pro only (local Node.js runtime)

@@ -3,7 +3,7 @@
     "target": "ES2020",
     "module": "commonjs",
     "lib": ["ES2020"],
-    "outDir": "./dist",
+    "outDir": "./.homeybuild",
     "rootDir": ".",
     "strict": true,
     "esModuleInterop": true,
@@ -19,6 +19,6 @@
     "sourceMap": true,
     "types": ["node", "homey-apps-sdk-v3-types"]
   },
-  "include": ["app.ts", "lib/**/*.ts"],
-  "exclude": ["node_modules", "dist", "tests"]
+  "include": ["app.ts", "lib/**/*.ts", "drivers/**/*.ts"],
+  "exclude": ["node_modules", ".homeybuild", "dist-test", "tests"]
 }

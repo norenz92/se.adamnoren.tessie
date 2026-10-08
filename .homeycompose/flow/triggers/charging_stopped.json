@@ -5,8 +5,19 @@
   "hint": {
     "en": "When the vehicle stops charging"
   },
-  "platforms": ["local"],
-  "tokens": [],
+  "platforms": [
+    "local"
+  ],
+  "tokens": [
+    {
+      "name": "battery",
+      "type": "number",
+      "title": {
+        "en": "Battery level"
+      },
+      "example": 80
+    }
+  ],
   "args": [
     {
       "type": "device",

@@ -1,11 +1,13 @@
 {
   "title": {
-    "en": "Vehicle is home"
+    "en": "Vehicle !{{is|is not}} home"
   },
   "hint": {
-    "en": "Check if the vehicle is at the home location (placeholder)"
+    "en": "Check if the vehicle is within the home radius of Homey's location"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",

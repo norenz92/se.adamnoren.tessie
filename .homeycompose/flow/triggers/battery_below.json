@@ -1,0 +1,41 @@
+{
+  "title": {
+    "en": "Battery dropped below"
+  },
+  "titleFormatted": {
+    "en": "Battery dropped below [[percent]]%"
+  },
+  "hint": {
+    "en": "When the battery level drops below a threshold"
+  },
+  "platforms": [
+    "local"
+  ],
+  "tokens": [
+    {
+      "name": "battery",
+      "type": "number",
+      "title": {
+        "en": "Battery level"
+      },
+      "example": 80
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "number",
+      "name": "percent",
+      "title": {
+        "en": "Battery level (%)"
+      },
+      "min": 1,
+      "max": 100,
+      "step": 1
+    }
+  ]
+}

@@ -8,7 +8,9 @@
   "hint": {
     "en": "Set the heating level for a specific seat"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",
@@ -22,11 +24,48 @@
         "en": "Seat"
       },
       "values": [
-        { "id": "driver", "title": { "en": "Driver" } },
-        { "id": "passenger", "title": { "en": "Passenger" } },
-        { "id": "rear_left", "title": { "en": "Rear left" } },
-        { "id": "rear_center", "title": { "en": "Rear center" } },
-        { "id": "rear_right", "title": { "en": "Rear right" } }
+        {
+          "id": "driver",
+          "title": {
+            "en": "Driver"
+          }
+        },
+        {
+          "id": "passenger",
+          "title": {
+            "en": "Passenger"
+          }
+        },
+        {
+          "id": "rear_left",
+          "title": {
+            "en": "Rear left"
+          }
+        },
+        {
+          "id": "rear_center",
+          "title": {
+            "en": "Rear center"
+          }
+        },
+        {
+          "id": "rear_right",
+          "title": {
+            "en": "Rear right"
+          }
+        },
+        {
+          "id": "third_row_left",
+          "title": {
+            "en": "Third row left"
+          }
+        },
+        {
+          "id": "third_row_right",
+          "title": {
+            "en": "Third row right"
+          }
+        }
       ]
     },
     {
@@ -36,10 +75,30 @@
         "en": "Heat level"
       },
       "values": [
-        { "id": "0", "title": { "en": "Off" } },
-        { "id": "1", "title": { "en": "Low" } },
-        { "id": "2", "title": { "en": "Medium" } },
-        { "id": "3", "title": { "en": "High" } }
+        {
+          "id": "0",
+          "title": {
+            "en": "Off"
+          }
+        },
+        {
+          "id": "1",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Medium"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "High"
+          }
+        }
       ]
     }
   ]

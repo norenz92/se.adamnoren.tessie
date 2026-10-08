@@ -1,11 +1,13 @@
 {
   "title": {
-    "en": "Vehicle is charging"
+    "en": "Vehicle !{{is|is not}} charging"
   },
   "hint": {
-    "en": "Check if the vehicle is currently charging"
+    "en": "Check if the vehicle is charging"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",

@@ -1,0 +1,28 @@
+{
+  "title": {
+    "en": "Charging status changed"
+  },
+  "hint": {
+    "en": "When the charging status changes"
+  },
+  "platforms": [
+    "local"
+  ],
+  "tokens": [
+    {
+      "name": "status",
+      "type": "string",
+      "title": {
+        "en": "Charging status"
+      },
+      "example": "Charging"
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "title": {
+    "en": "Set cabin overheat protection temperature"
+  },
+  "titleFormatted": {
+    "en": "Set cabin overheat protection temperature to [[level]]"
+  },
+  "hint": {
+    "en": "Set the temperature at which cabin overheat protection activates"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "dropdown",
+      "name": "level",
+      "title": {
+        "en": "Activation temperature"
+      },
+      "values": [
+        {
+          "id": "1",
+          "title": {
+            "en": "Low"
+          }
+        },
+        {
+          "id": "2",
+          "title": {
+            "en": "Medium"
+          }
+        },
+        {
+          "id": "3",
+          "title": {
+            "en": "High"
+          }
+        }
+      ]
+    }
+  ]
+}

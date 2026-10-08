@@ -1,0 +1,34 @@
+{
+  "title": {
+    "en": "Schedule software update"
+  },
+  "titleFormatted": {
+    "en": "Install software update in [[minutes]] minutes"
+  },
+  "hint": {
+    "en": "Install a downloaded software update after a delay (0 = now)"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "number",
+      "name": "minutes",
+      "title": {
+        "en": "Delay (minutes)"
+      },
+      "min": 0,
+      "max": 1440,
+      "step": 1,
+      "placeholder": {
+        "en": "0"
+      }
+    }
+  ]
+}

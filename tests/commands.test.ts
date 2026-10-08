@@ -49,12 +49,12 @@ describe('TessieClient command methods', () => {
       };
 
       const client = new TessieClient('test-token');
-      await client.command('VIN123', 'flash_lights');
+      await client.command('VIN123', 'flash');
 
       assert.strictEqual(capturedOptions!.method, 'POST');
       assert.ok(
-        capturedOptions!.path!.startsWith('/VIN123/command/flash_lights'),
-        `Path should start with /VIN123/command/flash_lights, got: ${capturedOptions!.path}`
+        capturedOptions!.path!.startsWith('/VIN123/command/flash'),
+        `Path should start with /VIN123/command/flash, got: ${capturedOptions!.path}`
       );
       assert.ok(
         capturedOptions!.path!.includes('wait_for_completion=true'),
@@ -93,7 +93,7 @@ describe('TessieClient command methods', () => {
       };
 
       const client = new TessieClient('test-token');
-      const result = await client.command('VIN123', 'flash_lights');
+      const result = await client.command('VIN123', 'flash');
 
       assert.strictEqual(result, true);
     });
@@ -106,7 +106,7 @@ describe('TessieClient command methods', () => {
       };
 
       const client = new TessieClient('test-token');
-      const result = await client.command('VIN123', 'flash_lights');
+      const result = await client.command('VIN123', 'flash');
 
       assert.strictEqual(result, false);
     });

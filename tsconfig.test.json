@@ -4,6 +4,6 @@
     "outDir": "./dist-test",
     "rootDir": "."
   },
-  "include": ["app.ts", "lib/**/*.ts", "tests/**/*.ts"],
+  "include": ["app.ts", "lib/**/*.ts", "drivers/**/*.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", "dist", "dist-test"]
 }

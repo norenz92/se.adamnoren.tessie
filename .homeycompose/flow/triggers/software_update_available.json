@@ -1,0 +1,28 @@
+{
+  "title": {
+    "en": "Software update available"
+  },
+  "hint": {
+    "en": "When a new software update is available"
+  },
+  "platforms": [
+    "local"
+  ],
+  "tokens": [
+    {
+      "name": "version",
+      "type": "string",
+      "title": {
+        "en": "Version"
+      },
+      "example": "2026.20.1"
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

@@ -1,4 +1,5 @@
 node_modules/
-/app.json
-dist/
+.homeybuild/
 dist-test/
+.DS_Store
+.vscode/

@@ -1,11 +1,13 @@
 {
   "title": {
-    "en": "Climate is on"
+    "en": "Climate !{{is|is not}} on"
   },
   "hint": {
-    "en": "Check if the climate system is currently active"
+    "en": "Check if climate control is on"
   },
-  "platforms": ["local"],
+  "platforms": [
+    "local"
+  ],
   "args": [
     {
       "type": "device",

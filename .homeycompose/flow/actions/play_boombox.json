@@ -1,0 +1,42 @@
+{
+  "title": {
+    "en": "Play boombox sound"
+  },
+  "titleFormatted": {
+    "en": "Play [[sound]] from the boombox"
+  },
+  "hint": {
+    "en": "Play a sound from the external speaker (requires 2022.40.25+ and a pedestrian speaker)"
+  },
+  "platforms": [
+    "local"
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    },
+    {
+      "type": "dropdown",
+      "name": "sound",
+      "title": {
+        "en": "Sound"
+      },
+      "values": [
+        {
+          "id": "2000",
+          "title": {
+            "en": "Locate ping"
+          }
+        },
+        {
+          "id": "0",
+          "title": {
+            "en": "Random fart"
+          }
+        }
+      ]
+    }
+  ]
+}

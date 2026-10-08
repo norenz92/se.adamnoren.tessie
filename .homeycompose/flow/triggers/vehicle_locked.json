@@ -5,8 +5,19 @@
   "hint": {
     "en": "When the vehicle is locked"
   },
-  "platforms": ["local"],
-  "tokens": [],
+  "platforms": [
+    "local"
+  ],
+  "tokens": [
+    {
+      "name": "source",
+      "type": "string",
+      "title": {
+        "en": "Source"
+      },
+      "example": "Outside Homey"
+    }
+  ],
   "args": [
     {
       "type": "device",

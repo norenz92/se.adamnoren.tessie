@@ -20,6 +20,9 @@ const ICON_MAP: Record<string, string> = {
   'cybertruck': '/drivers/vehicle/assets/icons/cybertruck.svg',
 };
 
+// Passed to capability listeners so state changes caused by a Flow can be attributed to it.
+const FLOW = { source: 'flow' };
+
 // Actions backed by a capability. They go through triggerCapabilityListener so the
 // command is actually sent (setCapabilityValue alone never invokes the listener).
 const CAPABILITY_ACTIONS: Record<string, [string, any]> = {
@@ -99,7 +102,7 @@ class VehicleDriver extends Homey.Driver {
 
     for (const [cardId, [capId, value]] of Object.entries(CAPABILITY_ACTIONS)) {
       flow.getActionCard(cardId).registerRunListener(async (args: any) => {
-        await (args.device as VehicleDevice).triggerCapabilityListener(capId, value);
+        await (args.device as VehicleDevice).triggerCapabilityListener(capId, value, FLOW);
       });
     }
 
@@ -131,16 +134,16 @@ class VehicleDriver extends Homey.Driver {
       await (args.device as VehicleDevice).setSpeedLimit(Number(args.speed), args.unit === 'kmh' ? 'kmh' : 'mph');
     });
     flow.getActionCard('set_charge_limit').registerRunListener(async (args: any) => {
-      await (args.device as VehicleDevice).triggerCapabilityListener('charge_limit', Number(args.percent) / 100);
+      await (args.device as VehicleDevice).triggerCapabilityListener('charge_limit', Number(args.percent) / 100, FLOW);
     });
     flow.getActionCard('set_charging_amps').registerRunListener(async (args: any) => {
-      await (args.device as VehicleDevice).triggerCapabilityListener('charging_amps', Number(args.amps));
+      await (args.device as VehicleDevice).triggerCapabilityListener('charging_amps', Number(args.amps), FLOW);
     });
     flow.getActionCard('set_climate_keeper_mode').registerRunListener(async (args: any) => {
-      await (args.device as VehicleDevice).triggerCapabilityListener('climate_keeper_mode', args.mode);
+      await (args.device as VehicleDevice).triggerCapabilityListener('climate_keeper_mode', args.mode, FLOW);
     });
     flow.getActionCard('set_cabin_overheat_protection').registerRunListener(async (args: any) => {
-      await (args.device as VehicleDevice).triggerCapabilityListener('cabin_overheat_protection', args.mode);
+      await (args.device as VehicleDevice).triggerCapabilityListener('cabin_overheat_protection', args.mode, FLOW);
     });
     flow.getActionCard('set_seat_heater').registerRunListener(async (args: any) => {
       await (args.device as VehicleDevice).setSeatHeater(args.seat, Number(args.level));

@@ -85,6 +85,20 @@ const STATUS_MAP: Record<string, string> = {
 const DRIVING_SHIFT_STATES = new Set(['D', 'R', 'N']);
 
 const REFRESH_DELAY_MS = 1500;
+// A state change within this window after a matching Homey command is attributed to that command
+const COMMAND_SOURCE_WINDOW_MS = 5 * 60 * 1000;
+// Tessie needs a moment after parking before the drive shows up in its history
+const DRIVE_LOOKUP_DELAY_MS = 2 * 60 * 1000;
+const DRIVE_LOOKUP_ATTEMPTS = 3;
+
+const SOURCE_FLOW = 'Homey Flow';
+const SOURCE_HOMEY = 'Homey';
+const SOURCE_OUTSIDE = 'Outside Homey';
+const SOURCE_PHRASE: Record<string, string> = {
+  [SOURCE_FLOW]: 'by a Homey Flow',
+  [SOURCE_HOMEY]: 'from Homey',
+  [SOURCE_OUTSIDE]: 'outside Homey',
+};
 const TOKEN_ERROR = 'Invalid or expired API token';
 
 class VehicleDevice extends Homey.Device {
@@ -103,6 +117,9 @@ class VehicleDevice extends Homey.Device {
   chargingAmpsMax: number | null = null;
   destroyed: boolean = false;
   lastStreamDataAt: number = 0;
+  // Last command Homey sent per capability, used to tell Homey-initiated changes from outside ones
+  recentCommands: Record<string, { value: any; source: string; at: number }> = {};
+  driveTimer: ReturnType<typeof setTimeout> | null = null;
   // Monotonic counter so a slow /state response can't overwrite a newer one
   stateRequestSeq: number = 0;
   stateAppliedSeq: number = 0;
@@ -164,71 +181,83 @@ class VehicleDevice extends Homey.Device {
   }
 
   private registerCapabilityListeners(): void {
-    this.registerCapabilityListener('locked', async (value: boolean) => {
+    // Wraps each listener so the command's origin is remembered for trigger tokens and the Timeline
+    const listen = (capId: string, fn: (value: any) => Promise<void>) => {
+      this.registerCapabilityListener(capId, async (value: any, opts: any) => {
+        this.recentCommands[capId] = { value, source: opts?.source === 'flow' ? SOURCE_FLOW : SOURCE_HOMEY, at: Date.now() };
+        try {
+          await fn(value);
+        } catch (err) {
+          delete this.recentCommands[capId];
+          throw err;
+        }
+      });
+    };
+    listen('locked', async (value: boolean) => {
       await this.executeCommand(value ? 'lock' : 'unlock');
     });
-    this.registerCapabilityListener('sentry_mode', async (value: boolean) => {
+    listen('sentry_mode', async (value: boolean) => {
       await this.executeCommand(value ? 'enable_sentry' : 'disable_sentry');
     });
-    this.registerCapabilityListener('climate_onoff', async (value: boolean) => {
+    listen('climate_onoff', async (value: boolean) => {
       await this.executeCommand(value ? 'start_climate' : 'stop_climate');
     });
-    this.registerCapabilityListener('target_temperature', async (value: number) => {
+    listen('target_temperature', async (value: number) => {
       await this.setTargetTemperature(value, this.tempUnit);
     });
-    this.registerCapabilityListener('charge_limit', async (value: number) => {
+    listen('charge_limit', async (value: number) => {
       await this.executeCommand('set_charge_limit', { percent: Math.round(value * 100) });
     });
-    this.registerCapabilityListener('charging_amps', async (value: number) => {
+    listen('charging_amps', async (value: number) => {
       await this.executeCommand('set_charging_amps', { amps: value });
     });
-    this.registerCapabilityListener('charge_port', async (value: boolean) => {
+    listen('charge_port', async (value: boolean) => {
       await this.executeCommand(value ? 'open_charge_port' : 'close_charge_port');
     });
-    this.registerCapabilityListener('charging_control', async (value: boolean) => {
+    listen('charging_control', async (value: boolean) => {
       await this.executeCommand(value ? 'start_charging' : 'stop_charging');
     });
-    this.registerCapabilityListener('trunk', async (_value: boolean) => {
+    listen('trunk', async (_value: boolean) => {
       await this.executeCommand('activate_rear_trunk');
     });
-    this.registerCapabilityListener('frunk', async (_value: boolean) => {
+    listen('frunk', async (_value: boolean) => {
       await this.executeCommand('activate_front_trunk');
     });
 
     for (const [capId, seat] of Object.entries(SEAT_CAPABILITY_TO_SEAT)) {
-      this.registerCapabilityListener(capId, async (value: string) => {
+      listen(capId, async (value: string) => {
         await this.setSeatHeater(seat, Number(value));
       });
     }
 
-    this.registerCapabilityListener('steering_wheel_heater', async (value: boolean) => {
+    listen('steering_wheel_heater', async (value: boolean) => {
       await this.executeCommand(value ? 'start_steering_wheel_heater' : 'stop_steering_wheel_heater');
     });
-    this.registerCapabilityListener('defrost_mode', async (value: boolean) => {
+    listen('defrost_mode', async (value: boolean) => {
       await this.executeCommand(value ? 'start_max_defrost' : 'stop_max_defrost');
     });
-    this.registerCapabilityListener('climate_keeper_mode', async (value: string) => {
+    listen('climate_keeper_mode', async (value: string) => {
       const mode = CLIMATE_KEEPER_TO_API[value];
       if (mode == null) throw new Error(`Unknown climate keeper mode: ${value}`);
       await this.executeCommand('set_climate_keeper_mode', { mode });
     });
-    this.registerCapabilityListener('cabin_overheat_protection', async (value: string) => {
+    listen('cabin_overheat_protection', async (value: string) => {
       const params = COP_TO_API[value];
       if (!params) throw new Error(`Unknown cabin overheat protection mode: ${value}`);
       await this.executeCommand('set_cabin_overheat_protection', params);
     });
 
     // Windows (true=closed, false=vented)
-    this.registerCapabilityListener('windows', async (value: boolean) => {
+    listen('windows', async (value: boolean) => {
       await this.executeCommand(value ? 'close_windows' : 'vent_windows');
     });
-    this.registerCapabilityListener('valet_mode', async (value: boolean) => {
+    listen('valet_mode', async (value: boolean) => {
       await this.executeCommand(value ? 'enable_valet' : 'disable_valet');
     });
-    this.registerCapabilityListener('speed_limit_mode', async (value: boolean) => {
+    listen('speed_limit_mode', async (value: boolean) => {
       await this.executeCommand(value ? 'enable_speed_limit' : 'disable_speed_limit', { pin: this.getSpeedLimitPin() });
     });
-    this.registerCapabilityListener('speed_limit_speed', async (value: number) => {
+    listen('speed_limit_speed', async (value: number) => {
       await this.setSpeedLimit(value, this.speedUnit);
     });
   }
@@ -453,20 +482,26 @@ class VehicleDevice extends Homey.Device {
 
   private onCapabilityChanged(id: string, prev: any, value: any): void {
     switch (id) {
-      case 'locked':
-        this.triggerFlow(value ? 'vehicle_locked' : 'vehicle_unlocked');
+      case 'locked': {
+        const source = this.commandSource('locked', value);
+        this.triggerFlow(value ? 'vehicle_locked' : 'vehicle_unlocked', { source });
+        this.postTimeline('timeline_security', `was ${value ? 'locked' : 'unlocked'} ${SOURCE_PHRASE[source]}`);
         break;
-      case 'sentry_mode':
-        this.triggerFlow(value ? 'sentry_enabled' : 'sentry_disabled');
+      }
+      case 'sentry_mode': {
+        const source = this.commandSource('sentry_mode', value);
+        this.triggerFlow(value ? 'sentry_enabled' : 'sentry_disabled', { source });
+        this.postTimeline('timeline_security', `· Sentry Mode turned ${value ? 'on' : 'off'} ${SOURCE_PHRASE[source]}`);
         break;
+      }
       case 'climate_onoff':
-        this.triggerFlow(value ? 'climate_started' : 'climate_stopped');
+        this.triggerFlow(value ? 'climate_started' : 'climate_stopped', { source: this.commandSource('climate_onoff', value) });
         break;
       case 'charging_status': {
         const battery = this.getCapabilityValue('measure_battery') ?? 0;
         this.triggerFlow('charging_status_changed', { status: String(value) });
-        if (value === 'Charging') this.triggerFlow('charging_started', { battery });
-        if (prev === 'Charging') this.triggerFlow('charging_stopped', { battery });
+        if (value === 'Charging') this.triggerFlow('charging_started', { battery, source: this.commandSource('charging_control', true) });
+        if (prev === 'Charging') this.triggerFlow('charging_stopped', { battery, source: this.commandSource('charging_control', false) });
         if (value === 'Complete') this.triggerFlow('charging_complete', { battery });
         if (prev === 'Disconnected') this.triggerFlow('plugged_in');
         if (value === 'Disconnected') this.triggerFlow('unplugged');
@@ -483,12 +518,79 @@ class VehicleDevice extends Homey.Device {
         const wasDriving = DRIVING_SHIFT_STATES.has(prev);
         const isDriving = DRIVING_SHIFT_STATES.has(value);
         if (!wasDriving && isDriving) this.triggerFlow('started_driving');
-        if (wasDriving && !isDriving) this.triggerFlow('parked');
+        if (wasDriving && !isDriving) {
+          this.triggerFlow('parked');
+          this.scheduleDriveLookup(Date.now(), 1);
+        }
         break;
       }
       default:
         break;
     }
+  }
+
+  /** Who caused a state change: the matching recent Homey command, or something outside Homey. */
+  private commandSource(capId: string, value: any): string {
+    const cmd = this.recentCommands[capId];
+    if (cmd && cmd.value === value && Date.now() - cmd.at < COMMAND_SOURCE_WINDOW_MS) {
+      delete this.recentCommands[capId];
+      return cmd.source;
+    }
+    return SOURCE_OUTSIDE;
+  }
+
+  /** Post to the Homey Timeline when the user enabled the given timeline setting. */
+  private postTimeline(settingKey: string, text: string): void {
+    if (!this.getSetting(settingKey)) return;
+    try {
+      this.homey.notifications.createNotification({ excerpt: `**${this.getName()}** ${text}` })
+        .catch((err: any) => this.error('Timeline notification failed:', err.message));
+    } catch (err: any) {
+      this.error('Timeline notification failed:', err.message);
+    }
+  }
+
+  // --- Drives ---
+
+  private scheduleDriveLookup(parkedAt: number, attempt: number): void {
+    if (this.destroyed) return;
+    if (this.driveTimer != null) this.homey.clearTimeout(this.driveTimer);
+    this.driveTimer = this.homey.setTimeout(() => {
+      this.driveTimer = null;
+      this.lookupCompletedDrive(parkedAt, attempt).catch((err: any) => this.error('Drive lookup failed:', err.message));
+    }, DRIVE_LOOKUP_DELAY_MS);
+  }
+
+  /** Fetch the drive that just ended from Tessie and announce it, including the car's driver profile. */
+  async lookupCompletedDrive(parkedAt: number, attempt: number): Promise<void> {
+    if (this.destroyed) return;
+    const parkedSec = Math.floor(parkedAt / 1000);
+    const drives = await this.client.getDrives(this.getData().id, {
+      from: parkedSec - 12 * 60 * 60,
+      distanceFormat: this.isMetric ? 'km' : 'mi',
+    });
+    const drive = drives
+      .filter((d: any) => typeof d.ended_at === 'number' && d.ended_at >= parkedSec - 15 * 60)
+      .reduce((a: any, b: any) => (!a || b.ended_at > a.ended_at ? b : a), null);
+    if (!drive) {
+      if (attempt < DRIVE_LOOKUP_ATTEMPTS) this.scheduleDriveLookup(parkedAt, attempt + 1);
+      return;
+    }
+    if (drive.id != null && this.getStoreValue('last_reported_drive') === drive.id) return;
+    if (drive.id != null) await this.setStoreValue('last_reported_drive', drive.id).catch(this.error);
+
+    const driver = String(drive.driver_profile ?? drive.driver_profile_name ?? drive.driver ?? '').trim() || 'Unknown';
+    const distance = Math.round(Number(drive.odometer_distance ?? 0) * 10) / 10;
+    const duration = Math.max(0, Math.round(((drive.ended_at ?? 0) - (drive.started_at ?? 0)) / 60));
+    const energy = Math.round(Number(drive.energy_used ?? 0) * 10) / 10;
+    const from = String(drive.starting_location ?? '');
+    const to = String(drive.ending_location ?? '');
+    this.triggerFlow('drive_completed', { driver, distance, duration, energy, from, to });
+
+    const unit = this.isMetric ? 'km' : 'mi';
+    const place = to.split(',')[0].trim();
+    const who = driver === 'Unknown' ? 'drove' : `· ${driver} drove`;
+    this.postTimeline('timeline_drives', `${who} ${distance} ${unit}${place ? ` to ${place}` : ''} (${duration} min)`);
   }
 
   private triggerFlow(cardId: string, tokens: Record<string, any> = {}, state: Record<string, any> = {}): void {
@@ -845,6 +947,10 @@ class VehicleDevice extends Homey.Device {
     if (this.batteryHealthTimer != null) {
       this.homey.clearInterval(this.batteryHealthTimer);
       this.batteryHealthTimer = null;
+    }
+    if (this.driveTimer != null) {
+      this.homey.clearTimeout(this.driveTimer);
+      this.driveTimer = null;
     }
   }
 

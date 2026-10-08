@@ -190,6 +190,36 @@
   {
     "type": "group",
     "label": {
+      "en": "Timeline"
+    },
+    "children": [
+      {
+        "id": "timeline_security",
+        "type": "checkbox",
+        "label": {
+          "en": "Locks and Sentry Mode"
+        },
+        "hint": {
+          "en": "Post to the Homey Timeline when the car is locked/unlocked or Sentry Mode changes, including whether it came from Homey, a Flow or outside Homey (Tesla app, key, auto-lock). Tesla does not report which person or key was used."
+        },
+        "value": false
+      },
+      {
+        "id": "timeline_drives",
+        "type": "checkbox",
+        "label": {
+          "en": "Completed drives"
+        },
+        "hint": {
+          "en": "Post each completed drive to the Homey Timeline with distance, destination and the car's driver profile."
+        },
+        "value": false
+      }
+    ]
+  },
+  {
+    "type": "group",
+    "label": {
       "en": "Security PINs"
     },
     "children": [

@@ -1,0 +1,68 @@
+{
+  "title": {
+    "en": "Drive completed"
+  },
+  "hint": {
+    "en": "Shortly after parking, when Tessie has recorded the drive. Driver is the car's driver profile (or 'Unknown'). Distance uses the device's distance unit."
+  },
+  "platforms": [
+    "local"
+  ],
+  "tokens": [
+    {
+      "name": "driver",
+      "type": "string",
+      "title": {
+        "en": "Driver"
+      },
+      "example": "Adam"
+    },
+    {
+      "name": "distance",
+      "type": "number",
+      "title": {
+        "en": "Distance"
+      },
+      "example": 12.4
+    },
+    {
+      "name": "duration",
+      "type": "number",
+      "title": {
+        "en": "Duration (min)"
+      },
+      "example": 18
+    },
+    {
+      "name": "energy",
+      "type": "number",
+      "title": {
+        "en": "Energy used (kWh)"
+      },
+      "example": 2.1
+    },
+    {
+      "name": "from",
+      "type": "string",
+      "title": {
+        "en": "From"
+      },
+      "example": "Main Street 1"
+    },
+    {
+      "name": "to",
+      "type": "string",
+      "title": {
+        "en": "To"
+      },
+      "example": "Falsterbovägen 65"
+    }
+  ],
+  "args": [
+    {
+      "type": "device",
+      "name": "device",
+      "filter": "driver_id=vehicle"
+    }
+  ]
+}

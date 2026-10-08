@@ -16,6 +16,14 @@
         "en": "Battery level"
       },
       "example": 80
+    },
+    {
+      "name": "source",
+      "type": "string",
+      "title": {
+        "en": "Source"
+      },
+      "example": "Outside Homey"
     }
   ],
   "args": [

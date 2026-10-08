@@ -56,15 +56,19 @@ export class MockHomeyDevice {
   _capabilityOptions: Record<string, any> = {};
   _available = true;
   homey: any = {
-    // Run short delays (post-command refresh) inline; never run poll timers (would loop forever)
-    setTimeout: (fn: Function, ms: number) => { if (ms <= 5000) fn(); return 0; },
+    // Run short delays (post-command refresh) inline; park longer timers (polls, drive lookups) for tests to fire
+    setTimeout: (fn: Function, ms: number) => { if (ms <= 5000) { fn(); return 0; } this._timers.push({ fn, ms }); return this._timers.length; },
     clearTimeout: () => {},
     setInterval: () => 0,
     clearInterval: () => {},
     flow: createMockFlow(),
     geolocation: createMockGeolocation(),
+    notifications: { createNotification: async ({ excerpt }: { excerpt: string }) => { this._notifications.push(excerpt); } },
   };
+  _timers: Array<{ fn: Function; ms: number }> = [];
+  _notifications: string[] = [];
 
+  getName() { return 'Test Car'; }
   getData() { return this._data; }
   getStoreValue(key: string) { return this._store[key]; }
   async setStoreValue(key: string, value: any) { this._store[key] = value; }
@@ -79,8 +83,8 @@ export class MockHomeyDevice {
   async removeCapability(id: string) { this._removedCapabilities.push(id); }
   async setCapabilityOptions(id: string, opts: any) { this._capabilityOptions[id] = opts; }
   registerCapabilityListener(id: string, fn: Function) { this._capabilityListeners[id] = fn; }
-  async triggerCapabilityListener(id: string, value: any) {
-    await this._capabilityListeners[id](value, {});
+  async triggerCapabilityListener(id: string, value: any, opts: Record<string, any> = {}) {
+    await this._capabilityListeners[id](value, opts);
     this._capabilities[id] = value;
   }
   async setAvailable() { this._available = true; }

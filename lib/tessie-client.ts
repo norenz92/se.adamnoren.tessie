@@ -128,6 +128,13 @@ class TessieClient {
     return Array.isArray(response?.results) ? response.results : [];
   }
 
+  async getDrives(vin: string, { from, distanceFormat = 'km' }: { from?: number; distanceFormat?: 'km' | 'mi' } = {}): Promise<any[]> {
+    const query = new URLSearchParams({ distance_format: distanceFormat });
+    if (from != null) query.set('from', String(Math.floor(from)));
+    const response = await this.request(`/${vin}/drives?${query.toString()}`);
+    return Array.isArray(response?.results) ? response.results : [];
+  }
+
   async getBatteryHealth(vin: string): Promise<any> {
     const response = await this.request('/battery_health');
     const results = response?.results;

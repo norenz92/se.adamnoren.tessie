@@ -93,7 +93,7 @@ describe('VehicleDevice flow triggers', () => {
     await device.updateCapabilities({ charge_state: { charging_state: 'Charging', battery_level: 50 } });
     assert.deepEqual(triggeredIds(device), ['charging_status_changed', 'charging_started', 'plugged_in']);
     assert.deepEqual(device.homey.flow.triggered[0].tokens, { status: 'Charging' });
-    assert.deepEqual(device.homey.flow.triggered[1].tokens, { battery: 50 });
+    assert.deepEqual(device.homey.flow.triggered[1].tokens, { battery: 50, source: 'Outside Homey' });
 
     device.homey.flow.triggered.length = 0;
     await device.updateCapabilities({ charge_state: { charging_state: 'Complete', battery_level: 80 } });
@@ -338,3 +338,124 @@ describe('VehicleDevice capability migration', () => {
     assert.equal(device.hasCapability('measure_soh'), true);
   });
 });
+
+describe('VehicleDevice action source attribution', () => {
+  async function setup(lockedAfter: boolean) {
+    const device = createDevice({ locked: !lockedAfter, vehicle_state_status: 'Awake' });
+    device._store = { token: 't' };
+    await device.onInit();
+    device._capabilities.locked = !lockedAfter;
+    device.client = createClient({ getVehicle: async () => ({ vehicle_state: { locked: lockedAfter } }) });
+    device.homey.flow.triggered.length = 0;
+    return device;
+  }
+  const lockTrigger = (device: any) => device.homey.flow.triggered.find((t: any) => t.id.startsWith('vehicle_'));
+
+  it('attributes a lock sent by a Flow card to "Homey Flow"', async () => {
+    const device = await setup(true);
+    await device.triggerCapabilityListener('locked', true, { source: 'flow' });
+    assert.deepEqual(lockTrigger(device), { id: 'vehicle_locked', tokens: { source: 'Homey Flow' }, state: {} });
+  });
+
+  it('attributes a lock from the Homey device screen to "Homey"', async () => {
+    const device = await setup(false);
+    await device._capabilityListeners.locked(false, {});
+    assert.deepEqual(lockTrigger(device).tokens, { source: 'Homey' });
+  });
+
+  it('attributes changes without a matching Homey command to "Outside Homey"', async () => {
+    const device = createDevice({ locked: true });
+    device.recentCommands.locked = { value: true, source: 'Homey', at: Date.now() }; // opposite value
+    await device.updateCapabilities({ vehicle_state: { locked: false } });
+    assert.deepEqual(lockTrigger(device).tokens, { source: 'Outside Homey' });
+  });
+
+  it('ignores Homey commands older than the attribution window', async () => {
+    const device = createDevice({ locked: false });
+    device.recentCommands.locked = { value: true, source: 'Homey Flow', at: Date.now() - 6 * 60 * 1000 };
+    await device.updateCapabilities({ vehicle_state: { locked: true } });
+    assert.deepEqual(lockTrigger(device).tokens, { source: 'Outside Homey' });
+  });
+
+  it('forgets the command when it fails, so a later outside change is not misattributed', async () => {
+    const device = await setup(true);
+    device.client.command = async () => false;
+    await assert.rejects(async () => device._capabilityListeners.locked(true, { source: 'flow' }));
+    assert.equal(device.recentCommands.locked, undefined);
+  });
+
+  it('adds the source to charging started/stopped', async () => {
+    const device = createDevice({ charging_status: 'Stopped' });
+    device.recentCommands.charging_control = { value: true, source: 'Homey Flow', at: Date.now() };
+    await device.updateCapabilities({ charge_state: { charging_state: 'Charging' } });
+    const started = device.homey.flow.triggered.find((t: any) => t.id === 'charging_started');
+    assert.equal(started.tokens.source, 'Homey Flow');
+  });
+
+  it('posts lock changes to the Timeline only when enabled', async () => {
+    const device = createDevice({ locked: true });
+    await device.updateCapabilities({ vehicle_state: { locked: false } });
+    assert.deepEqual(device._notifications, []);
+    device._settings = { timeline_security: true };
+    await device.updateCapabilities({ vehicle_state: { locked: true } });
+    assert.deepEqual(device._notifications, ['**Test Car** was locked outside Homey']);
+  });
+});
+
+describe('VehicleDevice completed drives', () => {
+  const drive = (over: Record<string, any> = {}) => ({
+    id: 42, started_at: Math.floor(Date.now() / 1000) - 20 * 60, ended_at: Math.floor(Date.now() / 1000) - 60,
+    odometer_distance: 12.44, energy_used: 2.13, starting_location: 'Main Street 1, Town', ending_location: 'Falsterbovägen 65, Höllviken, Sweden',
+    driver_profile: 'Adam', ...over,
+  });
+
+  async function parkWith(drives: any[], settings: Record<string, any> = {}) {
+    const device = createDevice({ shift_state: 'D' });
+    device._settings = settings;
+    const calls: any[] = [];
+    device.client = createClient({ getDrives: async (...args: any[]) => { calls.push(args); return drives; } });
+    await device.updateCapabilities({ drive_state: { shift_state: 'P' } });
+    return { device, calls };
+  }
+
+  it('looks up the drive after parking and fires drive_completed with the driver profile', async () => {
+    const { device, calls } = await parkWith([drive()], { timeline_drives: true });
+    assert.ok(triggeredIds(device).includes('parked'));
+    assert.equal(device._timers.length, 1);
+    await device._timers[0].fn();
+    await new Promise((r) => setImmediate(r));
+    assert.equal(calls[0][1].distanceFormat, 'km');
+    const done = device.homey.flow.triggered.find((t: any) => t.id === 'drive_completed');
+    assert.deepEqual(done.tokens, { driver: 'Adam', distance: 12.4, duration: 19, energy: 2.1, from: 'Main Street 1, Town', to: 'Falsterbovägen 65, Höllviken, Sweden' });
+    assert.deepEqual(device._notifications, ['**Test Car** · Adam drove 12.4 km to Falsterbovägen 65 (19 min)']);
+  });
+
+  it('uses "Unknown" when the drive has no driver profile', async () => {
+    const { device } = await parkWith([drive({ driver_profile: null })]);
+    await device._timers[0].fn();
+    await new Promise((r) => setImmediate(r));
+    assert.equal(device.homey.flow.triggered.find((t: any) => t.id === 'drive_completed').tokens.driver, 'Unknown');
+  });
+
+  it('retries when Tessie has not recorded the drive yet, and reports each drive once', async () => {
+    const drives: any[] = [];
+    const { device } = await parkWith(drives);
+    await device._timers[0].fn();
+    await new Promise((r) => setImmediate(r));
+    assert.equal(device._timers.length, 2, 'should schedule a retry');
+    drives.push(drive());
+    await device._timers[1].fn();
+    await new Promise((r) => setImmediate(r));
+    await device.lookupCompletedDrive(Date.now(), 1);
+    assert.equal(device.homey.flow.triggered.filter((t: any) => t.id === 'drive_completed').length, 1);
+  });
+
+  it('ignores drives that ended long before parking', async () => {
+    const old = drive({ ended_at: Math.floor(Date.now() / 1000) - 3 * 60 * 60 });
+    const { device } = await parkWith([old]);
+    await device._timers[0].fn();
+    await new Promise((r) => setImmediate(r));
+    assert.ok(!triggeredIds(device).includes('drive_completed'));
+  });
+});
+

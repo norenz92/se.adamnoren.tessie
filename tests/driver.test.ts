@@ -108,7 +108,7 @@ describe('VehicleDriver', () => {
       const device = createFakeDevice();
       await driver.homey.flow.runListeners['lock']({ device });
       await driver.homey.flow.runListeners['vent_windows']({ device });
-      assert.deepEqual(device.calls.triggerCapabilityListener, [['locked', true], ['windows', false]]);
+      assert.deepEqual(device.calls.triggerCapabilityListener, [['locked', true, { source: 'flow' }], ['windows', false, { source: 'flow' }]]);
     });
 
     it('flash_lights sends the Tessie "flash" command', async () => {

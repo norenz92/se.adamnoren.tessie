@@ -119,3 +119,17 @@ describe("Capability icons", () => {
     });
   }
 });
+
+describe("Icon SVGs", () => {
+  // The Homey app renders icons as filled shapes and ignores strokes, so every icon must be outlined fills
+  const dirs = ["assets", "assets/capabilities", "drivers/car/assets", "drivers/car/assets/icons"];
+  for (const dir of dirs) {
+    for (const file of readdirSync(join(process.cwd(), dir)).filter((f: string) => f.endsWith(".svg"))) {
+      it(`${dir}/${file} uses fills only`, () => {
+        const svg = readFileSync(join(process.cwd(), dir, file), "utf-8");
+        assert.ok(!/stroke(-width)?=/.test(svg), `${dir}/${file} contains strokes; outline them`);
+        assert.ok(!/fill="none"/.test(svg), `${dir}/${file} has unfilled shapes`);
+      });
+    }
+  }
+});

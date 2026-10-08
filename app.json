@@ -13,7 +13,7 @@
     "en": "Tessie"
   },
   "description": {
-    "en": "Monitor and control your Tesla vehicles via Tessie"
+    "en": "Your Tesla, in tune with your home"
   },
   "category": [
     "tools"
@@ -1382,7 +1382,7 @@
               {
                 "id": "0",
                 "title": {
-                  "en": "Random fart"
+                  "en": "Emissions test sound"
                 }
               }
             ]

@@ -1,0 +1,3 @@
+Make your Tesla part of your smart home. Through Tessie, Homey follows your car's battery, range, charging, climate, location and tire pressure in real time, and can lock it, warm up the cabin, open the charge port or adjust charging whenever your Flows decide it should. Start charging when electricity is cheapest, precondition the car before you leave in the morning, get a notification when it is left unlocked, or let your home react as soon as you pull into the driveway.
+
+To get started you need a Tessie account with your Tesla connected. When adding the car in Homey, paste a Tessie access token, which you can generate in the Tessie dashboard under Settings, API.

@@ -1,5 +1,5 @@
 {
-  "0.1.0": {
-    "en": "First release. Monitor and control your Tesla through Tessie: live battery, range, charging, climate, tyre pressure, location and software update status, with real-time streaming. Over 50 Flow actions, 21 triggers and 12 conditions, including a home geofence, completed-drive reports with the car's driver profile, whether a lock or unlock came from Homey or outside it, and optional Timeline posts."
+  "0.2.0": {
+    "en": "Big update. 40 new Flow cards: tonneau, sunroof, seat cooling, boombox, guest and low power modes, software updates, charging, sleep/wake, driving and arriving or leaving home. Completed-drive reports with the car's driver profile, whether a lock or unlock came from Homey or outside it, optional Timeline posts, new icons and images. Flow actions now reliably send commands, plus many fixes."
   }
 }
